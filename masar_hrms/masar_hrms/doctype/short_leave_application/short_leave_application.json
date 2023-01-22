@@ -33,7 +33,6 @@
   "column_break_24",
   "company",
   "letter_head",
-  "amended_from",
   "amended_from"
  ],
  "fields": [
@@ -236,7 +235,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-22 10:44:18.752885",
+ "modified": "2023-01-22 13:24:08.582984",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",

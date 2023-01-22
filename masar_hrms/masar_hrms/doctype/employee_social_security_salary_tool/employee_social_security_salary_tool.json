@@ -62,7 +62,7 @@
   {
    "fetch_from": "company.employee_share_rate",
    "fieldname": "employee_share_rate",
-   "fieldtype": "Currency",
+   "fieldtype": "Float",
    "label": "Employee Share Rate",
    "read_only": 1
   },
@@ -73,7 +73,7 @@
   {
    "fetch_from": "company.company_share_rate",
    "fieldname": "company_share_rate",
-   "fieldtype": "Currency",
+   "fieldtype": "Float",
    "label": "Company Share Rate",
    "read_only": 1
   }
@@ -81,7 +81,7 @@
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-01-22 10:36:49.114271",
+ "modified": "2023-01-22 13:25:34.678634",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Social Security Salary Tool",
