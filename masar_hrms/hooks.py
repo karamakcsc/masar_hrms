@@ -199,7 +199,7 @@ fixtures = [
         "Employee-association_membership",
         "Employee-social_commity_membership",
         "Employee-social_security_number",
-        "Employee-column_break_54",
+        #"Employee-column_break_54",
         "Employee-family_details",
         "Employee-family_members",
         "Employee-association_membership_number",
