@@ -235,7 +235,8 @@ fixtures = [
 		"Company-column_break_25",
 		"Company-employee_share_rate",
 		"Employee-social_security_salary",
-		"Employee-social_security_amount"
+		"Employee-social_security_amount",
+        "Employee-old_ref"
             ]
         ]
     ]}
