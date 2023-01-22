@@ -178,3 +178,73 @@ user_data_fields = [
 # auth_hooks = [
 #	"masar_hrms.auth.validate"
 # ]
+fixtures = [
+    {"dt": "Custom Field", "filters": [
+        [
+            "name", "in", [
+		"Employee-religion",
+        # "Employee-membership",
+		# "Employee-association_membership",
+		# "Employee-social_commity_membership",
+		# "Employee-social_security_number",
+		# "Employee-association_membership_number",
+		# "Employee-social_commity_fund_membership",
+		# "Employee-family_details",
+		# "Employee-family_members",
+		# "Employee-children_subject_to_allowance",
+        # "Salary Slip-hourly_leaves",
+        # "Employee-religion",
+        # "Employee-membership",
+        # "Employee-association_membership",
+        # "Employee-social_commity_membership",
+        # "Employee-social_security_number",
+        # "Employee-column_break_54",
+        # "Employee-family_details",
+        # "Employee-family_members",
+        # "Employee-association_membership_number",
+        # "Employee-social_commity_fund_membership",
+        # "Employee-children_subject_to_allowance",
+        # "Designation-desi_code",
+        # "Designation-hazard_code",
+        # "Designation-column_break_2",
+        # "Designation-section_break_4",
+        "Employee-third_name",
+        "Employee-first_name_ar",
+        "Employee-middle_name_ar",
+        "Employee-third_name_ar",
+        "Employee-last_name_ar",
+        "Employee-full_name_ar",
+        "Employee-place_or_birth",
+        "Employee-social_security_details",
+        "Employee-column_break_65",
+        "Employee-social_security_date",
+        "Employee-column_break_69",
+        "Employee-pobox",
+        "Employee-nationality",
+        "Employee-national_no",
+        "Employee-personal_no",
+        "Designation-is_hazard",
+        "Salary Component-is_social_security_applicable",
+        "Salary Component-name_ar",
+        "Leave Type-is_short_leave",
+        "Leave Type-max_short_allowed",
+        "Leave Type-short_leave",
+        "Employee Checkin-availo",
+        "Salary Component-is_overtime_applicable",
+        "Employee-is_overtime_applicable",
+        "Employee-column_break_67",
+        "Employee-overtime_ceiling",
+        "Employee-overtime_details"
+        # "Employee-is_social_security_applicable",
+        # "Employee-employee_share_rate",
+        # "Company-section_break_23",
+        # "Company-company_share_rate",
+        # "Company-column_break_25",
+        # "Company-employee_share_rate",
+        # "Employee-social_security_salary",
+        # "Employee-social_security_amount"
+
+            ]
+        ]
+    ]}
+]
