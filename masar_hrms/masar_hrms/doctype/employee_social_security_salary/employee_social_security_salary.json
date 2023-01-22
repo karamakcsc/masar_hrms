@@ -1,0 +1,190 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:{posting_date}-{employee_name}",
+ "creation": "2023-01-22 10:39:09.143705",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "posting_date",
+  "employee",
+  "nationality",
+  "column_break_12",
+  "company",
+  "employee_name",
+  "national_number",
+  "personal_number",
+  "birth_date",
+  "section_break_10",
+  "social_security_joining_date",
+  "employee_share_rate",
+  "ss_emp_share_amount",
+  "amount",
+  "column_break_13",
+  "social_security_number",
+  "company_share_rate",
+  "ss_company_share_amount",
+  "amended_from",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.nationality",
+   "fieldname": "nationality",
+   "fieldtype": "Read Only",
+   "label": "Nationality",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.company",
+   "fieldname": "company",
+   "fieldtype": "Read Only",
+   "label": "Company"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Read Only",
+   "label": "Employee Name"
+  },
+  {
+   "depends_on": "eval:doc.nationality==\"Jordan\"",
+   "fetch_from": "employee.national_no",
+   "fieldname": "national_number",
+   "fieldtype": "Data",
+   "label": "National No.",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.nationality!=\"Jordan\"",
+   "fetch_from": "employee.personal_no",
+   "fieldname": "personal_number",
+   "fieldtype": "Data",
+   "label": "Personal No.",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.date_of_birth",
+   "fieldname": "birth_date",
+   "fieldtype": "Read Only",
+   "label": "Birth Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_10",
+   "fieldtype": "Section Break",
+   "label": "Social Security Info"
+  },
+  {
+   "fetch_from": "employee.social_security_date",
+   "fieldname": "social_security_joining_date",
+   "fieldtype": "Read Only",
+   "label": "Social Security Joining Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "company.employee_share_rate",
+   "fieldname": "employee_share_rate",
+   "fieldtype": "Read Only",
+   "label": "Employee Share Rate",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee_social_security_salary.amount*employee_social_security_salary.employee_share_rate",
+   "fieldname": "ss_emp_share_amount",
+   "fieldtype": "Data",
+   "label": "Employee Share"
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount"
+  },
+  {
+   "fieldname": "column_break_13",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.social_security_number",
+   "fieldname": "social_security_number",
+   "fieldtype": "Read Only",
+   "label": "Social Security No.",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "company.company_share_rate",
+   "fieldname": "company_share_rate",
+   "fieldtype": "Read Only",
+   "label": "Company Share Rate",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee_social_security_salary.amount*employee_social_security_salary.company_share_rate",
+   "fieldname": "ss_company_share_amount",
+   "fieldtype": "Data",
+   "label": "Company Share"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Social Security Salary",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Social Security Salary",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-01-22 10:39:09.143705",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Social Security Salary",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1,
+ "track_seen": 1,
+ "track_views": 1
+}

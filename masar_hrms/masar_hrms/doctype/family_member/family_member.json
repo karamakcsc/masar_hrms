@@ -1,0 +1,70 @@
+{
+ "actions": [],
+ "creation": "2023-01-22 10:46:25.867237",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "relative_name",
+  "relative_relation",
+  "birth_date",
+  "age",
+  "marrige_date",
+  "allowance_activation_date",
+  "allowance_cancellation_date"
+ ],
+ "fields": [
+  {
+   "fieldname": "relative_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Relative Name"
+  },
+  {
+   "fieldname": "relative_relation",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Relative Relation",
+   "options": "Spouse\nSon\nDaughter"
+  },
+  {
+   "fieldname": "birth_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Birth Date"
+  },
+  {
+   "fieldname": "age",
+   "fieldtype": "Int",
+   "label": "Age"
+  },
+  {
+   "fieldname": "marrige_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Marrige Date"
+  },
+  {
+   "fieldname": "allowance_activation_date",
+   "fieldtype": "Date",
+   "label": "Allowance Activation Date"
+  },
+  {
+   "fieldname": "allowance_cancellation_date",
+   "fieldtype": "Date",
+   "label": "Allowance Cancellation Date"
+  }
+ ],
+ "istable": 1,
+ "links": [],
+ "modified": "2023-01-22 10:46:25.867237",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Family Member",
+ "owner": "Administrator",
+ "permissions": [],
+ "quick_entry": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "track_changes": 1
+}
