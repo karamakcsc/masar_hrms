@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include masar_hrms *.css
+recursive-include masar_hrms *.csv
+recursive-include masar_hrms *.html
+recursive-include masar_hrms *.ico
+recursive-include masar_hrms *.js
+recursive-include masar_hrms *.json
+recursive-include masar_hrms *.md
+recursive-include masar_hrms *.png
+recursive-include masar_hrms *.py
+recursive-include masar_hrms *.svg
+recursive-include masar_hrms *.txt
+recursive-exclude masar_hrms *.pyc
