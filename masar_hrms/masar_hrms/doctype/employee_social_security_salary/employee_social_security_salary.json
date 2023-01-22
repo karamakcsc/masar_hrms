@@ -18,6 +18,7 @@
   "birth_date",
   "section_break_10",
   "social_security_joining_date",
+  "employee_share_rate",
   "ss_emp_share_amount",
   "amount",
   "column_break_13",
@@ -150,12 +151,19 @@
    "options": "Employee Social Security Salary",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fetch_from": "company.employee_share_rate",
+   "fieldname": "employee_share_rate",
+   "fieldtype": "Float",
+   "label": "Employee Share Rate"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-22 13:33:28.157269",
+ "modified": "2023-01-22 14:53:11.047740",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Social Security Salary",
