@@ -238,10 +238,10 @@ fixtures = [
         "Employee-overtime_details",
         "Employee-is_social_security_applicable",
         "Employee-employee_share_rate",
-        "Company-section_break_23",
-        "Company-company_share_rate",
-        "Company-column_break_25",
-        "Company-employee_share_rate",
+        # "Company-section_break_23",
+        # "Company-company_share_rate",
+        # "Company-column_break_25",
+        # "Company-employee_share_rate",
         "Employee-social_security_salary",
         "Employee-social_security_amount"
 
