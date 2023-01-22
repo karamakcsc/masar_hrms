@@ -184,7 +184,7 @@ fixtures = [
         [
             "name", "in", [
 		"Employee-religion",
-                "Employee-membership",
+		"Employee-membership",
 		"Employee-association_membership",
 		"Employee-social_commity_membership",
 		"Employee-social_security_number",
@@ -237,11 +237,11 @@ fixtures = [
         "Employee-overtime_ceiling",
         "Employee-overtime_details",
         "Employee-is_social_security_applicable",
-        "Employee-employee_share_rate",
-        # "Company-section_break_23",
-        # "Company-company_share_rate",
-        # "Company-column_break_25",
-        # "Company-employee_share_rate",
+        #"Employee-employee_share_rate",
+        "Company-section_break_23",
+        "Company-company_share_rate",
+        "Company-column_break_25",
+        "Company-employee_share_rate",
         "Employee-social_security_salary",
         "Employee-social_security_amount"
 
