@@ -198,7 +198,7 @@ fixtures = [
         "Employee-membership",
         "Employee-association_membership",
         "Employee-social_commity_membership",
-        "Employee-social_security_number",
+        #"Employee-social_security_number",
         #"Employee-column_break_54",
         "Employee-family_details",
         "Employee-family_members",
@@ -216,9 +216,9 @@ fixtures = [
         "Employee-last_name_ar",
         "Employee-full_name_ar",
         "Employee-place_or_birth",
-        "Employee-social_security_details",
-        "Employee-column_break_65",
-        "Employee-social_security_date",
+        #"Employee-social_security_details",
+        #"Employee-column_break_65",
+        #"Employee-social_security_date",
         "Employee-column_break_69",
         "Employee-pobox",
         "Employee-nationality",
@@ -236,14 +236,14 @@ fixtures = [
         "Employee-column_break_67",
         "Employee-overtime_ceiling",
         "Employee-overtime_details",
-        "Employee-is_social_security_applicable",
-        "Employee-employee_share_rate",
+        #"Employee-is_social_security_applicable",
+        #"Employee-employee_share_rate",
         "Company-section_break_23",
         "Company-company_share_rate",
         "Company-column_break_25",
         "Company-employee_share_rate",
-        "Employee-social_security_salary",
-        "Employee-social_security_amount"
+        #"Employee-social_security_salary",
+        #"Employee-social_security_amount"
 
             ]
         ]
