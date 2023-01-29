@@ -52,10 +52,13 @@
    "fieldtype": "Column Break"
   },
   {
+   "default": "MID Contracting",
    "fetch_from": "employee.company",
    "fieldname": "company",
-   "fieldtype": "Read Only",
-   "label": "Company"
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
   },
   {
    "fetch_from": "employee.employee_name",
@@ -99,14 +102,16 @@
    "read_only": 1
   },
   {
-   "fetch_from": "employee_social_security_salary.amount*employee_social_security_salary.employee_share_rate",
+   "default": "0",
    "fieldname": "ss_emp_share_amount",
-   "fieldtype": "Data",
-   "label": "Employee Share"
+   "fieldtype": "Float",
+   "label": "Employee Share",
+   "read_only": 1
   },
   {
+   "default": "0",
    "fieldname": "amount",
-   "fieldtype": "Currency",
+   "fieldtype": "Float",
    "label": "Amount"
   },
   {
@@ -129,10 +134,11 @@
    "read_only": 1
   },
   {
-   "fetch_from": "employee_social_security_salary.amount*employee_social_security_salary.company_share_rate",
+   "default": "0",
    "fieldname": "ss_company_share_amount",
-   "fieldtype": "Data",
-   "label": "Company Share"
+   "fieldtype": "Float",
+   "label": "Company Share",
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -163,10 +169,11 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-22 14:53:11.047740",
+ "modified": "2023-01-27 02:09:15.330550",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Social Security Salary",
+ "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [
   {
@@ -184,6 +191,7 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1,
  "track_seen": 1,
  "track_views": 1

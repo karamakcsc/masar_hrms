@@ -7,17 +7,18 @@
 # class ShortLeaveApplication(Document):
 # 	pass
 
-
+#
 from __future__ import unicode_literals
 import frappe, erpnext, json,datetime
 import time
+from datetime import date, datetime, time, timedelta
 from frappe import _, scrub, ValidationError
-from frappe.utils import getdate
+from frappe.utils import cint, get_datetime, get_time, getdate
 from frappe.model.document import Document
-from erpnext.hr.doctype.leave_ledger_entry.leave_ledger_entry import create_leave_ledger_entry
-from erpnext.hr.doctype.employee.employee import get_holiday_list_for_employee
-from erpnext.hr.doctype.shift_assignment.shift_assignment import get_employee_shift
-from erpnext.hr.utils import (
+from hrms.hr.doctype.leave_ledger_entry.leave_ledger_entry import create_leave_ledger_entry
+from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
+from hrms.hr.doctype.shift_assignment.shift_assignment import get_employee_shift
+from hrms.hr.utils import (
 	get_holiday_dates_for_employee,
 	share_doc_with_approver,
 )
@@ -31,7 +32,7 @@ from frappe.utils import (
 
 from erpnext.buying.doctype.supplier_scorecard.supplier_scorecard import daterange
 
-from erpnext.hr.doctype.leave_application.leave_application import get_leave_balance_on
+from hrms.hr.doctype.leave_application.leave_application import get_leave_balance_on
 
 class InvalidShortLeaveApplication(ValidationError):
 	pass
@@ -56,7 +57,10 @@ class ShortLeaveApplication(Document):
 		share_doc_with_approver(self, self.leave_approver)
 
 	def on_submit(self):
-		result=get_employee_shift(self.employee, self.posting_date)
+		from_time = get_time(self.from_time)
+		posting_date = datetime.combine(self.posting_date, from_time)
+		result=get_employee_shift(self.employee, posting_date)
+		
 		plan_hours=0
 		if result:
 			if result.start_datetime.minute>result.end_datetime.minute:
@@ -66,7 +70,8 @@ class ShortLeaveApplication(Document):
 		elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
 			plan_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
 		else: frappe.throw("You have to assign a shift for the employee or assign standar working hours in HR Settings")
-		if self.total_leave_hours/3600.0>self.leave_balance*(plan_hours.hour+plan_hours.minute/60.0):
+		frappe.msgprint(str(plan_hours))
+		if self.total_leave_hours/3600.0>self.leave_balance*86400:
 			frappe.throw(
 				_("Leave hours is greater than remaining allowed hours")
 			)
@@ -80,7 +85,7 @@ class ShortLeaveApplication(Document):
 		if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
 			self.notify_employee()
 
-		# self.create_leave_ledger_entry()
+		self.create_leave_ledger_entry()
 		pass
 
 	def on_cancel(self):
@@ -94,17 +99,17 @@ class ShortLeaveApplication(Document):
 		self.reload()
 		pass
 
-	# def create_leave_ledger_entry(self, submit=True):
-	# 	raise_exception = False if frappe.flags.in_patch else True
-	# 	args = dict(
-	# 		leaves=((self.total_leave_hours.seconds/3600)/8.0) * -1,
-	# 		from_date=self.posting_date,
-	# 		to_date=self.posting_date,
-	# 		is_lwp=0,
-	# 		holiday_list=get_holiday_list_for_employee(self.employee, raise_exception=raise_exception)
-	# 		or "",
-	# 	)
-	# 	create_leave_ledger_entry(self, args, submit)
+	def create_leave_ledger_entry(self, submit=True):
+		raise_exception = False if frappe.flags.in_patch else True
+		args = dict(
+			leaves=((self.total_leave_hours)/8.0) * -1,
+			from_date=self.posting_date,
+			to_date=self.posting_date,
+			is_lwp=0,
+			holiday_list=get_holiday_list_for_employee(self.employee, raise_exception=raise_exception)
+			or "",
+		)
+		create_leave_ledger_entry(self, args, submit)
 
 
 

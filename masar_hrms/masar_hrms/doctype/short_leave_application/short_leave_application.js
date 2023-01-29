@@ -52,7 +52,7 @@ frappe.ui.form.on("Short Leave Application", {
 	setup: function(frm) {
 		frm.set_query("leave_approver", function() {
 			return {
-				query: "erpnext.hr.doctype.department_approver.department_approver.get_approvers",
+				query: "hrms.hr.doctype.department_approver.department_approver.get_approvers",
 				filters: {
 					employee: frm.doc.employee,
 					doctype: frm.doc.doctype
@@ -71,7 +71,7 @@ frappe.ui.form.on("Short Leave Application", {
 		}
 		if (frm.doc.docstatus == 0) {
 			return frappe.call({
-				method: "erpnext.hr.doctype.leave_application.leave_application.get_mandatory_approval",
+				method: "hrms.hr.doctype.leave_application.leave_application.get_mandatory_approval",
 				args: {
 					doctype: frm.doc.doctype,
 				},
@@ -117,24 +117,41 @@ frappe.ui.form.on("Short Leave Application", {
 	},
 
 	total_leave_hours: function(frm){
-		var duration = cur_frm.doc.total_leave_hours.toString();
-		var from_time = cur_frm.doc.from_time;
-		var hour=0;
-		var minute=0;
-		var second=0;
-		// var split_duration= duration.split(':');
-		var split_from_time= from_time.split(':');
-		hour = parseInt(duration/3600)+parseInt(split_from_time[0]);
-		duration=duration%3600
-		minute = parseInt(duration/60)+parseInt(split_from_time[1]);
-		hour = hour + minute/60;
-		minute = minute%60;
-		duration=duration%60
-		second = parseInt(duration)+parseInt(split_from_time[2]);
-		minute = minute + second/60;
-		second = second%60;
-		cur_frm.set_value('to_time',parseInt(hour)+':'+parseInt(minute)+':'+parseInt(second))
-		cur_frm.refresh_fields('to_time')
+		let from_time = frappe.datetime.str_to_obj(frm.doc.from_time.toString());
+		frappe.msgprint(from_time.toString())		
+		let duration = frm.doc.total_leave_hours;
+		let duration_array = duration.split(':');
+		let duration_in_minutes = (parseInt(duration_array[0]) * 60) + parseInt(duration_array[1]);
+		from_time.setMinutes(from_time.getMinutes() + duration_in_minutes);
+		let to_time = frappe.datetime.obj_to_time(from_time);
+		frm.set_value("to_time", to_time);
+
+
+
+
+
+		
+			
+		// frm.set_value('to_time',to_time)
+		// frm.refresh_field('to_time')
+		// var duration = cur_frm.doc.total_leave_hours.toString();
+		// var from_time = cur_frm.doc.from_time;
+		// var hour=0;
+		// var minute=0;
+		// var second=0;
+		// // var split_duration= duration.split(':');
+		// var split_from_time= from_time.split(':');
+		// hour = parseInt(duration/3600)+parseInt(split_from_time[0]);
+		// duration=duration%3600
+		// minute = parseInt(duration/60)+parseInt(split_from_time[1]);
+		// hour = hour + minute/60;
+		// minute = minute%60;
+		// duration=duration%60
+		// second = parseInt(duration)+parseInt(split_from_time[2]);
+		// minute = minute + second/60;
+		// second = second%60;
+		// cur_frm.set_value('to_time',parseInt(hour)+':'+parseInt(minute)+':'+parseInt(second))
+		// cur_frm.refresh_fields('to_time')
 		// frm.doc.to_time=addTimes(frm.doc.from_time, frm.doc.total_leave_hours)
 		// refresh_field("to_time");
 	},
@@ -151,7 +168,7 @@ frappe.ui.form.on("Short Leave Application", {
 
 		if (frm.doc.docstatus === 0 && frm.doc.employee && frm.doc.leave_type && frm.doc.posting_date && frm.doc.posting_date) {
 			return frappe.call({
-				method: "erpnext.hr.doctype.leave_application.leave_application.get_leave_balance_on",
+				method: "hrms.hr.doctype.leave_application.leave_application.get_leave_balance_on",
 				args: {
 					employee: frm.doc.employee,
 					date: frm.doc.posting_date,
@@ -183,7 +200,7 @@ frappe.ui.form.on("Short Leave Application", {
 			}
 			// server call is done to include holidays in leave days calculations
 			return frappe.call({
-				method: 'erpnext.hr.doctype.leave_application.leave_application.get_number_of_leave_days',
+				method: 'hrms.hr.doctype.leave_application.leave_application.get_number_of_leave_days',
 				args: {
 					"employee": frm.doc.employee,
 					"leave_type": frm.doc.leave_type,
@@ -206,7 +223,7 @@ frappe.ui.form.on("Short Leave Application", {
 		if (frm.doc.employee) {
 			// server call is done to include holidays in leave days calculations
 			return frappe.call({
-				method: 'erpnext.hr.doctype.leave_application.leave_application.get_leave_approver',
+				method: 'hrms.hr.doctype.leave_application.leave_application.get_leave_approver',
 				args: {
 					"employee": frm.doc.employee,
 				},

@@ -15,5 +15,5 @@ frappe.views.calendar["Short Leave Application"] = {
 			right: 'month'
 		}
 	},
-	get_events_method: "erpnext.hr.doctype.leave_application.leave_application.get_events"
+	get_events_method: "hrms.hr.doctype.leave_application.leave_application.get_events"
 }

@@ -26,10 +26,12 @@
   {
    "fieldname": "overtime_type",
    "fieldtype": "Link",
+   "in_list_view": 1,
    "label": "Overtime Type",
    "options": "Overtime Type"
   },
   {
+   "default": "0",
    "fieldname": "rate",
    "fieldtype": "Read Only",
    "in_list_view": 1,
@@ -67,12 +69,13 @@
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-01-22 10:40:04.510810",
+ "modified": "2023-01-24 17:01:15.277089",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Overtime Employee",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "states": []
 }

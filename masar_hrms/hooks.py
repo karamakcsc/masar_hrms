@@ -102,6 +102,11 @@ app_license = "MIT"
 #		"on_trash": "method"
 #	}
 # }
+# doc_events = {
+#  	"Salary Slip": {
+# 		"before_insert": "masar_hrms.utilities.hourly_leave_calc.SetHourlyLeaveForEmployee"
+# 	}
+#  }
 doctype_js = {
    "Employee" : "custom/employee/employee.js"
  }
@@ -225,7 +230,6 @@ fixtures = [
 		"Employee Checkin-availo",
 		"Salary Component-is_overtime_applicable",
 		"Employee-is_overtime_applicable",
-		"Employee-column_break_67",
 		"Employee-overtime_ceiling",
 		"Employee-overtime_details",
 		"Employee-is_social_security_applicable",
@@ -241,3 +245,8 @@ fixtures = [
         ]
     ]}
 ]
+
+from masar_hrms.override import _leave_application
+from hrms.hr.doctype.leave_application import leave_application
+
+leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period

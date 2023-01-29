@@ -18,7 +18,7 @@ from erpnext.accounts.general_ledger import make_gl_entries
 from erpnext.controllers.accounts_controller import AccountsController
 from frappe.model.document import Document
 from frappe.model.document import Document
-from erpnext.hr.doctype.shift_assignment.shift_assignment import get_employee_shift
+from hrms.hr.doctype.shift_assignment.shift_assignment import get_employee_shift
 
 class OvertimeApplication(Document):
 	def __init__(self, *args, **kwargs):
@@ -95,22 +95,20 @@ def calculate_overtime_amount(self):
 				doc = frappe.get_doc('Salary Component', d.get('salary_component'))
 				if doc.is_overtime_applicable:
 					overtime_components_amount+=int(d.amount)
-				 # frappe.msgprint(d.salary_component);
 			for d in sl.get('deductions'):
 				doc = frappe.get_doc('Salary Component', d.get('salary_component'))
 				if doc.is_overtime_applicable:
 					overtime_components_amount-=int(d.amount)
-			 # frappe.msgprint(d.salary_component);
 			overtime_components_amount=max(0, overtime_components_amount)
 			# frappe.msgprint(str(overtime_components_amount))
 			hour_rate=flt(overtime_components_amount)/month_working_hours
-			employee.rate=hour_rate*flt(overtime_type_hour_rate)
+			employee.rate=round(hour_rate*flt(overtime_type_hour_rate),3)
 
 			# self.reload()
 			# frappe.throw("alaa")
 			if employee.overtime_hours==0:
 				frappe.throw("Please fill overtime hours field")
-			employee.amount=flt(employee.rate)*int(employee.overtime_hours)
+			employee.amount=round(flt(employee.rate)*int(employee.overtime_hours),3)
 			# self.reload()
 			# frappe.msgprint(str(employee.amount))
 		# frappe.msgprint(str(sl.net_pay))
