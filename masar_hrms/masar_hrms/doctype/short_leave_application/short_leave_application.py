@@ -8,6 +8,7 @@
 # 	pass
 
 #
+
 from __future__ import unicode_literals
 import frappe, erpnext, json,datetime
 import time
@@ -18,6 +19,7 @@ from frappe.model.document import Document
 from hrms.hr.doctype.leave_ledger_entry.leave_ledger_entry import create_leave_ledger_entry
 from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
 from hrms.hr.doctype.shift_assignment.shift_assignment import get_employee_shift
+from frappe.utils import flt, comma_or, nowdate, getdate
 from hrms.hr.utils import (
 	get_holiday_dates_for_employee,
 	share_doc_with_approver,
@@ -189,3 +191,16 @@ class ShortLeaveApplication(Document):
 				frappe.msgprint(_("Email sent to {0}").format(contact))
 			except frappe.OutgoingEmailError:
 				pass
+@frappe.whitelist()
+def calculate_to_time(from_time,total_leave_hours):
+ 
+    # convert the from_time and total_leave_hours to datetime objects
+	from_time_obj = datetime.strptime(from_time, '%H:%M:%S')
+	total_leave_hours_obj = timedelta(hours=float(total_leave_hours)/3600)
+	frappe.msgprint(str(total_leave_hours_obj))
+    # add the total_leave_hours to the from_time
+	to_time_obj = from_time_obj + total_leave_hours_obj
+	to_time = to_time_obj.strftime('%H:%M:%S')
+	frappe.msgprint(str(to_time))
+	# set the to_time field
+	return to_time

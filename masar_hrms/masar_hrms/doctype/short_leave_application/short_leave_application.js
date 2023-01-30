@@ -117,20 +117,21 @@ frappe.ui.form.on("Short Leave Application", {
 	},
 
 	total_leave_hours: function(frm){
-		let from_time = frappe.datetime.str_to_obj(frm.doc.from_time.toString());
-		frappe.msgprint(from_time.toString())		
-		let duration = frm.doc.total_leave_hours;
-		let duration_array = duration.split(':');
-		let duration_in_minutes = (parseInt(duration_array[0]) * 60) + parseInt(duration_array[1]);
-		from_time.setMinutes(from_time.getMinutes() + duration_in_minutes);
-		let to_time = frappe.datetime.obj_to_time(from_time);
-		frm.set_value("to_time", to_time);
 
+		var from_time = frm.doc.from_time;
+		var total_leave_hours = frm.doc.total_leave_hours;
+		frappe.call({
+			method: "masar_hrms.masar_hrms.doctype.short_leave_application.short_leave_application.calculate_to_time",
+			args: {
+				"from_time": frm.doc.from_time,
+				"total_leave_hours": frm.doc.total_leave_hours
+			},
+			callback: function(r) {
+				frm.doc.to_time = r.message;
+				frm.refresh_field("to_time");
+			}
+		});
 
-
-
-
-		
 			
 		// frm.set_value('to_time',to_time)
 		// frm.refresh_field('to_time')

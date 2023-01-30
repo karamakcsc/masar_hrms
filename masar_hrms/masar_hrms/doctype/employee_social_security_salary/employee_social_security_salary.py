@@ -44,11 +44,9 @@ class EmployeeSocialSecuritySalary(Document):
 			for item in salary_slip.earnings:
 				if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
 					total_ss_amount+=item.amount
-					frappe.msgprint(item.salary_component)
 			for item in salary_slip.deductions:
 				if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
 					total_ss_amount-=item.amount
-					frappe.msgprint(item.salary_component)
 			total_ss_amount=max(0,total_ss_amount)
 			total_ss_amount=min(5000,total_ss_amount)
 		else:				
