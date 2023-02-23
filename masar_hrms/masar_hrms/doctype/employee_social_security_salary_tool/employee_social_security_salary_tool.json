@@ -8,13 +8,17 @@
  "field_order": [
   "posting_date",
   "department",
+  "designation",
   "column_break_3",
   "company",
   "branch",
   "default_shift",
   "section_break_7",
   "employee_share_rate",
-  "company_share_rate"
+  "column_break_9",
+  "company_share_rate",
+  "employee_tab",
+  "employees"
  ],
  "fields": [
   {
@@ -71,12 +75,33 @@
    "fieldname": "company_share_rate",
    "fieldtype": "Float",
    "label": "Company Share Rate"
+  },
+  {
+   "fieldname": "column_break_9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation"
+  },
+  {
+   "fieldname": "employee_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employee"
+  },
+  {
+   "fieldname": "employees",
+   "fieldtype": "Table",
+   "label": "employees",
+   "options": "Social Security Employee Detail"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2023-01-22 14:55:02.750866",
+ "modified": "2023-02-21 10:47:48.514221",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Social Security Salary Tool",
@@ -94,5 +119,6 @@
   }
  ],
  "sort_field": "modified",
- "sort_order": "DESC"
+ "sort_order": "DESC",
+ "states": []
 }
