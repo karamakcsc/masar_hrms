@@ -20,21 +20,21 @@ frappe.ui.form.on("Employee Social Security Salary", {
               var emp_share= 0.0
               company_share= frm.doc.amount * frm.doc.company_share_rate / 100
               emp_share= frm.doc.amount * frm.doc.employee_share_rate / 100
-              
+
               frm.set_value("ss_company_share_amount",company_share);
               frm.set_value("ss_emp_share_amount",emp_share);
-              
-            }  
-    
+
+            }
+
             }
         }
     });
-   
+
   }
 });
 
 frappe.ui.form.on("Employee Social Security Salary", "employee", function(frm) {
-    // Get Share rate from company  
+    // Get Share rate from company
     frappe.call({
       method: "frappe.client.get",
       args: {
