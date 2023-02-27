@@ -32,37 +32,39 @@ class EmployeeSocialSecuritySalary(Document):
 			frappe.throw(self.employee+" already have submitted document")
 		ss_salary_slip=get_ss_salary_slip(self.employee, posting_date.year)
 		total_ss_amount=0
-		if not len(ss_salary_slip):
-			#frappe.throw(self.employee + " don't have submitted salary slip for this date")
-			entry = {
-				"employee": self.employee,
-				"posting_date": posting_date
-			}
-			salary_slip = frappe.new_doc('Salary Slip')
-			salary_slip.update(entry)
-			salary_slip.get_emp_and_working_day_details()
-			for item in salary_slip.earnings:
-				if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-					total_ss_amount+=item.amount
-			for item in salary_slip.deductions:
-				if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-					total_ss_amount-=item.amount
-			total_ss_amount=max(0,total_ss_amount)
-			total_ss_amount=min(5000,total_ss_amount)
-		else:				
-			salary_slip_name=ss_salary_slip[0].name
-			salary_slip=frappe.get_doc("Salary Slip", salary_slip_name)
-			for item in salary_slip.earnings:
-				if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-					total_ss_amount+=item.amount
-			for item in salary_slip.deductions:
-				if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-					total_ss_amount-=item.amount
-			total_ss_amount=max(0,total_ss_amount)
-			total_ss_amount=min(5000,total_ss_amount)
-			# self.amount=total_ss_amount
-			# self.ss_company_share_amount=total_ss_amount*flt(self.company_share_rate)
-			# self.ss_emp_share_amount=total_ss_amount*flt(self.employee_share_rate)
+		#if not len(ss_salary_slip):
+		#frappe.throw(self.employee + " don't have submitted salary slip for this date")
+		salary_date  = datetime.date(posting_date.year + 1, 1, 1) - datetime.timedelta(days=1)
+		entry = {
+			"employee": self.employee,
+			"posting_date": salary_date
+		}
+		salary_slip = frappe.new_doc('Salary Slip')
+		salary_slip.update(entry)
+		salary_slip.get_emp_and_working_day_details()
+		for item in salary_slip.earnings:
+			if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
+				total_ss_amount+=item.amount
+		for item in salary_slip.deductions:
+			if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
+				total_ss_amount-=item.amount
+		total_ss_amount=max(0,total_ss_amount)
+		total_ss_amount=min(5000,total_ss_amount)
+		# else:
+		# 	frappe.msgprint("Yes Salary Slip")
+		# 	salary_slip_name=ss_salary_slip[0].name
+		# 	salary_slip=frappe.get_doc("Salary Slip", salary_slip_name)
+		# 	for item in salary_slip.earnings:
+		# 		if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
+		# 			total_ss_amount+=item.amount
+		# 	for item in salary_slip.deductions:
+		# 		if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
+		# 			total_ss_amount-=item.amount
+		# 	total_ss_amount=max(0,total_ss_amount)
+		# 	total_ss_amount=min(5000,total_ss_amount)
+		# 	# self.amount=total_ss_amount
+		# 	# self.ss_company_share_amount=total_ss_amount*flt(self.company_share_rate)
+		# 	# self.ss_emp_share_amount=total_ss_amount*flt(self.employee_share_rate)
 		return total_ss_amount
 
 @frappe.whitelist()
@@ -71,7 +73,7 @@ def get_ss_salary_slip(employee, year):
 		select name
 		from `tabSalary Slip` tss
 		where tss.docstatus=1 and employee='{employee}' and year(posting_date)='{year}'
-		order by month(posting_date) asc""",as_dict=True)
+		order by month(posting_date) desc""",as_dict=True)
 
 @frappe.whitelist()
 def get_ss_doc(employee, year):
