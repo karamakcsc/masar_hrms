@@ -30,7 +30,7 @@ def get_data(filters):
 									tss.total_working_days AS `Working Days`, tss.payment_days AS `Payment Days`, tssa.base AS `Basic Salary`,
 									MAX(CASE WHEN tsd.salary_component = 'Overtime Allowance' THEN tsd.amount END) AS `Overtime Allowance`,
 									MAX(CASE WHEN tsd.salary_component = 'Awards IN __ OUT'AND tsd.salary_component = 'Non Taxable Bonus' AND tsd.salary_component = 'End Service Awards' AND tsd.salary_component = 'Project Awards' AND tsd.salary_component = 'Award' AND tsd.salary_component = 'Bonus IN-OUT' THEN tsd.amount END) AS `Awards`,
-									(SELECT SUM(IF(tsd.salary_component != 'Overtime Allowance' AND tsd.salary_component != 'Basic' AND tsd.salary_component = 'Awards IN __ OUT'AND tsd.salary_component = 'Non Taxable Bonus' AND tsd.salary_component = 'End Service Awards' AND tsd.salary_component = 'Project Awards' AND tsd.salary_component = 'Award' AND tsd.salary_component = 'Bonus IN-OUT', tsd.amount, 0))
+									(SELECT SUM(IF(tsd.salary_component != 'Overtime Allowance' AND tsd.salary_component != 'Basic' AND tsd.salary_component != 'Awards IN __ OUT'AND tsd.salary_component != 'Non Taxable Bonus' AND tsd.salary_component != 'End Service Awards' AND tsd.salary_component != 'Project Awards' AND tsd.salary_component != 'Award' AND tsd.salary_component != 'Bonus IN-OUT', tsd.amount, 0))
 									FROM `tabSalary Detail` tsd
 									WHERE tsd.parent = tss.name AND tsd.parentfield = 'earnings') AS `Other Earnings`,
 									tss.gross_pay AS `Total Earnings`,
