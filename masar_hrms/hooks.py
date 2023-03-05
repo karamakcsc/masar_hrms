@@ -240,7 +240,8 @@ fixtures = [
 		"Company-employee_share_rate",
 		"Employee-social_security_salary",
 		"Employee-social_security_amount",
-        "Employee-old_ref"
+        "Employee-old_ref",
+        "Employee-work_type"
             ]
         ]
     ]}
