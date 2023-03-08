@@ -19,13 +19,13 @@ def get_data(filters):
 	#if(filters.get('account')):conditions += f" AND tjea.account='{filters.get('account')}' "
 	if(filters.get('emp_name')):conditions += f" AND tss.employee LIKE '%{filters.get('emp_name')}' "
 	if(filters.get('des')):conditions += f" AND tss.designation LIKE '%{filters.get('des')}' "
-	#if(filters.get('sales_person')):conditions += f" AND tst.sales_person='{filters.get('sales_person')}' "
+	if(filters.get('work_type')):conditions += f" AND te.work_type='{filters.get('work_type')}' "
 	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
 
 	#SQL Query
 	data = frappe.db.sql(f"""SELECT tss.name AS `Salary Slip No.`, tss.employee AS `Employee No.`,
-									tss.employee_name AS `Employee Name`, tss.branch AS `Branch`,
+									tss.employee_name AS `Employee Name`, tss.branch AS `Branch`, te.work_type AS `Work Type`,
 									tss.department AS `Department`, tss.designation AS `Designation`, te.date_of_joining AS `Date of Joining`,
 									tss.total_working_days AS `Working Days`, tss.leave_without_pay AS `Leave Without Pay`,
 									tss.payment_days AS `Payment Days`,tssa.base AS `Basic Salary`,
@@ -61,6 +61,7 @@ def get_columns():
 	   "Employee No.:Link/Employee:200",
 	   "Employee Name: Data:200",
 	   "Branch: Data:200",
+	   "Work Type: Data:200",
 	   "Department: Data:200",
 	   "Designation: Data:200",
 	   "Date of Joining: Data:200 ",

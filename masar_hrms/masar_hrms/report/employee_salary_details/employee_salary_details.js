@@ -59,15 +59,15 @@ frappe.query_reports["Employee Salary Details"] = {
 			"options": "Designation",
 			"width": 150,
 			"reqd": 0,
-		}
-		// {
-		// 	"fieldname": "tax_category",
-		// 	"label": __("Tax Group"),
-		// 	"fieldtype": "Link",
-		// 	"options": "Tax Category",
-		// 	"width": 100,
-		// 	"reqd": 0,
-		// },
+		},
+		{
+			"fieldname": "work_type",
+			"label": __("Work Type"),
+			"fieldtype": "Select",
+			"options": ["\n","Daily","Monthly"],
+			"width": 100,
+			"reqd": 0,
+		},
 		// {
 		// 					"fieldname": "is_return",
 		// 					"label": __("Is Return"),
