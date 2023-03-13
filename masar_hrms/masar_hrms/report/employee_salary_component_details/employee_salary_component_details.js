@@ -2,16 +2,8 @@
 // For license information, please see license.txt
 /* eslint-disable */
 
-frappe.query_reports["Employee Salary Details"] = {
+frappe.query_reports["Employee Salary Component Details"] = {
 	"filters": [
-		{
-			"fieldname": "ss_no",
-			"label": __("Salary Slip"),
-			"fieldtype": "Link",
-			"options": "Salary Slip",
-			"width": 100,
-			"reqd": 0,
-		},
 		{
 			"fieldname": "from",
 			"label": __("From Date"),
