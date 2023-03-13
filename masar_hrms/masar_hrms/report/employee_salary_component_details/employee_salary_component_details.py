@@ -15,13 +15,13 @@ def get_data(filters):
 	# _from, to = filters.get('from'), filters.get('to') #date range
 	#Conditions
 	conditions = " AND 1=1 "
-	if(filters.get('ss_no')):conditions += f" AND tss.name LIKE '%{filters.get('ss_no')}' "
-	if(filters.get('company')):conditions += f" AND tss.company='{filters.get('company')}' "
-	if(filters.get('emp_name')):conditions += f" AND tss.employee LIKE '%{filters.get('emp_name')}' "
-	if(filters.get('des')):conditions += f" AND tss.designation LIKE '%{filters.get('des')}' "
+	if(filters.get('ss_no')):conditions += f" AND te.name LIKE '%{filters.get('ss_no')}' "
+	if(filters.get('company')):conditions += f" AND te.company='{filters.get('company')}' "
+	if(filters.get('emp_name')):conditions += f" AND te.employee LIKE '%{filters.get('emp_name')}' "
+	if(filters.get('des')):conditions += f" AND te.designation LIKE '%{filters.get('des')}' "
 	if(filters.get('work_type')):conditions += f" AND te.work_type='{filters.get('work_type')}' "
-	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
-	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
+	if(filters.get('branch')):conditions += f" AND te.branch LIKE '%{filters.get('branch')}' "
+	if(filters.get('dep')):conditions += f" AND te.department LIKE '%{filters.get('dep')}' "
 
 	#SQL Query
 	# data = frappe.db.sql(f"""SELECT tss.employee AS `Employee No.`,
@@ -137,7 +137,7 @@ def get_data(filters):
 									INNER JOIN `tabEmployee Social Security Salary` tesss on te.name = tesss.employee 
 								WHERE tssa.docstatus = 1
 										{conditions}
-								GROUP BY te.name, tssa.employee, tssa.base, te.social_security_amount;""")
+								GROUP BY tss.name, tssa.employee, tssa.base, te.social_security_amount;""")
 
 	return data
 
