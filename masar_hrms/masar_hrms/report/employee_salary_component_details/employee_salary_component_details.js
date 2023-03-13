@@ -4,22 +4,22 @@
 
 frappe.query_reports["Employee Salary Component Details"] = {
 	"filters": [
-		{
-			"fieldname": "from",
-			"label": __("From Date"),
-			"fieldtype": "Date",
-			"width": 80,
-			"reqd": 1,
-			"default": dateutil.year_start()
-		 },
-		 {
-			"fieldname": "to",
-			"label": __("To Date"),
-			"fieldtype": "Date",
-			"width": 80,
-			"reqd": 1,
-			"default": dateutil.year_end()
-		},
+		// {
+		// 	"fieldname": "from",
+		// 	"label": __("From Date"),
+		// 	"fieldtype": "Date",
+		// 	"width": 80,
+		// 	"reqd": 1,
+		// 	"default": dateutil.year_start()
+		//  },
+		//  {
+		// 	"fieldname": "to",
+		// 	"label": __("To Date"),
+		// 	"fieldtype": "Date",
+		// 	"width": 80,
+		// 	"reqd": 1,
+		// 	"default": dateutil.year_end()
+		// },
 	  {
 			"fieldname": "emp_name",
 			"label": __("Employee Name"),
