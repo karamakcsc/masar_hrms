@@ -137,7 +137,7 @@ def get_data(filters):
 									INNER JOIN `tabEmployee Social Security Salary` tesss on te.name = tesss.employee 
 								WHERE tssa.docstatus = 1
 										{conditions}
-								GROUP BY tss.name, tssa.employee, tssa.base, te.social_security_amount;""")
+								GROUP BY te.name, tssa.employee, tssa.base, te.social_security_amount;""")
 
 	return data
 
