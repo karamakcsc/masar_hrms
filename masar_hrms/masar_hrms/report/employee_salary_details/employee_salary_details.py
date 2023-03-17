@@ -47,7 +47,7 @@ def get_data(filters):
 							INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
 							INNER JOIN `tabEmployee` te ON te.name = tss.employee
 							INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
-							WHERE tss.docstatus = 1 AND  tss_sub.name = tss.name
+							WHERE tss.docstatus = 1 AND tssa.docstatus = 1 AND tss_sub.name = tss.name
 										And (tss.posting_date BETWEEN '{_from}' AND '{to}')
 										{conditions}GROUP BY tss.name, tss.employee, tss.employee_name, tss.department,
 										tss.designation, te.date_of_joining, tssa.base, tss.gross_pay, tss.payment_days,
