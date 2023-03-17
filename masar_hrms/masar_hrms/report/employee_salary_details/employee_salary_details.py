@@ -41,7 +41,7 @@ def get_data(filters):
 									(SELECT SUM(IF(tsd.salary_component != 'Income Tax' AND tsd.salary_component != 'Social Security', tsd.amount, 0))
 							FROM `tabSalary Detail` tsd
 							WHERE tsd.parent = tss.name AND tsd.parentfield = 'deductions') AS `Other Deductions`, tss.total_deduction AS `Total Deductions`,
-							tss.net_pay AS `Net Pay`, tss.posting_date
+							round(tss.net_pay,3) AS `Net Pay`, tss.posting_date
 							FROM `tabSalary Slip` tss
 							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
 							INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
