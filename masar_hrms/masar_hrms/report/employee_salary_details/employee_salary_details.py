@@ -80,7 +80,7 @@ def get_columns():
 	   "Loan: Data:200",
 	   "Other Deductions: Data:200",
 	   "Total Deductions: Data:200",
-	   "Net Pay: Data:200"
+	   "Net Pay: Currency:200"
 	   #"Posting Date: Date/Posting Date:150"
 	   # "Tax Group: Data:200",
 	   # "Currency Code: Data:200"
