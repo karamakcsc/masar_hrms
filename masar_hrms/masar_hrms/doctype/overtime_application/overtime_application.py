@@ -79,10 +79,10 @@ def calculate_overtime_amount(self):
 				plan_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
 			else:
 				frappe.throw("You have to assign a shift for the employee or assign standar working hours in HR Settings")
-			# frappe.throw("alaa")
-			# frappe.msgprint(str(plan_hours))
-			month_working_hours=flt(plan_hours)*30
-			# frappe.msgprint(str(month_working_hours))
+
+			#month_working_hours=flt(plan_hours)*30
+			month_working_hours=8*30
+			
 			entry = {
 				"employee": employee.employee,
 				"posting_date": posting_date
