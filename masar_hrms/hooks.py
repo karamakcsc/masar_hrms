@@ -88,7 +88,8 @@ app_license = "MIT"
 # Override standard doctype classes
 
 # override_doctype_class = {
-#	"ToDo": "custom_app.overrides.CustomToDo"
+# 	#"ToDo": "custom_app.overrides.CustomToDo"
+	
 # }
 
 # Document Events
@@ -103,9 +104,9 @@ app_license = "MIT"
 #	}
 # }
 # doc_events = {
-#  	"Salary Slip": {
-# 		"before_insert": "masar_hrms.utilities.hourly_leave_calc.SetHourlyLeaveForEmployee"
-# 	}
+# #  	# "Salary Slip": {
+# # 	# 	"before_insert": "masar_hrms.utilities.hourly_leave_calc.SetHourlyLeaveForEmployee"
+# # 	# }
 #  }
 doctype_js = {
    "Employee" : "custom/employee/employee.js"
@@ -249,5 +250,9 @@ fixtures = [
 
 from masar_hrms.override import _leave_application
 from hrms.hr.doctype.leave_application import leave_application
+from masar_hrms.override import _salary_slip
+from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
 
 leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
+SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
+SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
