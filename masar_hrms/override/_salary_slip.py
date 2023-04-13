@@ -126,7 +126,7 @@ def compute_taxable_earnings_for_year(self):
         if self.deduct_tax_for_unclaimed_employee_benefits == 0:
             self.total_taxable_earnings = (self.current_structured_taxable_earnings * 12) - self.total_exemption_amount # Yasser
         else:self.total_taxable_earnings = (
-        	#self.previous_taxable_earnings
+        	self.previous_taxable_earnings
         	+ self.current_structured_taxable_earnings
         	+ self.future_structured_taxable_earnings
         	+ self.current_additional_earnings
@@ -136,8 +136,8 @@ def compute_taxable_earnings_for_year(self):
         ) - self.total_exemption_amount
 
         # Total taxable earnings without additional earnings with full tax
-        # self.total_taxable_earnings_without_full_tax_addl_components =(
-        #     self.total_taxable_earnings - self.current_additional_earnings_with_full_tax
         self.total_taxable_earnings_without_full_tax_addl_components =(
-            self.total_taxable_earnings 
+            self.total_taxable_earnings - self.current_additional_earnings_with_full_tax
+        # self.total_taxable_earnings_without_full_tax_addl_components =(
+        #     self.total_taxable_earnings 
         )
