@@ -63,10 +63,12 @@ def calculate_variable_tax(self, tax_component):
                 eval_locals,
             )
 
-            self.current_structured_tax_amount =  self.total_structured_tax_amount / 12 #Yasser
-            # (
-            # 	self.total_structured_tax_amount - self.previous_total_paid_taxes
-            # ) / self.remaining_sub_periods
+            #self.current_structured_tax_amount =  self.total_structured_tax_amount / 12 #Yasser
+            self.current_structured_tax_amount =  (
+            self.total_structured_tax_amount 
+            #- self.previous_total_paid_taxes
+            ) / 12
+            #/ self.remaining_sub_periods
 
             # Total taxable earnings with additional earnings with full tax
             self.full_tax_on_additional_earnings = 0.0
@@ -121,18 +123,21 @@ def compute_taxable_earnings_for_year(self):
         self.other_incomes = self.get_income_form_other_sources() or 0.0
 
         # Total taxable earnings including additional and other incomes
-        self.total_taxable_earnings = (self.current_structured_taxable_earnings * 12) - self.total_exemption_amount # Yasser
-        # (
-        # 	self.previous_taxable_earnings
-        # 	+ self.current_structured_taxable_earnings
-        # 	+ self.future_structured_taxable_earnings
-        # 	+ self.current_additional_earnings
-        # 	+ self.other_incomes
-        # 	+ self.unclaimed_taxable_benefits
-        # 	- self.total_exemption_amount
-        # )
+        if self.deduct_tax_for_unclaimed_employee_benefits == 0:
+            self.total_taxable_earnings = (self.current_structured_taxable_earnings * 12) - self.total_exemption_amount # Yasser
+        else:self.total_taxable_earnings = (
+        	#self.previous_taxable_earnings
+        	+ self.current_structured_taxable_earnings
+        	+ self.future_structured_taxable_earnings
+        	+ self.current_additional_earnings
+        	+ self.other_incomes
+        	+ self.unclaimed_taxable_benefits
+        	* 12
+        ) - self.total_exemption_amount
 
         # Total taxable earnings without additional earnings with full tax
+        # self.total_taxable_earnings_without_full_tax_addl_components =(
+        #     self.total_taxable_earnings - self.current_additional_earnings_with_full_tax
         self.total_taxable_earnings_without_full_tax_addl_components =(
-            self.total_taxable_earnings - self.current_additional_earnings_with_full_tax
+            self.total_taxable_earnings 
         )
