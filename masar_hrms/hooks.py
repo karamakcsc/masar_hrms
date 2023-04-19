@@ -242,7 +242,8 @@ fixtures = [
 		"Employee-social_security_salary",
 		"Employee-social_security_amount",
         "Employee-old_ref",
-        "Employee-work_type"
+        "Employee-work_type",
+		"Employee-tax_type"
             ]
         ]
     ]}

@@ -41,7 +41,7 @@ def get_data(filters):
 									(SELECT SUM(IF(tsd.salary_component != 'Income Tax' AND tsd.salary_component != 'Social Security', tsd.amount, 0))
 							FROM `tabSalary Detail` tsd
 							WHERE tsd.parent = tss.name AND tsd.parentfield = 'deductions') AS `Other Deductions`, tss.total_deduction AS `Total Deductions`,
-							tss.net_pay AS `Net Pay`, tss.posting_date
+							tss.net_pay AS `Net Pay`,  te.old_ref AS `Old Reference`, tss.posting_date
 							FROM `tabSalary Slip` tss
 							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
 							INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
@@ -51,7 +51,7 @@ def get_data(filters):
 										And (tss.posting_date BETWEEN '{_from}' AND '{to}')
 										{conditions}GROUP BY tss.name, tss.employee, tss.employee_name, tss.department,
 										tss.designation, te.date_of_joining, tssa.base, tss.gross_pay, tss.payment_days,
-										tss.total_deduction, tss.net_pay ;""")
+										tss.total_deduction, tss.net_pay,te.old_ref ;""")
 
 	return data
 
@@ -80,7 +80,8 @@ def get_columns():
 	   "Loan: Currency:200",
 	   "Other Deductions: Currency:200",
 	   "Total Deductions: Currency:200",
-	   "Net Pay: Currency:200"
+	   "Net Pay: Currency:200",
+	   "Old Reference: Data:200"
 	   #"Posting Date: Date/Posting Date:150"
 	   # "Tax Group: Data:200",
 	   # "Currency Code: Data:200"
