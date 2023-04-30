@@ -116,15 +116,14 @@ frappe.ui.form.on("Short Leave Application", {
 		frm.trigger("get_leave_balance");
 	},
 
-	total_leave_hours: function(frm){
-
+	leave_duration: function(frm){
+		frm.doc.total_leave_hours = frm.doc.leave_duration / 3600
 		var from_time = frm.doc.from_time;
-		var total_leave_hours = frm.doc.total_leave_hours;
-		frappe.call({
+			frappe.call({
 			method: "masar_hrms.masar_hrms.doctype.short_leave_application.short_leave_application.calculate_to_time",
 			args: {
 				"from_time": frm.doc.from_time,
-				"total_leave_hours": frm.doc.total_leave_hours
+				"total_leave_hours": frm.doc.leave_duration
 			},
 			callback: function(r) {
 				frm.doc.to_time = r.message;
@@ -178,6 +177,7 @@ frappe.ui.form.on("Short Leave Application", {
 					consider_all_leaves_in_the_allocation_period: 1
 				},
 				callback: function (r) {
+					frappe.msgprint(r.message.toString())
 					if (!r.exc && r.message) {
 						frm.set_value('leave_balance', r.message);
 					} else {

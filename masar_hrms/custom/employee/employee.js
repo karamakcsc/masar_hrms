@@ -11,3 +11,9 @@ frappe.ui.form.on('Employee',  {
     }
 
 });
+
+frappe.ui.form.on("Employee","refresh", function(frm) {
+    // frm.toggle_display("naming_series", false);
+    //frm.toggle_display("is_pos", false);
+    frm.toggle_display("bank_name", false);
+});

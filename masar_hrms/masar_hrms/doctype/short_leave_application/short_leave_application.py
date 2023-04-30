@@ -197,10 +197,10 @@ def calculate_to_time(from_time,total_leave_hours):
     # convert the from_time and total_leave_hours to datetime objects
 	from_time_obj = datetime.strptime(from_time, '%H:%M:%S')
 	total_leave_hours_obj = timedelta(hours=float(total_leave_hours)/3600)
-	frappe.msgprint(str(total_leave_hours_obj))
+	#frappe.msgprint(str(total_leave_hours_obj))
     # add the total_leave_hours to the from_time
 	to_time_obj = from_time_obj + total_leave_hours_obj
 	to_time = to_time_obj.strftime('%H:%M:%S')
-	frappe.msgprint(str(to_time))
+	#frappe.msgprint(str(to_time))
 	# set the to_time field
 	return to_time

@@ -13,10 +13,11 @@
   "column_break_4",
   "leave_type",
   "department",
+  "total_leave_hours",
   "leave_balance",
   "section_break_8",
   "from_time",
-  "total_leave_hours",
+  "leave_duration",
   "to_time",
   "column_break_12",
   "description",
@@ -102,12 +103,13 @@
   },
   {
    "fieldname": "total_leave_hours",
-   "fieldtype": "Duration",
+   "fieldtype": "Float",
    "hide_days": 1,
    "hide_seconds": 1,
    "in_list_view": 1,
    "label": "Total Leave Hours",
    "no_copy": 1,
+   "read_only": 1,
    "reqd": 1
   },
   {
@@ -230,12 +232,19 @@
    "options": "Short Leave Application",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "leave_duration",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "Leave Duration"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-01-29 00:48:01.581574",
+ "modified": "2023-04-30 01:11:12.972944",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",

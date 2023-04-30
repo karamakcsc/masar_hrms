@@ -243,7 +243,11 @@ fixtures = [
 		"Employee-social_security_amount",
         "Employee-old_ref",
         "Employee-work_type",
-		"Employee-tax_type"
+		"Employee-tax_type",
+		"Employee-bank",
+		"Employee-column_break_alwbp",
+		"Employee-bank_branch",
+		"Employee-iban"
             ]
         ]
     ]}
