@@ -53,14 +53,14 @@ frappe.query_reports["Bank Transfer Report"] = {
 			"width": 150,
 			"reqd": 0,
 		},
-		{
-			"fieldname": "work_type",
-			"label": __("Work Type"),
-			"fieldtype": "Select",
-			"options": ["\n","Daily","Monthly"],
-			"width": 100,
-			"reqd": 0,
-		},
+		// {
+		// 	"fieldname": "work_type",
+		// 	"label": __("Work Type"),
+		// 	"fieldtype": "Select",
+		// 	"options": ["\n","Daily","Monthly"],
+		// 	"width": 100,
+		// 	"reqd": 0,
+		// },
 		{
 			"fieldname": "company",
 			"label": __("Company"),
