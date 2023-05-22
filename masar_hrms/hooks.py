@@ -249,7 +249,8 @@ fixtures = [
 		"Employee-bank_branch",
 		"Employee-iban",
 		"Salary Structure Assignment-change_basic_amount",
-		"Salary Structure Assignment-modification_date"
+		"Salary Structure Assignment-basic_tracking",
+		"Salary Structure Assignment-section_break_82pzc"
             ]
         ]
     ]}
