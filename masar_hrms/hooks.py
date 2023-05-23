@@ -109,7 +109,8 @@ app_license = "MIT"
 # # 	# }
 #  }
 doctype_js = {
-   "Employee" : "custom/employee/employee.js"
+   "Employee" : "custom/employee/employee.js",
+   "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js"
  }
 
 # Scheduled Tasks
@@ -249,8 +250,12 @@ fixtures = [
 		"Employee-bank_branch",
 		"Employee-iban",
 		"Salary Structure Assignment-change_basic_amount",
-		"Salary Structure Assignment-basic_tracking",
-		"Salary Structure Assignment-section_break_82pzc"
+		"Salary Structure Assignment-change_amount",
+		"Salary Structure Assignment-new_basic",
+        "Salary Structure Assignment-change_to_date",
+        "Salary Structure Assignment-change_from_date",
+        "Salary Structure Assignment-old_basic",
+        "Salary Structure Assignment-change_basic_amount"
             ]
         ]
     ]}
