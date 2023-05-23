@@ -15,4 +15,5 @@ frappe.ui.form.on("Salary Structure Assignment","refresh", function(frm) {
     frm.set_df_property("change_amount", "read_only", frm.is_new() ? 0 : 1);
     frm.set_df_property("change_to_date", "read_only", frm.is_new() ? 0 : 1);
     frm.set_df_property("change_from_date", "read_only", frm.is_new() ? 0 : 1);
+    frm.set_df_property("remark", "read_only", frm.is_new() ? 0 : 1);
 });
