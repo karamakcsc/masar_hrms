@@ -144,3 +144,46 @@ def compute_taxable_earnings_for_year(self):
 		# self.total_taxable_earnings_without_full_tax_addl_components =(
 		#     self.total_taxable_earnings
 		)
+
+
+# def set_loan_repayment(self):
+#     principal_amounts = []
+#     interest_amounts = []
+
+#     if not self.get("loans"):
+#         for loan in self.get_loan_details():
+#             amounts = calculate_amounts(loan.name, self.posting_date, "Regular Payment")
+#             if amounts["interest_amount"] or amounts["payable_principal_amount"]:
+#                 self.append(
+#                     "loans",
+#                     {
+#                         "loan": loan.name,
+#                         "interest_amount": amounts["interest_amount"],
+#                         "principal_amount": amounts["payable_principal_amount"],
+#                         "loan_account": loan.loan_account,
+#                         "interest_income_account": loan.interest_income_account,
+#                     },
+#                 )
+
+#     for payment in self.get("loans"):
+#         amounts = calculate_amounts(payment.loan, self.posting_date, "Regular Payment")
+#         principal_amount = amounts["payable_principal_amount"]
+#         interest_amount = amounts["interest_amount"]
+#         total_amount = principal_amount + interest_amount
+
+#         if payment.total_payment > total_amount:
+#             frappe.throw(
+#                 _(
+#                     """Row {0}: Paid amount {1} is greater than pending accrued amount {2} against loan {3}"""
+#                 ).format(
+#                     payment.idx,
+#                     frappe.bold(payment.total_payment),
+#                     frappe.bold(total_amount),
+#                     frappe.bold(payment.loan),
+#                 )
+#             )
+
+#         principal_amounts.append(principal_amount)
+#         interest_amounts.append(interest_amount)
+
+#     return principal_amounts, interest_amounts

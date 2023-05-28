@@ -87,21 +87,21 @@ def calculate_overtime_amount(self):
 				"employee": employee.employee,
 				"posting_date": posting_date
 			}
-			sl = frappe.new_doc('Salary Slip')
-			sl.update(entry)
-			sl.get_emp_and_working_day_details()
-			overtime_components_amount=0
-			for d in sl.get('earnings'):
-				doc = frappe.get_doc('Salary Component', d.get('salary_component'))
-				if doc.is_overtime_applicable:
-					overtime_components_amount+=int(d.amount)
-			for d in sl.get('deductions'):
-				doc = frappe.get_doc('Salary Component', d.get('salary_component'))
-				if doc.is_overtime_applicable:
-					overtime_components_amount-=int(d.amount)
-			overtime_components_amount=max(0, overtime_components_amount)
+			# sl = frappe.new_doc('Salary Slip')
+			# sl.update(entry)
+			# sl.get_emp_and_working_day_details()
+			# overtime_components_amount=0
+			# for d in sl.get('earnings'):
+			# 	doc = frappe.get_doc('Salary Component', d.get('salary_component'))
+			# 	if doc.is_overtime_applicable:
+			# 		overtime_components_amount+=int(d.amount)
+			# for d in sl.get('deductions'):
+			# 	doc = frappe.get_doc('Salary Component', d.get('salary_component'))
+			# 	if doc.is_overtime_applicable:
+			# 		overtime_components_amount-=int(d.amount)
+			# overtime_components_amount=max(0, overtime_components_amount)
 			# frappe.msgprint(str(overtime_components_amount))
-			hour_rate=flt(overtime_components_amount)/month_working_hours
+			hour_rate=flt(employee.basic_salary)/month_working_hours
 			employee.rate=round(hour_rate*flt(overtime_type_hour_rate),3)
 
 			# self.reload()

@@ -8,6 +8,7 @@
  "field_order": [
   "employee",
   "overtime_type",
+  "basic_salary",
   "rate",
   "salary_component",
   "column_break_2",
@@ -31,6 +32,7 @@
    "options": "Overtime Type"
   },
   {
+   "columns": 1,
    "default": "0",
    "fieldname": "rate",
    "fieldtype": "Read Only",
@@ -64,12 +66,20 @@
    "fieldtype": "Read Only",
    "in_list_view": 1,
    "label": "Amount"
+  },
+  {
+   "columns": 1,
+   "fetch_from": "employee.basic_salary",
+   "fieldname": "basic_salary",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "label": "Basic Salary"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2023-01-24 17:01:15.277089",
+ "modified": "2023-05-29 00:44:12.247574",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Overtime Employee",

@@ -256,7 +256,8 @@ fixtures = [
         "Salary Structure Assignment-change_from_date",
         "Salary Structure Assignment-old_basic",
         "Salary Structure Assignment-change_basic_amount",
-        "Salary Structure Assignment-remark"
+        "Salary Structure Assignment-remark",
+		"Employee-basic_salary"
             ]
         ]
     ]}
@@ -270,3 +271,4 @@ from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
 leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
 SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
 SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
+# SalarySlip.set_loan_repayment = _salary_slip.set_loan_repayment
