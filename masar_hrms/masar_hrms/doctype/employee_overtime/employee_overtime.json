@@ -1,0 +1,288 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-05-29 12:29:47.952966",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "naming_series",
+  "posting_date",
+  "employee",
+  "employee_name",
+  "salary_structure_assignment",
+  "column_break_4",
+  "company",
+  "department",
+  "shift_type",
+  "basic_salary",
+  "salary_component",
+  "section_break_5",
+  "overtime_type_working_day",
+  "overtime_hours_working_day",
+  "column_break_7",
+  "overtime_rate_working_hour",
+  "rate_hours_working_day",
+  "section_break_r6hox",
+  "overtime_type_off_day",
+  "overtime_hours_off_day",
+  "column_break_1iwvc",
+  "overtime_rate_off_day",
+  "rate_hours_off_day",
+  "overtime_totals_section",
+  "amount_working_day",
+  "total_amount",
+  "column_break_m2ydb",
+  "amount_off_day",
+  "remaks_total",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "OTA-.YY.-.MM.-.####"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Read Only",
+   "in_list_view": 1,
+   "label": "Employee Name"
+  },
+  {
+   "fieldname": "salary_structure_assignment",
+   "fieldtype": "Link",
+   "label": "Salary Structure Assignment",
+   "options": "Salary Structure Assignment"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.company",
+   "fieldname": "company",
+   "fieldtype": "Read Only",
+   "label": "Company",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Read Only",
+   "label": "Department"
+  },
+  {
+   "fetch_from": "employee.default_shift",
+   "fieldname": "shift_type",
+   "fieldtype": "Read Only",
+   "label": "Shift Type"
+  },
+  {
+   "fetch_from": "salary_structure_assignment.base",
+   "fieldname": "basic_salary",
+   "fieldtype": "Read Only",
+   "label": "Basic Salary"
+  },
+  {
+   "default": "Overtime Allowance",
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break",
+   "label": "Overtime For Working Day"
+  },
+  {
+   "default": "Working Day",
+   "fieldname": "overtime_type_working_day",
+   "fieldtype": "Link",
+   "label": "Overtime Type",
+   "options": "Overtime Type",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "overtime_hours_working_day",
+   "fieldtype": "Float",
+   "label": "Overtime Hours"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "overtime_type_working_day.rate",
+   "fieldname": "overtime_rate_working_hour",
+   "fieldtype": "Read Only",
+   "label": "Overtime Rate"
+  },
+  {
+   "default": "0",
+   "fieldname": "rate_hours_working_day",
+   "fieldtype": "Float",
+   "label": "Rate Hours",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fetch_from": "overtime_type_off_day.rate",
+   "fieldname": "section_break_r6hox",
+   "fieldtype": "Section Break",
+   "label": "Overtime For Off-Day"
+  },
+  {
+   "default": "Off-Day",
+   "fieldname": "overtime_type_off_day",
+   "fieldtype": "Link",
+   "label": "Overtime Type",
+   "options": "Overtime Type",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "overtime_hours_off_day",
+   "fieldtype": "Float",
+   "label": "Overtime Hours"
+  },
+  {
+   "fieldname": "column_break_1iwvc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "overtime_type_off_day.rate",
+   "fieldname": "overtime_rate_off_day",
+   "fieldtype": "Read Only",
+   "label": "Overtime Rate"
+  },
+  {
+   "default": "0",
+   "fieldname": "rate_hours_off_day",
+   "fieldtype": "Float",
+   "label": "Rate Hours",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_totals_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime Totals"
+  },
+  {
+   "default": "0",
+   "fieldname": "amount_working_day",
+   "fieldtype": "Float",
+   "label": "Amount Working Day",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_m2ydb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "amount_off_day",
+   "fieldtype": "Read Only",
+   "label": "Amount Off-Day",
+   "read_only": 1
+  },
+  {
+   "fieldname": "remaks_total",
+   "fieldtype": "Small Text",
+   "label": "Remaks",
+   "max_height": "50px"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Overtime",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Overtime",
+   "print_hide": 1,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-05-29 12:42:20.106023",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Overtime",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "All",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1,
+ "track_seen": 1
+}
