@@ -7,9 +7,6 @@
 // 	// }
 // });
 
-
-//// Fetching Leave Type with Filter ///// Start ///Siam
-
 cur_frm.fields_dict['employee'].get_query = function(doc) {
 	return {
 		filters: {
@@ -17,7 +14,6 @@ cur_frm.fields_dict['employee'].get_query = function(doc) {
 		}
 	}
 }
-
 
 cur_frm.fields_dict['salary_component'].get_query = function(doc) {
 	return {
@@ -27,10 +23,6 @@ cur_frm.fields_dict['salary_component'].get_query = function(doc) {
 	}
 }
 
-
-
-
-
 cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
 	return {
 		filters: {
@@ -39,8 +31,6 @@ cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
 		}
 	}
 }
-//// Fetching Leave Type with Filter ///// END ///Siam
-
 
 frappe.ui.form.on("Employee Overtime", {
 	reresh: function(frm){
@@ -72,10 +62,6 @@ var rate_off_day = function(frm) {
     frm.set_value("rate_hours_off_day",doc.basic_salary / 240 * doc.overtime_rate_off_day)
 }
 
-
-
-
-
 frappe.ui.form.on("Employee Overtime", {
 	rate_hours_working_day: function(frm){
   amount_wd(frm);
@@ -91,10 +77,6 @@ var amount_wd = function(frm) {
     frm.set_value("amount_working_day",doc.rate_hours_working_day * doc.overtime_hours_working_day)
 }
 
-
-
-
-
 frappe.ui.form.on("Employee Overtime", {
 	rate_hours_off_day: function(frm){
   amount_off_day(frm);
@@ -108,13 +90,6 @@ var amount_off_day = function(frm) {
   var doc = frm.doc
     frm.set_value("amount_off_day",doc.rate_hours_off_day * doc.overtime_hours_off_day)
 }
-
-
-
-
-
-
-
 
 frappe.ui.form.on("Employee Overtime", {
 	overtime_hours_working_day: function(frm){
