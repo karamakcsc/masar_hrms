@@ -256,8 +256,8 @@ fixtures = [
         "Salary Structure Assignment-change_from_date",
         "Salary Structure Assignment-old_basic",
         "Salary Structure Assignment-change_basic_amount",
-        "Salary Structure Assignment-remark",
-		"Employee-basic_salary"
+        "Salary Structure Assignment-remark"
+		# "Employee-basic_salary"
             ]
         ]
     ]}
