@@ -257,7 +257,8 @@ fixtures = [
         "Salary Structure Assignment-old_basic",
         "Salary Structure Assignment-change_basic_amount",
         "Salary Structure Assignment-remark"
-		# "Employee-basic_salary"
+		"Employee-basic_salary",
+        "Payroll Entry-work_type"
             ]
         ]
     ]}
@@ -272,3 +273,10 @@ leave_application.get_leaves_for_period = _leave_application.get_leaves_for_peri
 SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
 SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
 # SalarySlip.set_loan_repayment = _salary_slip.set_loan_repayment
+
+from masar_hrms.override import _payroll_entry
+from hrms.payroll.doctype.payroll_entry import payroll_entry
+from hrms.payroll.doctype.payroll_entry.payroll_entry import PayrollEntry 
+payroll_entry.get_filter_condition= _payroll_entry.get_filter_condition
+PayrollEntry.fill_employee_detailsr = _payroll_entry.fill_employee_details
+PayrollEntry.make_filters = _payroll_entry.make_filters
