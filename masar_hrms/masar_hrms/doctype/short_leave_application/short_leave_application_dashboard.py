@@ -1,6 +1,6 @@
-# from frappe import _
-#
-#
+from frappe import _
+
+
 # def get_data():
 # 	return {
 # 		"fieldname": "short_leave_application",
