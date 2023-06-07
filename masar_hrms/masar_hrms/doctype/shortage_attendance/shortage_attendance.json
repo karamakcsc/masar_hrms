@@ -1,0 +1,264 @@
+{
+ "actions": [],
+ "allow_import": 1,
+ "autoname": "naming_series:",
+ "creation": "2023-06-04 11:53:42.670454",
+ "default_view": "List",
+ "doctype": "DocType",
+ "document_type": "Setup",
+ "engine": "InnoDB",
+ "field_order": [
+  "attendance_details",
+  "naming_series",
+  "employee",
+  "employee_name",
+  "difference_hours",
+  "column_break0",
+  "attendance_date",
+  "company",
+  "department",
+  "leave_balance",
+  "details_section",
+  "attendance",
+  "in_time",
+  "working_hours",
+  "plan_hours",
+  "column_break_18",
+  "shift",
+  "out_time",
+  "status",
+  "late_entry",
+  "early_exit",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "attendance_details",
+   "fieldtype": "Section Break",
+   "oldfieldtype": "Section Break",
+   "options": "Simple"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "no_copy": 1,
+   "oldfieldname": "naming_series",
+   "oldfieldtype": "Select",
+   "options": "HR-ATTS-.YYYY.-",
+   "set_only_once": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_global_search": 1,
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "oldfieldname": "employee",
+   "oldfieldtype": "Link",
+   "options": "Employee",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "label": "Employee Name",
+   "oldfieldname": "employee_name",
+   "oldfieldtype": "Data",
+   "read_only": 1
+  },
+  {
+   "depends_on": "working_hours",
+   "fieldname": "working_hours",
+   "fieldtype": "Float",
+   "label": "Working Hours",
+   "precision": "1",
+   "read_only": 1
+  },
+  {
+   "default": "Present",
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "oldfieldname": "status",
+   "oldfieldtype": "Select",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break0",
+   "fieldtype": "Column Break",
+   "oldfieldtype": "Column Break",
+   "width": "50%"
+  },
+  {
+   "fieldname": "attendance_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Attendance Date",
+   "oldfieldname": "attendance_date",
+   "oldfieldtype": "Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "oldfieldname": "company",
+   "oldfieldtype": "Link",
+   "options": "Company",
+   "read_only": 1,
+   "remember_last_selected_value": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "details_section",
+   "fieldtype": "Section Break",
+   "label": "Attendance Details"
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Link",
+   "label": "Shift",
+   "options": "Shift Type"
+  },
+  {
+   "depends_on": "shift",
+   "fieldname": "in_time",
+   "fieldtype": "Datetime",
+   "label": "In Time",
+   "read_only": 1
+  },
+  {
+   "depends_on": "shift",
+   "fieldname": "out_time",
+   "fieldtype": "Datetime",
+   "label": "Out Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_18",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "late_entry",
+   "fieldtype": "Check",
+   "label": "Late Entry",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "early_exit",
+   "fieldtype": "Check",
+   "label": "Early Exit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Shortage Attendance",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "attendance",
+   "fieldtype": "Link",
+   "label": "Attendance",
+   "options": "Attendance",
+   "read_only": 1
+  },
+  {
+   "fieldname": "plan_hours",
+   "fieldtype": "Float",
+   "label": "Plan Hours",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "difference_hours",
+   "fieldtype": "Float",
+   "label": "Difference Hours ",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_balance",
+   "fieldtype": "Data",
+   "label": "Leave Balance"
+  }
+ ],
+ "icon": "fa fa-ok",
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2023-06-04 17:55:28.542091",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Shortage Attendance",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "import": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "search_fields": "employee,employee_name,attendance_date,status",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "employee_name",
+ "track_changes": 1
+}

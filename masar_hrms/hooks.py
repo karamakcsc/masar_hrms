@@ -116,23 +116,28 @@ doctype_js = {
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-#	"all": [
-#		"masar_hrms.tasks.all"
-#	],
-#	"daily": [
-#		"masar_hrms.tasks.daily"
-#	],
-#	"hourly": [
-#		"masar_hrms.tasks.hourly"
-#	],
-#	"weekly": [
-#		"masar_hrms.tasks.weekly"
-#	]
-#	"monthly": [
-#		"masar_hrms.tasks.monthly"
-#	]
-# }
+scheduler_events = {
+	"cron":{
+		"* * * * *": [
+			"masar_hrms.tasks.cron"
+		]
+	}
+	# "all": [
+	# 	"masar_hrms.tasks.all"
+	# ],
+	# "daily": [
+	# 	"masar_hrms.tasks.daily"
+	# ],
+	# "hourly": [
+	# 	"masar_hrms.tasks.hourly"
+	# ],
+	# "weekly": [
+	# 	"masar_hrms.tasks.weekly"
+	# ],
+	# "monthly": [
+	# 	"masar_hrms.tasks.monthly"
+	# ]
+}
 
 # Testing
 # -------
@@ -272,7 +277,6 @@ from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
 leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
 SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
 SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
-# SalarySlip.set_loan_repayment = _salary_slip.set_loan_repayment
 
 from masar_hrms.override import _payroll_entry
 from hrms.payroll.doctype.payroll_entry import payroll_entry
