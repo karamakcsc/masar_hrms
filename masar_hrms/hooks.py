@@ -116,12 +116,12 @@ doctype_js = {
 # Scheduled Tasks
 # ---------------
 
-scheduler_events = {
-	"cron":{
-		"* * * * *": [
-			"masar_hrms.tasks.cron"
-		]
-	}
+# scheduler_events = {
+# 	"cron":{
+# 		"* * * * *": [
+# 			"masar_hrms.tasks.cron"
+# 		]
+# 	}
 	# "all": [
 	# 	"masar_hrms.tasks.all"
 	# ],
