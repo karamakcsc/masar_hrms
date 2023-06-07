@@ -137,7 +137,7 @@ doctype_js = {
 	# "monthly": [
 	# 	"masar_hrms.tasks.monthly"
 	# ]
-}
+# }
 
 # Testing
 # -------
