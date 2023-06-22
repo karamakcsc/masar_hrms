@@ -8,14 +8,6 @@ frappe.ui.form.on('Attendance Shortage', {
 });
 
 
-frappe.ui.form.on("Attendance Shortage", "refresh", function(frm) {
-    frm.add_custom_button(__("Deduct From Salary"), function() {
-        frappe.msgprint("Button clicked!");
-    });
-});
-
-
-
 cur_frm.fields_dict['short_leave_application'].get_query = function(doc) {
     var attendanceDate = frappe.datetime.str_to_obj(doc.attendance_date);
     var startOfMonth = new Date(attendanceDate.getFullYear(), attendanceDate.getMonth(), 1);
