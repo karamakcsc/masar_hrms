@@ -8,16 +8,6 @@ frappe.ui.form.on('Attendance Shortage', {
 });
 
 
-// cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
-// 	return {
-// 		filters: {
-// 			"docstatus": 1,
-// 			"employee": doc.employee
-// 		}
-// 	}
-// }
-
-
 frappe.ui.form.on("Attendance Shortage", "refresh", function(frm) {
     frm.add_custom_button(__("Deduct From Salary"), function() {
         frappe.msgprint("Button clicked!");
