@@ -42,6 +42,14 @@ cur_frm.fields_dict['leave_type'].get_query = function(doc) {
 		}
 	}
 }
+cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
+	return {
+		filters: {
+			"docstatus": 1,
+			"employee": doc.employee
+		}
+	}
+}
 ////// Fetching Leave Type with Filter ///// END ///Siam
 
 
@@ -103,6 +111,7 @@ frappe.ui.form.on("Short Leave Application", {
 
 	employee: function(frm) {
 	 	frm.trigger("get_leave_balance");
+		frm.trigger("get_working_hours");
 		frm.trigger("set_leave_approver");
 	},
 
@@ -114,6 +123,7 @@ frappe.ui.form.on("Short Leave Application", {
 
 	leave_type: function(frm) {
 		frm.trigger("get_leave_balance");
+		frm.trigger("get_working_hours");
 	},
 
 	leave_duration: function(frm){
@@ -177,11 +187,32 @@ frappe.ui.form.on("Short Leave Application", {
 					consider_all_leaves_in_the_allocation_period: 1
 				},
 				callback: function (r) {
-					frappe.msgprint(r.message.toString())
 					if (!r.exc && r.message) {
 						frm.set_value('leave_balance', r.message);
+						frm.set_value('leave_balance_hr', r.message *8);
 					} else {
 						frm.set_value('leave_balance', "0");
+						frm.set_value('leave_balance_hr', "0");
+					}
+				}
+			});
+		}
+	},
+
+	get_working_hours: function(frm) {
+
+		if (frm.doc.docstatus === 0 && frm.doc.employee && frm.doc.leave_type && frm.doc.posting_date && frm.doc.posting_date) {
+			return frappe.call({
+				method: "masar_hrms.masar_hrms.doctype.short_leave_application.short_leave_application.calculate_working_hours",
+				args: {
+					"employee": frm.doc.employee,
+					"posting_date": frm.doc.posting_date
+				},
+				callback: function (r) {
+					if (!r.exc && r.message) {
+						frm.set_value('working_hours', r.message);
+					} else {
+						frm.set_value('working_hours', "0");
 					}
 				}
 			});
@@ -214,6 +245,7 @@ frappe.ui.form.on("Short Leave Application", {
 					if (r && r.message) {
 						frm.set_value('total_leave_days', r.message);
 						frm.trigger("get_leave_balance");
+						frm.trigger("get_working_hours");
 					}
 				}
 			});

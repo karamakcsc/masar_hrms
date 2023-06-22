@@ -44,10 +44,8 @@ class ShortLeaveApplication(Document):
 		super(ShortLeaveApplication, self).__init__(*args, **kwargs)
 
 	def validate(self):
-		# from_time=datetime.datetime.strptime(self.from_time, '%H:%M:%S')
-		# to_time=datetime.datetime.strptime(self.to_time, '%H:%M:%S')
-		# self.total_leave_hours=to_time-from_time
 		pass
+	
 
 	def on_update(self):
 
@@ -59,36 +57,49 @@ class ShortLeaveApplication(Document):
 		share_doc_with_approver(self, self.leave_approver)
 
 	def on_submit(self):
+		
+
 		from_time = get_time(self.from_time)
 		posting_date = datetime.combine(self.posting_date, from_time)
 		result=get_employee_shift(self.employee, posting_date)
 		
-		plan_hours=0
+		working_hours=0
 		if result:
 			if result.start_datetime.minute>result.end_datetime.minute:
-				plan_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour-1,60-result.start_datetime.minute+result.end_datetime.minute)
+				working_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour-1,60-result.start_datetime.minute+result.end_datetime.minute)
 			else:
-				plan_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour,result.end_datetime.minute-result.start_datetime.minute)
+				working_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour,result.end_datetime.minute-result.start_datetime.minute)
 		elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
-			plan_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
+			working_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
 		else: frappe.throw("You have to assign a shift for the employee or assign standar working hours in HR Settings")
-		frappe.msgprint(str(plan_hours))
-		if self.total_leave_hours/3600.0>self.leave_balance*86400:
-			frappe.throw(
-				_("Leave hours is greater than remaining allowed hours")
-			)
+
+		# if self.total_leave_hours/3600.0>self.leave_balance*working_hours*3600:
+		# 	frappe.throw(
+		# 		_("Leave hours is greater than remaining allowed hours")
+		# 	)
+
 		if self.status in ["Open", "Cancelled"]:
 			frappe.throw(
 				_("Only Short Leave Applications with status 'Approved' and 'Rejected' can be submitted")
 			)
+		
+		if self.leave_type:	
+			leave_type = frappe.get_doc("Leave Type", self.leave_type)
 
+			if leave_type.is_lwp == 0:
+				if self.leave_balance * working_hours < self.total_leave_hours:
+					frappe.throw(_("Insufficient leave balance. Requested leaves exceed available balance."))
 
-		# notify leave applier about approval
-		if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-			self.notify_employee()
+				# notify leave applier about approval
+				if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
+					self.notify_employee()
 
-		self.create_leave_ledger_entry()
-		pass
+				self.create_leave_ledger_entry(str(working_hours))
+			else:
+				if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
+					self.notify_employee()
+					
+				self.AddAdditionalSalary()	
 
 	def on_cancel(self):
 		# self.create_leave_ledger_entry(submit=False)
@@ -101,10 +112,10 @@ class ShortLeaveApplication(Document):
 		self.reload()
 		pass
 
-	def create_leave_ledger_entry(self, submit=True):
+	def create_leave_ledger_entry(self,working_hours, submit=True):
 		raise_exception = False if frappe.flags.in_patch else True
 		args = dict(
-			leaves=((self.total_leave_hours)/8.0) * -1,
+			leaves=((self.total_leave_hours)/flt(working_hours)) * -1,
 			from_date=self.posting_date,
 			to_date=self.posting_date,
 			is_lwp=0,
@@ -113,7 +124,26 @@ class ShortLeaveApplication(Document):
 		)
 		create_leave_ledger_entry(self, args, submit)
 
+	def AddAdditionalSalary(self, submit=True):
+		employee = self.employee
+		salary_component = self.salary_component
+		payroll_date = self.posting_date		
+		working_hours = calculate_working_hours(employee,payroll_date)
+		hour_rate = hour_rate = flt(self.basic_salary) / 240
+		deduct_amount = self.total_leave_hours * hour_rate
+		entry = {
+			"employee": employee,
+			"salary_component": salary_component,
+			"company": self.company,
+			"currency": frappe.get_doc("Company", self.company).default_currency,
+			"amount": flt(deduct_amount),
+			"payroll_date": payroll_date,
 
+		}
+		(frappe.new_doc("Additional Salary")
+			.update(entry)
+			.insert(ignore_permissions=True, ignore_mandatory=True)).run_method('submit')
+		frappe.db.commit()
 
 
 
@@ -204,3 +234,31 @@ def calculate_to_time(from_time,total_leave_hours):
 	#frappe.msgprint(str(to_time))
 	# set the to_time field
 	return to_time
+
+
+
+@frappe.whitelist()
+def calculate_working_hours(employee, posting_date):
+    posting_date = posting_date.strftime("%Y-%m-%d")
+    posting_date = datetime.strptime(posting_date, "%Y-%m-%d")
+    result = get_employee_shift(employee, posting_date)
+    working_hours = 0
+
+    if result:
+        if result.start_datetime.minute > result.end_datetime.minute:
+            working_hours = datetime.time(
+                result.end_datetime.hour - result.start_datetime.hour - 1,
+                60 - result.start_datetime.minute + result.end_datetime.minute
+            )
+        else:
+            working_hours = datetime.time(
+                result.end_datetime.hour - result.start_datetime.hour,
+                result.end_datetime.minute - result.start_datetime.minute
+            )
+    elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
+        working_hours = frappe.db.get_single_value("HR Settings", "standard_working_hours")
+    else:
+        working_hours = 0
+
+    return working_hours
+

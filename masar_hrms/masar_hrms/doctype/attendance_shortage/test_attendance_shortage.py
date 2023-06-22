@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestShortageAttendance(FrappeTestCase):
+class TestAttendanceShortage(FrappeTestCase):
 	pass

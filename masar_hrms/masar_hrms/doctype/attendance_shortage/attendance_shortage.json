@@ -2,7 +2,7 @@
  "actions": [],
  "allow_import": 1,
  "autoname": "naming_series:",
- "creation": "2023-06-04 11:53:42.670454",
+ "creation": "2023-06-20 11:18:05.844158",
  "default_view": "List",
  "doctype": "DocType",
  "document_type": "Setup",
@@ -13,11 +13,19 @@
   "employee",
   "employee_name",
   "difference_hours",
+  "leave_approver",
   "column_break0",
   "attendance_date",
   "company",
   "department",
   "leave_balance",
+  "tab_break_o7bwj",
+  "salary_structure_assignment",
+  "salary_component",
+  "column_break_ewjc4",
+  "basic_salary",
+  "hour_rate",
+  "deduct_amount",
   "details_section",
   "attendance",
   "in_time",
@@ -29,6 +37,8 @@
   "status",
   "late_entry",
   "early_exit",
+  "section_break_gek2r",
+  "short_leave_application",
   "amended_from"
  ],
  "fields": [
@@ -71,24 +81,11 @@
    "read_only": 1
   },
   {
-   "depends_on": "working_hours",
-   "fieldname": "working_hours",
+   "fieldname": "difference_hours",
    "fieldtype": "Float",
-   "label": "Working Hours",
-   "precision": "1",
+   "label": "Difference Hours ",
+   "precision": "3",
    "read_only": 1
-  },
-  {
-   "default": "Present",
-   "fieldname": "status",
-   "fieldtype": "Data",
-   "in_standard_filter": 1,
-   "label": "Status",
-   "no_copy": 1,
-   "oldfieldname": "status",
-   "oldfieldtype": "Select",
-   "read_only": 1,
-   "search_index": 1
   },
   {
    "fieldname": "column_break0",
@@ -97,12 +94,14 @@
    "width": "50%"
   },
   {
+   "fetch_from": "short_leave_application.posting_date",
    "fieldname": "attendance_date",
    "fieldtype": "Date",
    "in_list_view": 1,
    "label": "Attendance Date",
    "oldfieldname": "attendance_date",
    "oldfieldtype": "Date",
+   "options": "Today",
    "read_only": 1
   },
   {
@@ -125,15 +124,21 @@
    "read_only": 1
   },
   {
+   "fieldname": "leave_balance",
+   "fieldtype": "Data",
+   "label": "Leave Balance"
+  },
+  {
    "fieldname": "details_section",
-   "fieldtype": "Section Break",
+   "fieldtype": "Tab Break",
    "label": "Attendance Details"
   },
   {
-   "fieldname": "shift",
+   "fieldname": "attendance",
    "fieldtype": "Link",
-   "label": "Shift",
-   "options": "Shift Type"
+   "label": "Attendance",
+   "options": "Attendance",
+   "read_only": 1
   },
   {
    "depends_on": "shift",
@@ -143,6 +148,30 @@
    "read_only": 1
   },
   {
+   "depends_on": "working_hours",
+   "fieldname": "working_hours",
+   "fieldtype": "Float",
+   "label": "Working Hours",
+   "read_only": 1
+  },
+  {
+   "fieldname": "plan_hours",
+   "fieldtype": "Float",
+   "label": "Plan Hours",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_18",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "shift",
+   "fieldtype": "Link",
+   "label": "Shift",
+   "options": "Shift Type"
+  },
+  {
    "depends_on": "shift",
    "fieldname": "out_time",
    "fieldtype": "Datetime",
@@ -150,8 +179,16 @@
    "read_only": 1
   },
   {
-   "fieldname": "column_break_18",
-   "fieldtype": "Column Break"
+   "default": "Present",
+   "fieldname": "status",
+   "fieldtype": "Data",
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "oldfieldname": "status",
+   "oldfieldtype": "Select",
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "default": "0",
@@ -172,44 +209,85 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Shortage Attendance",
+   "options": "Attendance Shortage",
    "print_hide": 1,
    "read_only": 1
   },
   {
-   "fieldname": "attendance",
+   "fieldname": "amended_from",
    "fieldtype": "Link",
-   "label": "Attendance",
-   "options": "Attendance",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Attendance Shortage",
+   "print_hide": 1,
    "read_only": 1
   },
   {
-   "fieldname": "plan_hours",
-   "fieldtype": "Float",
-   "label": "Plan Hours",
+   "fieldname": "section_break_gek2r",
+   "fieldtype": "Tab Break",
+   "label": "Leaves"
+  },
+  {
+   "fieldname": "short_leave_application",
+   "fieldtype": "Link",
+   "label": "Short Leave Application",
+   "options": "Short Leave Application"
+  },
+  {
+   "fieldname": "salary_structure_assignment",
+   "fieldtype": "Link",
+   "label": "Salary Structure Assignment",
+   "options": "Salary Structure Assignment",
+   "reqd": 1
+  },
+  {
+   "fieldname": "tab_break_o7bwj",
+   "fieldtype": "Tab Break",
+   "label": "Salary Details"
+  },
+  {
+   "fieldname": "column_break_ewjc4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fetch_from": "salary_structure_assignment.base",
+   "fieldname": "basic_salary",
+   "fieldtype": "Read Only",
+   "label": "Basic Salary"
+  },
+  {
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "hour_rate",
+   "fieldtype": "Read Only",
+   "label": "Hour Rate",
    "precision": "3",
    "read_only": 1
   },
   {
-   "fieldname": "difference_hours",
-   "fieldtype": "Float",
-   "label": "Difference Hours ",
-   "precision": "3",
-   "read_only": 1
+   "fieldname": "deduct_amount",
+   "fieldtype": "Read Only",
+   "label": "Deduct Amount"
   },
   {
-   "fieldname": "leave_balance",
-   "fieldtype": "Data",
-   "label": "Leave Balance"
+   "fetch_from": "employee.leave_approver",
+   "fieldname": "leave_approver",
+   "fieldtype": "Read Only",
+   "label": "Leave Approver"
   }
  ],
  "icon": "fa fa-ok",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-06-04 17:55:28.542091",
+ "modified": "2023-06-21 14:27:20.654920",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
- "name": "Shortage Attendance",
+ "name": "Attendance Shortage",
  "naming_rule": "By \"Naming Series\" field",
  "owner": "Administrator",
  "permissions": [

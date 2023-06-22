@@ -10,11 +10,16 @@
   "naming_series",
   "employee",
   "employee_name",
+  "salary_component",
+  "salary_structure_assignment",
   "column_break_4",
   "leave_type",
   "department",
   "total_leave_hours",
+  "working_hours",
   "leave_balance",
+  "leave_balance_hr",
+  "basic_salary",
   "section_break_8",
   "from_time",
   "leave_duration",
@@ -86,8 +91,9 @@
   {
    "fieldname": "leave_balance",
    "fieldtype": "Float",
-   "label": "Leave Balance Before Application",
+   "label": "Leave Balance - Days",
    "no_copy": 1,
+   "precision": "3",
    "read_only": 1
   },
   {
@@ -239,12 +245,45 @@
    "hide_days": 1,
    "hide_seconds": 1,
    "label": "Leave Duration"
+  },
+  {
+   "fieldname": "leave_balance_hr",
+   "fieldtype": "Float",
+   "label": "Leave Balance - Hours",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "working_hours",
+   "fieldtype": "Float",
+   "label": "Working Hours",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component"
+  },
+  {
+   "fieldname": "salary_structure_assignment",
+   "fieldtype": "Link",
+   "label": "Salary Structure Assignment",
+   "options": "Salary Structure Assignment",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "salary_structure_assignment.base",
+   "fieldname": "basic_salary",
+   "fieldtype": "Read Only",
+   "label": "Basic Salary"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-04-30 01:11:12.972944",
+ "modified": "2023-06-17 22:32:35.163594",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",

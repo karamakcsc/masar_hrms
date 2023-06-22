@@ -30,7 +30,7 @@ class OvertimeApplication(Document):
 	def on_submit(self):
 		for employee in self.overtime_employees:
 			if frappe.get_doc("Employee", employee.employee).is_overtime_applicable:
-				defAddAdditionalSalary(self, employee.employee, employee.salary_component, employee.amount, self.posting_date)
+				AddAdditionalSalary(self, employee.employee, employee.salary_component, employee.amount, self.posting_date)
 
 
 @frappe.whitelist()
@@ -114,7 +114,7 @@ def calculate_overtime_amount(self):
 		# frappe.msgprint(str(sl.net_pay))
 
 @frappe.whitelist()
-def defAddAdditionalSalary(self, employee_no,salary_component,amount,payroll_date):
+def AddAdditionalSalary(self, employee_no,salary_component,amount,payroll_date):
 	# frappe.msgprint(employee_no)
 	# frappe.msgprint(str(salary_component))
 	# frappe.msgprint(str(amount))

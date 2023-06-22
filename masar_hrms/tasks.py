@@ -64,7 +64,7 @@ def cron():
             difference_hours = (plan_hours - working_hours)
             if plan_hours > working_hours and working_hours != 0:
                 new_note = frappe.get_doc({
-                                    "doctype": "Shortage Attendance",
+                                    "doctype": "Attendance Shortage",
                                     "employee": employee,
                                     "shift": shift,
                                     "attendance_date": attendance_date,
