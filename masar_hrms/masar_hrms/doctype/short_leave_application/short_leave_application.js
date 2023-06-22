@@ -50,6 +50,15 @@ cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
 		}
 	}
 }
+
+cur_frm.fields_dict['salary_component'].get_query = function(doc) {
+	return {
+		filters: {
+			"type": "Deduction"
+		}
+	}
+}
+
 ////// Fetching Leave Type with Filter ///// END ///Siam
 
 
