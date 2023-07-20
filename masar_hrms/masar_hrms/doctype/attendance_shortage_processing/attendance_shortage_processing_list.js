@@ -1,20 +1,4 @@
-// frappe.listview_settings['Attendance Shortage'] = {
-//     onload: function(list) {
-//         list.page.add_inner_button(
-//             __('Get Attendance Details'),
-//             function() {
-//                 frappe.call({
-//                     method: 'masar_hrms.masar_hrms.doctype.attendance_shortage.attendance_shortage.get_employee_attendance',
-//                     callback: function(ret) {},
-//                 });
-//             },
-//             null,
-//             'primary'
-//         );
-//     }
-// };
-
-frappe.listview_settings['Attendance Shortage'] = {
+frappe.listview_settings['Attendance Shortage Processing'] = {
     onload: function(list) {
         list.page.add_inner_button(
             __('Get Attendance Details'),
@@ -43,7 +27,7 @@ frappe.listview_settings['Attendance Shortage'] = {
                     ],
                     function(values) {
                         frappe.call({
-                            method: 'masar_hrms.masar_hrms.doctype.attendance_shortage.attendance_shortage.get_employee_attendance',
+                            method: 'masar_hrms.masar_hrms.doctype.attendance_shortage_processing.attendance_shortage_processing.get_employee_attendance',
                             args: {
                                 date_from: values.date_from,
                                 date_to: values.date_to,

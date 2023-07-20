@@ -148,57 +148,135 @@ def get_salary_structure_assignment(employee=None):
         return 0
     doc.save()
 
-@frappe.whitelist()
-def get_employee_attendance():
-    # Assuming you have a list of attendance records
-    attendance_list = frappe.get_list("Attendance", filters={"status": "Present"}, fields=["name", "employee", "attendance_date", "status","shift","working_hours", "late_entry", "early_exit", "out_time", "in_time"])
+# @frappe.whitelist()
+# def get_employee_attendance(date_from, date_to):
+#     # Assuming you have a list of attendance records
+#     attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time"])
 
-    # Loop through the attendance list
+#     # Loop through the attendance list
+#     for attendance in attendance_list:
+
+#         # Calculate the shift working hours
+#         if attendance.shift:
+#             shift_type = frappe.get_doc("Shift Type", attendance.shift)
+#             plan_hours=0
+#             if shift_type:
+#                 # Convert the time field to an integer
+#                 start_time_object = datetime.strptime(str(shift_type.start_time), "%H:%M:%S")
+#                 start_time_in_second = timedelta(hours=start_time_object.hour, minutes=start_time_object.minute, seconds=start_time_object.second).total_seconds()
+
+#                 end_time_object = datetime.strptime(str(shift_type.end_time), "%H:%M:%S")
+#                 end_time_in_seconds = timedelta(hours=end_time_object.hour, minutes=end_time_object.minute, seconds=end_time_object.second).total_seconds()
+#                 plan_hours = (end_time_in_seconds - start_time_in_second) / 3600
+#             elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
+#                 plan_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
+
+#             # Check if employee is not working full day
+#             attendance_name = attendance.name
+#             employee = attendance.employee
+#             status = attendance.status
+#             shift =  attendance.shift
+#             attendance_date = attendance.attendance_date
+#             working_hours = attendance.working_hours
+#             late_entry = attendance.late_entry
+#             early_exit = attendance.early_exit
+#             in_time = attendance.in_time
+#             out_time = attendance.out_time
+#             difference_hours = (plan_hours - working_hours)
+#             if plan_hours > working_hours and working_hours != 0:
+#                 new_note = frappe.get_doc({
+#                                     "doctype": "Attendance Shortage",
+#                                     "employee": employee,
+#                                     "shift": shift,
+#                                     "attendance_date": attendance_date,
+#                                     "working_hours": working_hours,
+#                                     "late_entry": late_entry,
+#                                     "early_exit": early_exit,
+#                                     "attendance": attendance_name,
+#                                     "status": status,
+#                                     "in_time" : in_time,
+#                                     "out_time": out_time,
+#                                     "plan_hours": plan_hours,
+#                                     "difference_hours": difference_hours
+
+#                                 })
+#                 new_note.insert(ignore_permissions=True, ignore_mandatory=True)
+#                 frappe.db.commit()
+
+
+@frappe.whitelist()
+def get_employee_attendance(date_from, date_to):
+    # Assuming you have a list of attendance records
+    attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time"])
+
     for attendance in attendance_list:
+        # Check if the record already exists for the same employee and attendance date
+        existing_record = frappe.get_all("Attendance Shortage", filters={"employee": attendance.employee, "attendance_date": attendance.attendance_date})
+        if existing_record:
+            continue  # Skip the iteration if a record already exists
 
         # Calculate the shift working hours
-        if attendance.shift:
-            shift_type = frappe.get_doc("Shift Type", attendance.shift)
-            plan_hours=0
-            if shift_type:
-                # Convert the time field to an integer
-                start_time_object = datetime.strptime(str(shift_type.start_time), "%H:%M:%S")
-                start_time_in_second = timedelta(hours=start_time_object.hour, minutes=start_time_object.minute, seconds=start_time_object.second).total_seconds()
+        shift_type = frappe.get_doc("Shift Type", attendance.shift) if attendance.shift else None
+        if shift_type:
+            start_time_object = datetime.strptime(str(shift_type.start_time), "%H:%M:%S")
+            start_time_in_seconds = timedelta(hours=start_time_object.hour, minutes=start_time_object.minute, seconds=start_time_object.second).total_seconds()
 
-                end_time_object = datetime.strptime(str(shift_type.end_time), "%H:%M:%S")
-                end_time_in_seconds = timedelta(hours=end_time_object.hour, minutes=end_time_object.minute, seconds=end_time_object.second).total_seconds()
-                plan_hours = (end_time_in_seconds - start_time_in_second) / 3600
-            elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
-                plan_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
+            end_time_object = datetime.strptime(str(shift_type.end_time), "%H:%M:%S")
+            end_time_in_seconds = timedelta(hours=end_time_object.hour, minutes=end_time_object.minute, seconds=end_time_object.second).total_seconds()
 
-            # Check if employee is not working full day
-            attendance_name = attendance.name
-            employee = attendance.employee
-            status = attendance.status
-            shift =  attendance.shift
-            attendance_date = attendance.attendance_date
-            working_hours = attendance.working_hours
-            late_entry = attendance.late_entry
-            early_exit = attendance.early_exit
-            in_time = attendance.in_time
-            out_time = attendance.out_time
-            difference_hours = (plan_hours - working_hours)
-            if plan_hours > working_hours and working_hours != 0:
-                new_note = frappe.get_doc({
-                                    "doctype": "Attendance Shortage",
-                                    "employee": employee,
-                                    "shift": shift,
-                                    "attendance_date": attendance_date,
-                                    "working_hours": working_hours,
-                                    "late_entry": late_entry,
-                                    "early_exit": early_exit,
-                                    "attendance": attendance_name,
-                                    "status": status,
-                                    "in_time" : in_time,
-                                    "out_time": out_time,
-                                    "plan_hours": plan_hours,
-                                    "difference_hours": difference_hours
+            plan_hours = (end_time_in_seconds - start_time_in_seconds) / 3600
+        else:
+            plan_hours = frappe.db.get_single_value("HR Settings", "standard_working_hours")
 
-                                })
-                new_note.insert(ignore_permissions=True, ignore_mandatory=True)
-                frappe.db.commit()
+        # Assign the values to variables
+        employee = attendance.employee
+        shift = attendance.shift
+        attendance_date = attendance.attendance_date
+        working_hours = attendance.working_hours
+        late_entry = attendance.late_entry
+        early_exit = attendance.early_exit
+        in_time = attendance.in_time
+        out_time = attendance.out_time
+        attendance_name = attendance.name
+        status = attendance.status
+        difference_hours = working_hours - plan_hours
+
+        if working_hours > plan_hours:
+            # Insert the new record for overtime
+            new_note = frappe.get_doc({
+                "doctype": "Attendance Shortage",
+                "employee": employee,
+                "shift": shift,
+                "attendance_date": attendance_date,
+                "working_hours": working_hours,
+                "late_entry": late_entry,
+                "early_exit": early_exit,
+                "attendance": attendance_name,
+                "status": status,
+                "in_time": in_time,
+                "out_time": out_time,
+                "plan_hours": plan_hours,
+                "difference_hours": difference_hours,
+                "is_overtime": 1
+            })
+        elif working_hours < plan_hours:
+            # Insert the new record for shortage
+            new_note = frappe.get_doc({
+                "doctype": "Attendance Shortage",
+                "employee": employee,
+                "shift": shift,
+                "attendance_date": attendance_date,
+                "working_hours": working_hours,
+                "late_entry": late_entry,
+                "early_exit": early_exit,
+                "attendance": attendance_name,
+                "status": status,
+                "in_time": in_time,
+                "out_time": out_time,
+                "plan_hours": plan_hours,
+                "difference_hours": difference_hours,
+                "is_shortage": 1
+            })
+
+        new_note.insert(ignore_permissions=True, ignore_mandatory=True)
+        frappe.db.commit()

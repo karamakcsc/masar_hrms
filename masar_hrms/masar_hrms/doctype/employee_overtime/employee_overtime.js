@@ -48,7 +48,22 @@ frappe.ui.form.on("Employee Overtime", {
         rate_off_day(frm);
         amount_off_day(frm);
         calculate_total(frm);
-    }
+    },
+    validate: function(frm) {
+        rate_off_day(frm);
+        amount_off_day(frm);
+        calculate_total(frm);
+    },
+    setup: function(frm) {
+        rate_off_day(frm);
+        amount_off_day(frm);
+        calculate_total(frm);
+    },
+    on_submit: function(frm) {
+        rate_off_day(frm);
+        amount_off_day(frm);
+        calculate_total(frm);
+    },
 });
 
 var rate_wd = function(frm) {
@@ -75,3 +90,5 @@ var calculate_total = function(frm) {
     var doc = frm.doc;
     frm.set_value("total_amount", flt(doc.amount_working_day) + flt(doc.amount_off_day));
 };
+
+
