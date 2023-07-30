@@ -46,53 +46,53 @@ class EmployeeOvertime(Document):
 
 
 
-@frappe.whitelist()
-def get_employee_attendance(date_from, date_to):
-	attendance_list = frappe.db.sql("""
-		WITH AttSh AS (
-			SELECT
-				tas.employee,
-				tas.employee_name,
-				SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
-			FROM `tabAttendance Shortage` tas
-			WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN %s AND %s
-			GROUP BY employee
-		),
-		LeaveSH AS (
-			SELECT
-				tsla.employee,
-				tsla.employee_name,
-				SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
-			FROM `tabShort Leave Application` tsla
-			WHERE tsla.posting_date BETWEEN %s AND %s
-			GROUP BY employee
-		)
-		SELECT
-			a.employee,
-			a.employee_name,
-			IFNULL(shortage_hours, 0) AS shortage_hours,
-			IFNULL(leave_hours, 0) AS leave_hours,
-			IFNULL(shortage_hours, 0) - IFNULL(leave_hours, 0) AS not_covered_hours
-		FROM AttSh a
-		LEFT JOIN LeaveSh l ON a.employee = l.employee
-	""", (date_from, date_to, date_from, date_to), as_dict=True)
+# @frappe.whitelist()
+# def get_employee_attendance(date_from, date_to):
+# 	attendance_list = frappe.db.sql("""
+# 		WITH AttSh AS (
+# 			SELECT
+# 				tas.employee,
+# 				tas.employee_name,
+# 				SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
+# 			FROM `tabAttendance Shortage` tas
+# 			WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN %s AND %s
+# 			GROUP BY employee
+# 		),
+# 		LeaveSH AS (
+# 			SELECT
+# 				tsla.employee,
+# 				tsla.employee_name,
+# 				SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
+# 			FROM `tabShort Leave Application` tsla
+# 			WHERE tsla.posting_date BETWEEN %s AND %s
+# 			GROUP BY employee
+# 		)
+# 		SELECT
+# 			a.employee,
+# 			a.employee_name,
+# 			IFNULL(shortage_hours, 0) AS shortage_hours,
+# 			IFNULL(leave_hours, 0) AS leave_hours,
+# 			IFNULL(shortage_hours, 0) - IFNULL(leave_hours, 0) AS not_covered_hours
+# 		FROM AttSh a
+# 		LEFT JOIN LeaveSh l ON a.employee = l.employee
+# 	""", (date_from, date_to, date_from, date_to), as_dict=True)
 
-	for attendance in attendance_list:
-		result = get_salary_structure_assignment(attendance.employee)
-		entry = {
-			"employee": attendance.employee,
-			# "date_from": date_from,
-			# "date_to": date_to,
-			"overtime_hours_working_day": attendance.shortage_hours,
-			# "leave_hours": attendance.leave_hours,
-			"not_covered_hours": attendance.not_covered_hours,
-			"salary_structure_assignment": result
-		}
-		(frappe.new_doc("Employee Overtime")
-			.update(entry)
-			.insert(ignore_permissions=True, ignore_mandatory=True)
-			.run_method('submit'))
-		frappe.db.commit()
+# 	for attendance in attendance_list:
+# 		result = get_salary_structure_assignment(attendance.employee)
+# 		entry = {
+# 			"employee": attendance.employee,
+# 			# "date_from": date_from,
+# 			# "date_to": date_to,
+# 			"overtime_hours_working_day": attendance.shortage_hours,
+# 			# "leave_hours": attendance.leave_hours,
+# 			"not_covered_hours": attendance.not_covered_hours,
+# 			"salary_structure_assignment": result
+# 		}
+# 		(frappe.new_doc("Employee Overtime")
+# 			.update(entry)
+# 			.insert(ignore_permissions=True, ignore_mandatory=True)
+# 			.run_method('submit'))
+# 		frappe.db.commit()
 
 
 @frappe.whitelist()
@@ -109,3 +109,64 @@ def get_salary_structure_assignment(employee=None):
 		return result[0].name
 	else:
 		return 0
+
+
+@frappe.whitelist()
+def get_employee_attendance(date_from, date_to):
+    attendance_list = frappe.db.sql("""
+        WITH AttSh AS (
+            SELECT
+                tas.employee,
+                tas.employee_name,
+                SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
+            FROM `tabAttendance Shortage` tas
+            WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN %s AND %s
+            GROUP BY employee
+        ),
+        ATTSH_OFD AS (
+            SELECT
+                tas.employee,
+                tas.employee_name,
+                SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours_wofd
+            FROM `tabAttendance Shortage` tas
+            WHERE tas.working_off_day = 1 AND tas.attendance_date BETWEEN %s AND %s
+            GROUP BY employee
+        ),
+        LeaveSH AS (
+            SELECT
+                tsla.employee,
+                tsla.employee_name,
+                SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
+            FROM `tabShort Leave Application` tsla
+            WHERE tsla.posting_date BETWEEN %s AND %s
+            GROUP BY employee
+        )
+        SELECT
+            a.employee,
+            a.employee_name,
+            IFNULL(a.shortage_hours, 0) AS shortage_hours,
+            IFNULL(o.shortage_hours_wofd, 0) AS shortage_hours_wofd,
+            IFNULL(l.leave_hours, 0) AS leave_hours,
+            IFNULL(a.shortage_hours, 0) - IFNULL(l.leave_hours, 0) AS not_covered_hours
+        FROM AttSh a
+        LEFT JOIN LeaveSh l ON a.employee = l.employee
+        LEFT JOIN ATTSH_OFD o ON a.employee = o.employee
+    """, (date_from, date_to, date_from, date_to, date_from, date_to), as_dict=True)
+
+    for attendance in attendance_list:
+        result = get_salary_structure_assignment(attendance.employee)
+        entry = {
+            "employee": attendance.employee,
+            # "date_from": date_from,
+            # "date_to": date_to,
+            "overtime_hours_working_day": attendance.shortage_hours,
+            "overtime_hours_off_day": attendance.shortage_hours_wofd,
+            # "leave_hours": attendance.leave_hours,
+            "not_covered_hours": attendance.not_covered_hours,
+            "salary_structure_assignment": result
+        }
+        (frappe.new_doc("Employee Overtime")
+            .update(entry)
+            .insert(ignore_permissions=True, ignore_mandatory=True)
+            .run_method('submit'))
+        frappe.db.commit()

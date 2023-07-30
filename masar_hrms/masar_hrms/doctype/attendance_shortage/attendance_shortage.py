@@ -203,19 +203,95 @@ def get_salary_structure_assignment(employee=None):
 #                 new_note.insert(ignore_permissions=True, ignore_mandatory=True)
 #                 frappe.db.commit()
 
+#################################################################################################
+# @frappe.whitelist()
+# def get_employee_attendance(date_from, date_to):
+#     # Assuming you have a list of attendance records
+#     attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time"])
 
+#     for attendance in attendance_list:
+#         # Check if the record already exists for the same employee and attendance date
+#         existing_record = frappe.get_all("Attendance Shortage", filters={"employee": attendance.employee, "attendance_date": attendance.attendance_date})
+#         if existing_record:
+#             continue  # Skip the iteration if a record already exists
+
+#         # Calculate the shift working hours
+#         shift_type = frappe.get_doc("Shift Type", attendance.shift) if attendance.shift else None
+#         if shift_type:
+#             start_time_object = datetime.strptime(str(shift_type.start_time), "%H:%M:%S")
+#             start_time_in_seconds = timedelta(hours=start_time_object.hour, minutes=start_time_object.minute, seconds=start_time_object.second).total_seconds()
+
+#             end_time_object = datetime.strptime(str(shift_type.end_time), "%H:%M:%S")
+#             end_time_in_seconds = timedelta(hours=end_time_object.hour, minutes=end_time_object.minute, seconds=end_time_object.second).total_seconds()
+
+#             plan_hours = (end_time_in_seconds - start_time_in_seconds) / 3600
+#         else:
+#             plan_hours = frappe.db.get_single_value("HR Settings", "standard_working_hours")
+
+#         # Assign the values to variables
+#         employee = attendance.employee
+#         shift = attendance.shift
+#         attendance_date = attendance.attendance_date
+#         working_hours = attendance.working_hours
+#         late_entry = attendance.late_entry
+#         early_exit = attendance.early_exit
+#         in_time = attendance.in_time
+#         out_time = attendance.out_time
+#         attendance_name = attendance.name
+#         status = attendance.status
+#         difference_hours = working_hours - plan_hours
+
+#         if working_hours > plan_hours:
+#             # Insert the new record for overtime
+#             new_note = frappe.get_doc({
+#                 "doctype": "Attendance Shortage",
+#                 "employee": employee,
+#                 "shift": shift,
+#                 "attendance_date": attendance_date,
+#                 "working_hours": working_hours,
+#                 "late_entry": late_entry,
+#                 "early_exit": early_exit,
+#                 "attendance": attendance_name,
+#                 "status": status,
+#                 "in_time": in_time,
+#                 "out_time": out_time,
+#                 "plan_hours": plan_hours,
+#                 "difference_hours": difference_hours,
+#                 "is_overtime": 1
+#             })
+#         elif working_hours < plan_hours:
+#             # Insert the new record for shortage
+#             new_note = frappe.get_doc({
+#                 "doctype": "Attendance Shortage",
+#                 "employee": employee,
+#                 "shift": shift,
+#                 "attendance_date": attendance_date,
+#                 "working_hours": working_hours,
+#                 "late_entry": late_entry,
+#                 "early_exit": early_exit,
+#                 "attendance": attendance_name,
+#                 "status": status,
+#                 "in_time": in_time,
+#                 "out_time": out_time,
+#                 "plan_hours": plan_hours,
+#                 "difference_hours": difference_hours,
+#                 "is_shortage": 1
+#             })
+
+#         new_note.insert(ignore_permissions=True, ignore_mandatory=True)
+#         frappe.db.commit()
+###################################################################################
 @frappe.whitelist()
 def get_employee_attendance(date_from, date_to):
-    # Assuming you have a list of attendance records
-    attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time"])
+
+    attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
 
     for attendance in attendance_list:
-        # Check if the record already exists for the same employee and attendance date
+      
         existing_record = frappe.get_all("Attendance Shortage", filters={"employee": attendance.employee, "attendance_date": attendance.attendance_date})
         if existing_record:
-            continue  # Skip the iteration if a record already exists
+            continue  
 
-        # Calculate the shift working hours
         shift_type = frappe.get_doc("Shift Type", attendance.shift) if attendance.shift else None
         if shift_type:
             start_time_object = datetime.strptime(str(shift_type.start_time), "%H:%M:%S")
@@ -225,10 +301,29 @@ def get_employee_attendance(date_from, date_to):
             end_time_in_seconds = timedelta(hours=end_time_object.hour, minutes=end_time_object.minute, seconds=end_time_object.second).total_seconds()
 
             plan_hours = (end_time_in_seconds - start_time_in_seconds) / 3600
+            holiday_list = shift_type.holiday_list
         else:
             plan_hours = frappe.db.get_single_value("HR Settings", "standard_working_hours")
+            holiday_list = None
 
-        # Assign the values to variables
+        if not holiday_list:
+            company = frappe.get_doc("Company", attendance.company)
+            holiday_list = company.default_holiday_list
+
+        if not holiday_list:
+            frappe.throw("Holiday List not found")
+
+        try:
+            holidays_doc = frappe.get_doc("Holiday List", holiday_list)
+            holidays = holidays_doc.holidays
+        except frappe.DoesNotExist:
+            frappe.throw("Holidays not found in the Holiday List")
+
+        is_working_off_day = 0
+        for holiday in holidays:
+            if holiday.holiday_date == attendance.attendance_date and holiday.weekly_off == 1:
+                is_working_off_day = 1
+                break
         employee = attendance.employee
         shift = attendance.shift
         attendance_date = attendance.attendance_date
@@ -241,8 +336,8 @@ def get_employee_attendance(date_from, date_to):
         status = attendance.status
         difference_hours = working_hours - plan_hours
 
+        new_note = None
         if working_hours > plan_hours:
-            # Insert the new record for overtime
             new_note = frappe.get_doc({
                 "doctype": "Attendance Shortage",
                 "employee": employee,
@@ -257,10 +352,11 @@ def get_employee_attendance(date_from, date_to):
                 "out_time": out_time,
                 "plan_hours": plan_hours,
                 "difference_hours": difference_hours,
-                "is_overtime": 1
+                "is_overtime": 1,
+                # "working_off_day": is_working_off_day,
+                "holiday_list": holiday_list 
             })
-        elif working_hours < plan_hours:
-            # Insert the new record for shortage
+        elif working_hours < plan_hours:  
             new_note = frappe.get_doc({
                 "doctype": "Attendance Shortage",
                 "employee": employee,
@@ -275,8 +371,30 @@ def get_employee_attendance(date_from, date_to):
                 "out_time": out_time,
                 "plan_hours": plan_hours,
                 "difference_hours": difference_hours,
-                "is_shortage": 1
+                "is_shortage": 1,
+                "working_off_day": is_working_off_day, 
+                "holiday_list": holiday_list 
+            })
+        elif working_hours > plan_hours and is_working_off_day ==1 :
+            new_note = frappe.get_doc({
+                "doctype": "Attendance Shortage",
+                "employee": employee,
+                "shift": shift,
+                "attendance_date": attendance_date,
+                "working_hours": working_hours,
+                "late_entry": late_entry,
+                "early_exit": early_exit,
+                "attendance": attendance_name,
+                "status": status,
+                "in_time": in_time,
+                "out_time": out_time,
+                "plan_hours": plan_hours,
+                "difference_hours": difference_hours,
+                # "is_overtime": 1,
+                "working_off_day": is_working_off_day,
+                "holiday_list": holiday_list  
             })
 
-        new_note.insert(ignore_permissions=True, ignore_mandatory=True)
-        frappe.db.commit()
+        if new_note:
+            new_note.insert(ignore_permissions=True, ignore_mandatory=True)
+            frappe.db.commit()

@@ -21,6 +21,8 @@
   "department",
   "is_shortage",
   "is_overtime",
+  "working_off_day",
+  "holiday_list",
   "leave_balance",
   "details_section",
   "attendance",
@@ -314,12 +316,25 @@
    "in_standard_filter": 1,
    "label": "Is Overtime",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "working_off_day",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Is Working Off Day"
+  },
+  {
+   "fieldname": "holiday_list",
+   "fieldtype": "Data",
+   "label": "Holiday List"
   }
  ],
  "icon": "fa fa-ok",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-17 01:59:36.113267",
+ "modified": "2023-07-30 16:00:13.450802",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Attendance Shortage",
