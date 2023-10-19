@@ -253,7 +253,7 @@ fixtures = [
 		"Employee-bank",
 		"Employee-column_break_alwbp",
 		"Employee-bank_branch",
-		"Employee-iban",
+		# "Employee-iban",
 		"Salary Structure Assignment-change_basic_amount",
 		"Salary Structure Assignment-change_amount",
 		"Salary Structure Assignment-new_basic",
