@@ -83,22 +83,13 @@
    "options": "Overtime Application",
    "print_hide": 1,
    "read_only": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Overtime Application",
-   "print_hide": 1,
-   "read_only": 1
   }
  ],
  "in_create": 1,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-05-29 12:54:39.487710",
+ "modified": "2023-10-24 11:06:37.746230",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Overtime Application",

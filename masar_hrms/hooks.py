@@ -271,12 +271,12 @@ fixtures = [
 
 from masar_hrms.override import _leave_application
 from hrms.hr.doctype.leave_application import leave_application
-from masar_hrms.override import _salary_slip
-from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
+# from masar_hrms.override import _salary_slip
+# from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
 
 leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
-SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
-SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
+# SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
+# SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
 
 from masar_hrms.override import _payroll_entry
 from hrms.payroll.doctype.payroll_entry import payroll_entry
