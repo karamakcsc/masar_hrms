@@ -82,7 +82,7 @@ def calculate_variable_tax(self, tax_component):
 			if flt(current_tax_amount) < 0:
 				current_tax_amount = 0
 
-			self.component_based_veriable_tax[tax_component].update(
+			self._component_based_variable_tax[tax_component].update(
 				{
 					"previous_total_paid_taxes": self.previous_total_paid_taxes,
 					"total_structured_tax_amount": self.total_structured_tax_amount,
