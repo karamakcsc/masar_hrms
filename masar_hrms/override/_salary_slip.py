@@ -92,7 +92,7 @@ def calculate_variable_tax(self, tax_component):
 				}
 			)
 
-			return current_tax_amount
+			return current_tax_amount -0.004
 
 def compute_taxable_earnings_for_year(self):
 		# get taxable_earnings, opening_taxable_earning, paid_taxes for previous period
