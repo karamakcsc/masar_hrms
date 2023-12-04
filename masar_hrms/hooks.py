@@ -281,6 +281,6 @@ SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
 from masar_hrms.override import _payroll_entry
 from hrms.payroll.doctype.payroll_entry import payroll_entry
 from hrms.payroll.doctype.payroll_entry.payroll_entry import PayrollEntry 
-payroll_entry.get_filter_condition= _payroll_entry.get_filter_condition
-PayrollEntry.fill_employee_detailsr = _payroll_entry.fill_employee_details
-PayrollEntry.make_filters = _payroll_entry.make_filters
+# payroll_entry.get_filter_condition= _payroll_entry.get_filter_condition
+# PayrollEntry.fill_employee_detailsr = _payroll_entry.fill_employee_details
+# PayrollEntry.make_filters = _payroll_entry.make_filters
