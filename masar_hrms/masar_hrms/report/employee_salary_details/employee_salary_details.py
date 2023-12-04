@@ -101,5 +101,5 @@ def get_columns():
 	   # "Currency Code: Data:200"
 	   #"Status:150"
 	]
-# to add loan in the report siam
+# to add loan in the report siam 04-12-2023
 # MAX(CASE WHEN tss.total_loan_repayment > 0 THEN tss.total_loan_repayment ELSE 0 END) AS `Loan`,
