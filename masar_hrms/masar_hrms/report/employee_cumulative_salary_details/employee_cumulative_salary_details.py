@@ -60,9 +60,12 @@ def get_data(filters):
 								tss.total_deduction AS `Total Deductions`,
 								tss.net_pay AS `Net Pay Salary`,
 								pay_amount AS `Net Pay Amount`,
+        						tss.net_pay - pay_amount AS `Balance Amount`,
 					  			(MAX(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) * (tc.company_share_rate) / 100) / (tc.employee_share_rate / 100) AS `Social Security for Company Contribution`,
-					 			te.old_ref AS `Old Reference`,
-								tss.posting_date
+					 			tss.posting_date,
+         						DATE_FORMAT(tss.posting_date, '%m') AS `Month`,
+         						te.old_ref AS `Old Reference`
+								
 							FROM
 								`tabSalary Slip` tss
 							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
@@ -108,9 +111,12 @@ def get_columns():
 	   "Total Deductions: Currency:150",
 	   "Net Pay Salary: Currency:150",
 	   "Net Pay Amount: Currency:200",
+	   "Balance Amount: Currency:200",
 	   "Social Security for Company Contribution: Currency:300",
+       "Posting Date:150",
+       "Month:150",
 	   "Old Reference: Data:150"
-	   #"Status:150"
+	#    "Posting Date:150"
 	]
 # to add loan in the report siam
 # MAX(CASE WHEN tss.total_loan_repayment > 0 THEN tss.total_loan_repayment ELSE 0 END) AS `Loan`,
