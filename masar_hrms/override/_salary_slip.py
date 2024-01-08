@@ -79,8 +79,10 @@ def calculate_variable_tax(self, tax_component):
 				self.full_tax_on_additional_earnings = self.total_tax_amount - self.total_structured_tax_amount
 
 			current_tax_amount = self.current_structured_tax_amount + self.full_tax_on_additional_earnings
-			if flt(current_tax_amount) < 0:
-				current_tax_amount = 0
+   			# if flt(current_tax_amount) < 0:
+			# 	current_tax_amount = 0
+			if flt(current_tax_amount) != 0:
+				current_tax_amount = current_tax_amount - 0.004
 
 			self._component_based_variable_tax[tax_component].update(
 				{
@@ -91,8 +93,8 @@ def calculate_variable_tax(self, tax_component):
 					"current_tax_amount": current_tax_amount,
 				}
 			)
-
-			return current_tax_amount -0.004
+            
+			return current_tax_amount
 
 def compute_taxable_earnings_for_year(self):
 		# get taxable_earnings, opening_taxable_earning, paid_taxes for previous period

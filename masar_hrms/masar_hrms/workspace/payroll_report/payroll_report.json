@@ -1,0 +1,87 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"MasyODcIcY\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Payroll Report</span>\",\"col\":12}},{\"id\":\"ubIgAo8I16\",\"type\":\"card\",\"data\":{\"card_name\":\"Payroll Reports\",\"col\":4}}]",
+ "creation": "2024-01-08 12:33:56.918631",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "color-energy-points",
+ "idx": 0,
+ "is_hidden": 0,
+ "label": "Payroll Report",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll Reports",
+   "link_count": 5,
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Component Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Component Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Tracking",
+   "link_count": 0,
+   "link_to": "Employee Salary Tracking",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details - Trial",
+   "link_count": 0,
+   "link_to": "Employee Salary Details - Trial",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Cumulative Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Cumulative Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2024-01-08 12:56:18.957972",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Payroll Report",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "Payroll",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 40.0,
+ "shortcuts": [],
+ "title": "Payroll Report"
+}
