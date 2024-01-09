@@ -11,6 +11,13 @@ frappe.query_reports["Employee Salary Details - Trial"] = {
 			"options": "Salary Slip",
 			"width": 100,
 			"reqd": 0,
+			"get_query": function () {
+				return {
+					"filters": {
+						"docstatus": 0
+					}
+				};
+			}
 		},
 		{
 			"fieldname": "from",

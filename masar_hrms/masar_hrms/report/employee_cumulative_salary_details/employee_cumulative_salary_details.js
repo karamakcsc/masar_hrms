@@ -11,6 +11,13 @@ frappe.query_reports["Employee Cumulative Salary Details"] = {
 			"options": "Salary Slip",
 			"width": 100,
 			"reqd": 0,
+			"get_query": function () {
+				return {
+					"filters": {
+						"docstatus": 1
+					}
+				};
+			}
 		},
 		{
 			"fieldname": "from",
