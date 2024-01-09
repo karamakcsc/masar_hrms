@@ -267,7 +267,10 @@ fixtures = [
         "Salary Structure Assignment-change_basic_amount",
         "Salary Structure Assignment-remark",
 		"Employee-basic_salary",
-        "Payroll Entry-work_type"
+        "Payroll Entry-work_type",
+        "Company-custom_social_security_liabilities",
+        "Company-custom_social_security_expenses",
+        "Company-custom_section_break_9o0od"
             ]
         ]
     ]}

@@ -12,7 +12,7 @@ def check_ss_jv(company, name, posting_date, cost_center):
         WHERE reference_type = 'Payroll Entry' AND reference_name = %s AND against_account IN (%s, %s)
     """, (name, ss_expenses, ss_liabilities), as_dict=True)
     if result:
-        frappe.throw(_("The Social Security Journal Entry is created before."))
+        frappe.throw(_("The Social Security Journal Entry Has Been Created For The Same Period."))
     else:
         return ss_jv(company, name, posting_date, cost_center , ss_liabilities , ss_expenses)
           
