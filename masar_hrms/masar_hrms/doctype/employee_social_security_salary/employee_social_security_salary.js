@@ -74,7 +74,6 @@ frappe.ui.form.on('Employee Social Security Salary', {
                   // },
                   callback: function(ret) {
                     frm.set_value("amount",ret.message);
-                    frappe.msgprint(ret.message.toString())
                   },
               });
               }

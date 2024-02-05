@@ -1,6 +1,7 @@
 # Copyright (c) 2023, KCSC and contributors
 # For license information, please see license.txt
 
+
 # import frappe
 import frappe
 # from __future__ import unicode_literals

@@ -56,6 +56,6 @@ def ss_jv(company, name, posting_date, cost_center , ss_liabilities , ss_expense
 
     jv.insert(ignore_permissions=True)
     jv.submit()
-    return(f"Journal Entries created for{company} in journal Entry")
+    return(f"Journal Entries created for{company} in Journal Entry")
 
    

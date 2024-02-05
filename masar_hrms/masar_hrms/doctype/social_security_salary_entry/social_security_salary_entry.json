@@ -13,10 +13,6 @@
   "company",
   "column_break_5",
   "status",
-  "section_break_cypo",
-  "start_date",
-  "end_date",
-  "column_break_13",
   "employees_tab",
   "section_break_17",
   "branch",
@@ -66,26 +62,6 @@
    "options": "Draft\nSubmitted\nCancelled\nQueued\nFailed",
    "print_hide": 1,
    "read_only": 1
-  },
-  {
-   "fieldname": "section_break_cypo",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "start_date",
-   "fieldtype": "Date",
-   "label": "Start Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "end_date",
-   "fieldtype": "Date",
-   "label": "End Date",
-   "reqd": 1
-  },
-  {
-   "fieldname": "column_break_13",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "employees_tab",
@@ -187,7 +163,7 @@
  "icon": "fa fa-cog",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-03-10 02:54:03.365191",
+ "modified": "2024-01-18 09:19:39.730123",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Social Security Salary Entry",

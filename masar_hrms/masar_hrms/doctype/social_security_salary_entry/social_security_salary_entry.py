@@ -4,7 +4,6 @@
 import json
 
 from dateutil.relativedelta import relativedelta
-
 import frappe
 from frappe import _
 from frappe.desk.reportview import get_filters_cond, get_match_cond
@@ -24,6 +23,10 @@ from frappe.utils import (
 import erpnext
 from erpnext.accounts.utils import get_fiscal_year
 from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
+import datetime
+import masar_hrms
+from masar_hrms.masar_hrms.doctype.employee_social_security_salary.employee_social_security_salary import EmployeeSocialSecuritySalary
+from frappe.model.document import Document
 
 
 class SocialSecuritySalaryEntry(Document):
@@ -62,10 +65,10 @@ class SocialSecuritySalaryEntry(Document):
 		Returns list of active employees based on selected criteria
 		and for which salary structure exists
 		"""
-		self.check_mandatory()
+		# self.check_mandatory()
 		filters = self.make_filters()
 		cond = get_filter_condition(filters)
-		cond += get_joining_relieving_condition(self.start_date, self.end_date)	
+		# cond += get_joining_relieving_condition(self.start_date, self.end_date)	
 
 		condition = ""
 
@@ -74,8 +77,8 @@ class SocialSecuritySalaryEntry(Document):
 		)
 		if sal_struct:
 			cond += "and t2.salary_structure IN %(sal_struct)s "
-			cond += "and %(from_date)s >= t2.from_date"
-			emp_list = get_emp_list(sal_struct, cond, self.end_date)
+			# cond += "and %(from_date)s >= t2.from_date"
+			emp_list = get_emp_list(sal_struct, cond)
 			return emp_list
 
 	def make_filters(self):
@@ -110,10 +113,12 @@ class SocialSecuritySalaryEntry(Document):
 
 		self.number_of_employees = len(self.employees)
 
-	def check_mandatory(self):
-		for fieldname in ["company", "start_date", "end_date"]:
-			if not self.get(fieldname):
-				frappe.throw(_("Please set {0}").format(self.meta.get_label(fieldname)))
+	# def check_mandatory(self):
+	# 	for fieldname in ["company", "start_date", "end_date"]:
+	# 		if not self.get(fieldname):
+	# 			frappe.throw(_("Please set {0}").format(self.meta.get_label(fieldname)))
+
+
 
 def get_sal_struct(
 	company: str, condition: str
@@ -143,17 +148,17 @@ def get_filter_condition(filters):
 
 	return cond
 
-def get_joining_relieving_condition(start_date, end_date):
-	cond = """
-		and ifnull(t1.date_of_joining, '1900-01-01') <= '%(end_date)s'
-		and ifnull(t1.relieving_date, '2199-12-31') >= '%(start_date)s'
-	""" % {
-		"start_date": start_date,
-		"end_date": end_date,
-	}
-	return cond
+# def get_joining_relieving_condition(start_date, end_date):
+# 	cond = """
+# 		and ifnull(t1.date_of_joining, '1900-01-01') <= '%(end_date)s'
+# 		and ifnull(t1.relieving_date, '2199-12-31') >= '%(start_date)s'
+# 	""" % {
+# 		"start_date": start_date,
+# 		"end_date": end_date,
+# 	}
+# 	return cond
 
-def get_emp_list(sal_struct, cond, end_date):
+def get_emp_list(sal_struct, cond):
 	return frappe.db.sql(
 		"""
 			select
@@ -164,12 +169,12 @@ def get_emp_list(sal_struct, cond, end_date):
 				t1.name = t2.employee
 				and t2.docstatus = 1
 				and t1.status != 'Inactive'
-		%s order by t2.from_date desc
+		%s order by t2.creation desc
 		"""
 		% cond,
 		{
 			"sal_struct": tuple(sal_struct),
-			"from_date": end_date,
+			# "from_date": end_date,
 		},
 		as_dict=True,
 	)
@@ -186,14 +191,14 @@ def get_employee_list(filters: frappe._dict) -> list[str]:
 
 	cond = (
 		get_filter_condition(filters)
-		+ get_joining_relieving_condition(filters.start_date, filters.end_date)
+		# + get_joining_relieving_condition(filters.start_date, filters.end_date)
 		+ (
 			"and t2.salary_structure IN %(sal_struct)s "
-			"and t2.payroll_payable_account = %(payroll_payable_account)s "
-			"and %(from_date)s >= t2.from_date"
+			# "and t2.payroll_payable_account = %(payroll_payable_account)s "
+			# "and %(from_date)s >= t2.from_date"
 		)
 	)
-	emp_list = get_emp_list(sal_struct, cond, filters.end_date, filters.payroll_payable_account)
+	emp_list = get_emp_list(sal_struct, cond)
 	return emp_list
 
 
@@ -249,3 +254,64 @@ def employee_query(doctype, txt, searchfield, start, page_len, filters):
 			"include_employees": include_employees,
 		},
 	)
+
+
+
+############mahmoud start code 
+
+@frappe.whitelist()
+def create_employee_social_security_salary(name , posting_date):
+	employee_sql = frappe.db.sql("""
+		SELECT tssed.employee 
+			FROM `tabSocial Security Salary Entry` tssse 
+			INNER JOIN `tabSocial Security Employee Detail` tssed  ON tssse.name = tssed.parent 
+			WHERE tssed.parent  = %s
+	""" , (name))
+
+
+	exist = frappe.db.sql("""
+		SELECT employee , docstatus
+			FROM `tabEmployee Social Security Salary` tesss 
+		""")
+	employee_name = [name[0] for name in  employee_sql]
+	exist_employee = [name[0] for name in exist]
+	status = [doc[1] for doc in exist]
+	len_status = len(status)
+	range_status = 0 
+	for new_employee_ss in employee_name:
+		if (new_employee_ss in exist_employee and status[range_status] == 1  ):
+			if(range_status < len_status):
+				range_status =+1 
+		else:	
+			doc = frappe.new_doc("Employee Social Security Salary")
+			doc.employee = new_employee_ss
+			doc.posting_date = posting_date
+			doc.insert(ignore_permissions=True)
+			doc.save()
+			calcutale_all_share(new_employee_ss , doc)
+			doc.save()
+			doc.submit()
+
+	return f'The Employee Social Security Salary is created For All Employee Except The Employees : {exist_employee} Becuase Alredy Created '
+			
+@frappe.whitelist()
+def calcutale_all_share(employee  , doc ):
+	sql = frappe.db.sql("""
+		SELECT  tesss.company_share_rate , tesss.employee_share_rate ,tssa.base 
+			FROM `tabEmployee Social Security Salary` tesss 
+			INNER JOIN `tabSalary Structure Assignment` tssa ON tesss.employee  = tssa.employee 
+			WHERE tesss.employee =  %s AND tssa.docstatus = 1 
+	""" , (employee) , as_dict=True)
+	
+	result = sql
+
+	company_share_rate = result[0]['company_share_rate']
+	employee_share_rate = result[0]['employee_share_rate'] 
+	base_salary = result[0]['base']
+
+
+	company_share = base_salary * (company_share_rate/100)
+	employee_share = base_salary * (employee_share_rate/100)
+	doc.ss_company_share_amount = company_share
+	doc.ss_emp_share_amount = employee_share
+	doc.amount = base_salary

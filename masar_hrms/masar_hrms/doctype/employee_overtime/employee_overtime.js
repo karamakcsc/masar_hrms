@@ -7,6 +7,7 @@
 // 	// }
 // });
 
+
 cur_frm.fields_dict['employee'].get_query = function(doc) {
 	return {
 		filters: {
@@ -90,5 +91,3 @@ var calculate_total = function(frm) {
     var doc = frm.doc;
     frm.set_value("total_amount", flt(doc.amount_working_day) + flt(doc.amount_off_day));
 };
-
-

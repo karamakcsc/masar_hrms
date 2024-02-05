@@ -82,3 +82,35 @@ def cron():
                                 })
                 new_note.insert(ignore_permissions=True, ignore_mandatory=True)
                 frappe.db.commit()
+
+def daily():
+    current_date = datetime.now()
+    today_name = current_date.weekday()
+    today = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][today_name]
+    day_shift_type = today.lower()+'_shift_type' ### day #### make sure in lower case when use
+    shift_assignment_sql = frappe.db.sql("""
+    SELECT custom_employee_shift_management, name , shift_type
+    FROM `tabShift Assignment` tsa
+    WHERE docstatus =1 
+    """, as_dict=True)
+    custom_employee_shift_management_list = list(set(entry['custom_employee_shift_management'] for entry in shift_assignment_sql))
+    for custom_employee_shift_management in custom_employee_shift_management_list:
+        employee_shift_management = frappe.db.sql("""
+        SELECT  saturday_shift_type , sunday_shift_type , monday_shift_type , tuesday_shift_type , wednesday_shift_type , 
+                thursday_shift_type , friday_shift_type
+                FROM `tabEmployee Shift Management` tesm 
+                WHERE status = 'Active' AND docstatus = 1 AND name = %s
+        """,(custom_employee_shift_management)  , as_dict=True)
+        new_shift = employee_shift_management[0][day_shift_type]
+        for shift_assignment in shift_assignment_sql:
+            name = shift_assignment.get('name')
+            old_shift_type = shift_assignment.get('shift_type')
+            if new_shift == None:
+                status = 'Inactive' 
+            elif new_shift == old_shift_type:
+                status = 'Active' 
+            elif new_shift != old_shift_type:
+                status = 'Inactive' 
+            frappe.db.set_value('Shift Assignment' , name , 'status', status)
+            doc = frappe.get_doc('Shift Assignment', name)
+            doc.save()

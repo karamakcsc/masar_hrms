@@ -35,10 +35,24 @@ frappe.ui.form.on('Social Security Salary Entry', {
 			if (frm.doc.docstatus == 0) {
 				frm.page.clear_primary_action();
 				frm.page.set_primary_action(__("Create Social Security Salary"), () => {
+					
 					frm.save("Submit").then(() => {
 						frm.page.clear_primary_action();
 						frm.refresh();
 						frm.events.refresh(frm);
+						/////////// mahmoud code start
+				frappe.call({
+					method: "masar_hrms.masar_hrms.doctype.social_security_salary_entry.social_security_salary_entry.create_employee_social_security_salary",
+					args:{
+						name :frm.doc.name , 
+						posting_date :frm.doc.posting_date 
+					},
+					callback: function(r){
+						frappe.msgprint(r.message)
+					}
+				
+			});
+				/////////////mahmoud code end 
 					});
 				});
 			} else if (frm.doc.docstatus == 1 && frm.doc.status == "Failed") {
@@ -82,7 +96,6 @@ frappe.ui.form.on('Social Security Salary Entry', {
 		});		
 	},	
 	get_employee_details: function (frm) {
-		frappe.msgprint("Hi")
 		return frappe.call({
 			doc: frm.doc,
 			method: 'fill_employee_details',
@@ -202,7 +215,20 @@ frappe.ui.form.on('Social Security Salary Entry', {
 		frm.clear_table('employees');
 		frm.refresh();
 	},
+	
 });
 
+///// mahmoud code 
+// frappe.ui.form.on("Social Security Salary Entry" ,{
+// 	// "Create Social Security Salary" : function(){
+// 	create_social_security_salary : function() {
+// 		frappe.call({
+// 			method: "masar_hrms.masar_hrms.doctype.social_security_salary_entry.social_security_salary_entry.",
+// 			callback: function () {
+// 				frappe.msgprint(r.message)
+// 				}
+// 		});
+// 	}
+// });
 
 

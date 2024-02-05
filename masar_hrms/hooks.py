@@ -113,25 +113,24 @@ doctype_js = {
    "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js",
    "Salary Slip" : "custom/salary_slip/salary_slip.js",
    ############## from mahmoud 
-   "Payroll Entry" : "custom/payroll_entry/payroll_entry.js",
-   
+   "Payroll Entry" : "custom/payroll_entry/payroll_entry.js", 
  }
 
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"cron":{
-# 		"* * * * *": [
-# 			"masar_hrms.tasks.cron"
-# 		]
-# 	}
+scheduler_events = {
+	# "cron":{
+	# 	"* * * * *": [
+	# 		"masar_hrms.tasks.cron"
+	# 	]
+	# }
 	# "all": [
 	# 	"masar_hrms.tasks.all"
 	# ],
-	# "daily": [
-	# 	"masar_hrms.tasks.daily"
-	# ],
+	"daily": [
+		"masar_hrms.tasks.daily"
+	]
 	# "hourly": [
 	# 	"masar_hrms.tasks.hourly"
 	# ],
@@ -141,7 +140,7 @@ doctype_js = {
 	# "monthly": [
 	# 	"masar_hrms.tasks.monthly"
 	# ]
-# }
+}
 
 # Testing
 # -------
@@ -270,7 +269,8 @@ fixtures = [
         "Payroll Entry-work_type",
         "Company-custom_social_security_liabilities",
         "Company-custom_social_security_expenses",
-        "Company-custom_section_break_9o0od"
+        "Company-custom_section_break_9o0od" , 
+        "Shift Assignment-custom_employee_shift_management"
             ]
         ]
     ]}
