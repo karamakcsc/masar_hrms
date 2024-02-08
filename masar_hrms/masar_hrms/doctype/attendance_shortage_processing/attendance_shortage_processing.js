@@ -11,6 +11,7 @@ frappe.ui.form.on('Attendance Shortage Processing', {
 
 frappe.ui.form.on('Attendance Shortage Processing', {
     setup: function(frm) {
+        if (frm.doc.docstatus != 1) {
             frappe.call({
                 method: "masar_hrms.masar_hrms.doctype.attendance_shortage_processing.attendance_shortage_processing.get_salary_structure_assignment",
                 args: {
@@ -20,12 +21,14 @@ frappe.ui.form.on('Attendance Shortage Processing', {
                     if (r && r.message) {
                         frm.set_value('salary_structure_assignment', r.message);
                     } else {
-                        frappe.msgprint("This Employee Don't Have Salary Structure Assignment.");
+                        frappe.msgprint("This Employee Doesn't Have Salary Structure Assignment.");
                     }
                 }
             });
+        }
     }
 });
+
 
 
 cur_frm.fields_dict['salary_component'].get_query = function(doc) {
