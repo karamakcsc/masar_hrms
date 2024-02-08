@@ -133,7 +133,7 @@ class ShortLeaveApplication(Document):
 	def AddAdditionalSalary(self, submit=True):
 		employee = self.employee
 		salary_component = self.salary_component
-		payroll_date = self.posting_date		
+		payroll_date = self.posting_date.strftime("%Y-%m-%d")		
 		working_hours = calculate_working_hours(employee,payroll_date)
 		hour_rate = hour_rate = flt(self.basic_salary) / 240
 		deduct_amount = self.total_leave_hours * hour_rate
@@ -244,6 +244,7 @@ def calculate_to_time(from_time,total_leave_hours):
 @frappe.whitelist()
 def calculate_working_hours(employee, posting_date):
     posting_date = datetime.strptime(posting_date, "%Y-%m-%d")
+	
     result = get_employee_shift(employee, posting_date)
     working_hours = 0
 

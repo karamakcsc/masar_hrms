@@ -31,6 +31,7 @@
   "leave_approver_name",
   "column_break_17",
   "status",
+  "attendance_shortage_processing_reference",
   "salary_slip",
   "section_break_20",
   "posting_date",
@@ -278,12 +279,19 @@
    "fieldname": "basic_salary",
    "fieldtype": "Read Only",
    "label": "Basic Salary"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "attendance_shortage_processing_reference",
+   "fieldtype": "Link",
+   "label": "Attendance Shortage Processing Reference",
+   "options": "Attendance Shortage Processing"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2023-06-17 22:32:35.163594",
+ "modified": "2024-02-08 08:56:35.254049",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",

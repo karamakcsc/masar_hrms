@@ -130,16 +130,16 @@ scheduler_events = {
 	# ],
 	"daily": [
 		"masar_hrms.tasks.daily"
-	]
+	],
 	# "hourly": [
 	# 	"masar_hrms.tasks.hourly"
 	# ],
 	# "weekly": [
 	# 	"masar_hrms.tasks.weekly"
 	# ],
-	# "monthly": [
-	# 	"masar_hrms.tasks.monthly"
-	# ]
+	"monthly": [
+		"masar_hrms.tasks.monthly"
+	]
 }
 
 # Testing

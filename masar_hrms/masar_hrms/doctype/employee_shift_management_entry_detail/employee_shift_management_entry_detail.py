@@ -1,8 +1,8 @@
-# Copyright (c) 2023, KCSC and contributors
+# Copyright (c) 2024, KCSC and contributors
 # For license information, please see license.txt
 
 # import frappe
 from frappe.model.document import Document
 
-class OvertimeEmployee(Document):
+class EmployeeShiftManagementEntryDetail(Document):
 	pass

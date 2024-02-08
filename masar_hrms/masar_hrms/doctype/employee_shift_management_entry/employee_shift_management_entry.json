@@ -1,0 +1,207 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2024-02-06 09:34:11.818726",
+ "default_view": "List",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "overview_tab",
+  "naming_series",
+  "posting_date",
+  "column_break_ujpw3",
+  "status",
+  "start_date",
+  "end_date",
+  "section_break_2znyb",
+  "saturday_st",
+  "wednesday_st",
+  "column_break_emew9",
+  "sunday_st",
+  "thursday_st",
+  "column_break_tlrtj",
+  "monday_st",
+  "friday_st",
+  "column_break_yx9sn",
+  "tuesday_st",
+  "employees_tab",
+  "filter_employees_section",
+  "department",
+  "column_break_6veyc",
+  "number_of_employees",
+  "section_break_diwtq",
+  "employee_table",
+  "amended_from"
+ ],
+ "fields": [
+  {
+   "fieldname": "overview_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overview"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Series",
+   "options": "HR-SHTE-.YYYY.-"
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date"
+  },
+  {
+   "fieldname": "column_break_ujpw3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "label": "Status",
+   "options": "\nActive\nInactive"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "section_break_2znyb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "saturday_st",
+   "fieldtype": "Link",
+   "label": "Saturday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "wednesday_st",
+   "fieldtype": "Link",
+   "label": "Wednesday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "column_break_emew9",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "sunday_st",
+   "fieldtype": "Link",
+   "label": "Sunday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "thursday_st",
+   "fieldtype": "Link",
+   "label": "Thursday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "column_break_tlrtj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "monday_st",
+   "fieldtype": "Link",
+   "label": "Monday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "friday_st",
+   "fieldtype": "Link",
+   "label": "Friday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "column_break_yx9sn",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tuesday_st",
+   "fieldtype": "Link",
+   "label": "Tuesday Shift Type",
+   "options": "Shift Type"
+  },
+  {
+   "fieldname": "employees_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employees"
+  },
+  {
+   "fieldname": "filter_employees_section",
+   "fieldtype": "Section Break",
+   "label": "Filter Employees"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "column_break_6veyc",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "number_of_employees",
+   "fieldtype": "Int",
+   "label": "Number Of Employees",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_table",
+   "fieldtype": "Table",
+   "label": "Employees",
+   "options": "Employee Shift Management Entry Detail"
+  },
+  {
+   "fieldname": "section_break_diwtq",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Shift Management Entry",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2024-02-06 16:47:26.612355",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Shift Management Entry",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -334,7 +334,7 @@ def get_employee_attendance(date_from, date_to):
         out_time = attendance.out_time
         attendance_name = attendance.name
         status = attendance.status
-        difference_hours = plan_hours - working_hours
+        difference_hours =   working_hours  - plan_hours
 
         new_note = None
         if working_hours > plan_hours:
@@ -370,7 +370,7 @@ def get_employee_attendance(date_from, date_to):
                 "in_time": in_time,
                 "out_time": out_time,
                 "plan_hours": plan_hours,
-                "difference_hours": difference_hours,
+                "difference_hours": -1 * difference_hours,
                 "is_shortage": 1,
                 "working_off_day": is_working_off_day, 
                 "holiday_list": holiday_list 

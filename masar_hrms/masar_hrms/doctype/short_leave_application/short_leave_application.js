@@ -141,8 +141,8 @@ frappe.ui.form.on("Short Leave Application", {
 			frappe.call({
 			method: "masar_hrms.masar_hrms.doctype.short_leave_application.short_leave_application.calculate_to_time",
 			args: {
-				"from_time": frm.doc.from_time,
-				"total_leave_hours": frm.doc.leave_duration
+				from_time: frm.doc.from_time,
+				total_leave_hours: frm.doc.leave_duration
 			},
 			callback: function(r) {
 				frm.doc.to_time = r.message;
@@ -214,8 +214,8 @@ frappe.ui.form.on("Short Leave Application", {
 			return frappe.call({
 				method: "masar_hrms.masar_hrms.doctype.short_leave_application.short_leave_application.calculate_working_hours",
 				args: {
-					"employee": frm.doc.employee,
-					"posting_date": frm.doc.posting_date
+					employee: frm.doc.employee,
+					posting_date: frm.doc.posting_date
 				},
 				callback: function (r) {
 					if (!r.exc && r.message) {
