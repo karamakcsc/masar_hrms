@@ -118,7 +118,7 @@ def daily():
             doc.save()
 
 
-
+## this Task for Attendance Shortage 
 def monthly(): 
     date = datetime.now().date()
     first_day_of_month = date.replace(day=1)
