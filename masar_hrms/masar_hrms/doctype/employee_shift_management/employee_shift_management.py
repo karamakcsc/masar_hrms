@@ -5,9 +5,15 @@ import datetime
 from datetime import datetime
 
 from frappe.model.document import Document
-class EmployeeShiftManagement(Document):
-    pass
+from frappe.model.document import Document
 
+class EmployeeShiftManagement(Document):
+    def __init__(self, *args, **kwargs):
+        super(EmployeeShiftManagement, self).__init__(*args, **kwargs)
+
+    def on_submit(self):
+        create_shift_assignment(self.name)
+    
 ##### from mahmoud 
 @frappe.whitelist()
 def check_active_status(employee):

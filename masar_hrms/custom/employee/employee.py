@@ -72,3 +72,38 @@ def delete_cheque(self):
         if frappe.db.exists("Cheque", d.parent + "-" + d.cheque_no):
             cheque_doc = frappe.get_doc("Cheque", d.parent + "-" + d.cheque_no)
             cheque_doc.delete()
+
+
+
+#### from mahmoud to get full name to employee 
+@frappe.whitelist()
+def employee_full_name(name =None):
+    result_en = frappe.get_list(
+        doctype='Employee',  
+        fields=['first_name', 'middle_name','third_name', 'last_name'],
+        filters={'name': name},
+        order_by='creation DESC',
+        limit=1
+    )
+    result_ar = frappe.get_list(
+        doctype='Employee',  
+        fields=['first_name_ar', 'middle_name_ar','third_name_ar', 'last_name_ar'],
+        filters={'name': name},
+        order_by='creation DESC',
+        limit=1
+    )
+    if result_en:
+        full_name = result_en[0]
+        full_name_en =  f"{full_name.get('first_name')} {full_name.get('middle_name')} {full_name.get('third_name')} {full_name.get('last_name')}"
+    if result_ar:
+        full_ar = result_ar[0]
+        full_name_ar =  f"{full_ar.get('first_name_ar')} {full_ar.get('middle_name_ar')} {full_ar.get('third_name_ar')} {full_ar.get('last_name_ar')}"
+
+    if not result_ar and not result_en:
+        return"Employee Name Not Found"
+    
+    return {
+        'full_name_en': full_name_en, 
+        'full_name_ar' : full_name_ar
+    }
+    
