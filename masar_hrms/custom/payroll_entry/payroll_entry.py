@@ -25,13 +25,13 @@ def ss_jv(company, name, posting_date, cost_center , ss_liabilities , ss_expense
     employee_share_rate  = float((frappe.db.get_all("Company", "employee_share_rate"))[0]['employee_share_rate'])
     # amounts_of_employee  = (frappe.db.get_all("Employee" ,fields =["social_security_amount"]))
     amount_sql = frappe.db.sql("""
-    SELECT  te.social_security_amount 
-        FROM `tabPayroll Entry` tpe 
-        INNER JOIN `tabPayroll Employee Detail` tped ON tped.parent = tpe.name 
-        INNER JOIN tabEmployee te ON te.name = tped.employee 
-        WHERE tpe.name =  %s 
+    select sum(tsd.default_amount) as `amount`
+    from `tabSalary Slip` tss 
+    inner join `tabSalary Detail` tsd on tss.name = tsd.parent 
+    inner join `tabPayroll Entry` tpe on tpe.name = tss.payroll_entry 
+    where tsd.salary_component = 'Social Security' and tpe.name = %s and tss.docstatus =1
     """, (name) , as_dict = True)
-    ss_amount= sum([float(item['social_security_amount']) for item in amount_sql])
+    ss_amount= amount_sql[0]['amount']
     ss_calculation = (ss_amount * (company_share_rate/100)) / (employee_share_rate/100)
     
     jv = frappe.new_doc("Journal Entry")
