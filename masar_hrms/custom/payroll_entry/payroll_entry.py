@@ -3,9 +3,10 @@ from frappe import _
 
 
 @frappe.whitelist()
-def check_ss_jv(company, name, posting_date, cost_center):
-    ss_liabilities       = frappe.db.get_all("Company", "custom_social_security_liabilities")[0]['custom_social_security_liabilities']
-    ss_expenses          = frappe.db.get_all("Company", "custom_social_security_expenses")[0]['custom_social_security_expenses']
+def check_ss_jv(company, name, posting_date):
+    ss_liabilities       = frappe.db.get_all("Company", {"name" : company} ,"custom_social_security_liabilities")[0]['custom_social_security_liabilities']
+    ss_expenses          = frappe.db.get_all("Company", {"name" : company} , "custom_social_security_expenses")[0]['custom_social_security_expenses']
+    cost_center          = frappe.db.get_all("Company", {"name" : company} ,"custom_ss_cost_center")[0]['custom_ss_cost_center']
     result = frappe.db.sql("""
         SELECT *
         FROM `tabJournal Entry Account` tjea 

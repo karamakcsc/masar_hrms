@@ -9,8 +9,7 @@ frappe.ui.form.on('Payroll Entry', {
           args:{                
               company : frm.doc.company,
               name  : frm.doc.name,
-              posting_date : frm.doc.posting_date , 
-              cost_center : frm.doc.cost_center 
+              posting_date : frm.doc.posting_date
             },
           callback: function(r) {   
             frappe.msgprint(r.message);   
