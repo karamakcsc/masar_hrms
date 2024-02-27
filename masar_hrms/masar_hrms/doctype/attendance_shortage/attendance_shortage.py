@@ -70,13 +70,13 @@ class AttendanceShortage(Document):
                     if self.salary_component is None:
                         frappe.throw(_("Please Insert The Salary Componanet For This Employee"))
 
-                    if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-                        self.notify_employee()
+                    # if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
+                    #     self.notify_employee()
 
-                        self.create_leave_ledger_entry(str(working_hours))
-                    else:
-                        if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-                            self.notify_employee()
+                    #     self.create_leave_ledger_entry(str(working_hours))
+                    # else:
+                    #     if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
+                    #         self.notify_employee()
 
                     self.AddAdditionalSalary()
 

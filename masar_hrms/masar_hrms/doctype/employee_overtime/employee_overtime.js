@@ -37,34 +37,46 @@ cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
 
 frappe.ui.form.on("Employee Overtime", {
     refresh: function(frm) {
+        if(frm.doc.docstatus !=1){
         rate_wd(frm);
         rate_off_day(frm);
+        }
     },
     overtime_hours_working_day: function(frm) {
+        if(frm.doc.docstatus !=1){
         rate_wd(frm);
         amount_wd(frm);
         calculate_total(frm);
+        }
     },
     overtime_hours_off_day: function(frm) {
+        if(frm.doc.docstatus !=1){
         rate_off_day(frm);
         amount_off_day(frm);
         calculate_total(frm);
+        }
     },
     validate: function(frm) {
+        if(frm.doc.docstatus !=1){
         rate_off_day(frm);
         amount_off_day(frm);
         calculate_total(frm);
+        }
     },
     setup: function(frm) {
+        if(frm.doc.docstatus !=1){
         rate_off_day(frm);
         amount_off_day(frm);
         calculate_total(frm);
+        }
     },
     on_submit: function(frm) {
+        if(frm.doc.docstatus !=1){
         rate_off_day(frm);
         amount_off_day(frm);
         calculate_total(frm);
-    },
+        }
+}
 });
 
 var rate_wd = function(frm) {
