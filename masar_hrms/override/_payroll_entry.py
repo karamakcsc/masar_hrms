@@ -1,87 +1,50 @@
-import json
-
-from dateutil.relativedelta import relativedelta
-
 import frappe
 from frappe import _
-from frappe.desk.reportview import get_filters_cond, get_match_cond
-from frappe.model.document import Document
-from frappe.query_builder.functions import Coalesce
-from frappe.utils import (
-	DATE_FORMAT,
-	add_days,
-	add_to_date,
-	cint,
-	comma_and,
-	date_diff,
-	flt,
-	get_link_to_form,
-	getdate,
-)
-
-# import erpnext
-# from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
-# 	get_accounting_dimensions,
-# )
-# from erpnext.accounts.utils import get_fiscal_year
-# from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
 
 
-def make_filters(self):
-    filters = frappe._dict()
-    filters["company"] = self.company
-    filters["branch"] = self.branch
-    filters["department"] = self.department
-    filters["designation"] = self.designation
-    filters["work_type"] = self.work_type
-
-    return filters
 
 
 @frappe.whitelist()
 def fill_employee_details(self):
+    cond =" "
+    if self.branch:
+        cond = f" AND te.branch = '{self.branch}'"
+    if self.designation:
+        cond = f" AND te.designation = '{self.designation}'"
+    if self.department:
+        cond = f" AND te.department ='{self.department}' "
+    if self.grade:
+        cond = f" AND te.grade ='{self.grade}' "
+    if self.work_type:
+        cond = f" AND te.work_type ='{self.work_type}' "
+
+    results = frappe.db.sql(f"""
+        SELECT 
+            te.employee ,
+            te.employee_name ,
+            te.department ,
+            te.designation 
+        FROM 
+            tabEmployee te 
+        WHERE 
+            1=1
+            {cond}
+        """ , as_dict = True)
+    
+    doc = frappe.get_doc("Payroll Entry" , self.name)
+    doc.number_of_employees = len(results)
+
     self.set("employees", [])
-    employees = self.get_emp_list()
-    if not employees:
-        error_msg = _(
-            "No employees found for the mentioned criteria:<br>Company: {0}<br> Currency: {1}<br>Payroll Payable Account: {2}"
-        ).format(
-            frappe.bold(self.company),
-            frappe.bold(self.currency),
-            frappe.bold(self.payroll_payable_account),
-        )
-        if self.branch:
-            error_msg += "<br>" + _("Branch: {0}").format(frappe.bold(self.branch))
-        if self.department:
-            error_msg += "<br>" + _("Department: {0}").format(frappe.bold(self.department))
-        if self.designation:
-            error_msg += "<br>" + _("Designation: {0}").format(frappe.bold(self.designation))
-        if self.start_date:
-            error_msg += "<br>" + _("Start date: {0}").format(frappe.bold(self.start_date))
-        if self.end_date:
-            error_msg += "<br>" + _("End date: {0}").format(frappe.bold(self.end_date))
-        if self.work_type:
-            error_msg += "<br>" + _("Work Type: {0}").format(frappe.bold(self.work_type))
-        frappe.throw(error_msg, title=_("No employees found"))
-
-    for d in employees:
-        self.append("employees", d)
-
-    self.number_of_employees = len(self.employees)
-    if self.validate_attendance:
-        return self.validate_employee_attendance()
-
-def check_mandatory(self):
-    for fieldname in ["company", "start_date", "end_date"]:
-        if not self.get(fieldname):
-            frappe.throw(_("Please set {0}").format(self.meta.get_label(fieldname)))
+    attendance = []
+    for result in results:
+ 
+        attendance.append({
+            "employee":result.get('employee'), 
+            "employee_name":  result.get('employee_name'), 
+            "department" : result.get('department'), 
+            "designation" : result.get('designation')				
+            })
+    self.set("employees", attendance)
+    self.number_of_employees = len(results)
 
 
-
-def get_filter_condition(filters):
-	cond = ""
-	for f in ["company", "branch", "department", "designation", "work_type"]:
-		if filters.get(f):
-			cond += " and t1." + f + " = " + frappe.db.escape(filters.get(f))
-
-	return cond
