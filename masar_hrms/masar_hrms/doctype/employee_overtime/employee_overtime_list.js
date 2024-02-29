@@ -24,6 +24,14 @@ frappe.listview_settings['Employee Overtime'] = {
                             reqd: 1,
                             bold: 1
                         },
+                        {
+                            fieldname: 'department',
+                            fieldtype: 'Link',
+                            label: __('Department'),
+                            options: 'Department',
+                            reqd: 0,
+                            bold: 1, 
+                        }
                     ],
                     function(values) {
                         frappe.call({
@@ -31,6 +39,7 @@ frappe.listview_settings['Employee Overtime'] = {
                             args: {
                                 date_from: values.date_from,
                                 date_to: values.date_to,
+                                department:values.department,
                             },
                             callback: function(ret) {},
                         });

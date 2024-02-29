@@ -282,9 +282,12 @@ def get_salary_structure_assignment(employee=None):
 #         frappe.db.commit()
 ###################################################################################
 @frappe.whitelist()
-def get_employee_attendance(date_from, date_to):
+def get_employee_attendance(date_from, date_to , department =None):
+    if department:
+        attendance_list = frappe.get_list("Attendance", filters={"status": "Present","department" :department, "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
+    else:
+        attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
 
-    attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
 
     for attendance in attendance_list:
       

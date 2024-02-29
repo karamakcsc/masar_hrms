@@ -257,7 +257,6 @@ class AttendanceShortageProcessing(Document):
             "currency": frappe.get_doc("Company", self.company).default_currency,
             "amount": flt(deduct_amount),
             "payroll_date": self.date_to,
-
         }
         (frappe.new_doc("Additional Salary")
             .update(entry)
@@ -290,15 +289,18 @@ def calculate_working_hours(employee, posting_date):
     return working_hours
 
 @frappe.whitelist()
-def get_employee_attendance(date_from, date_to):
-    attendance_list = frappe.db.sql("""
+def get_employee_attendance(date_from, date_to ,department=None):
+    cond = ""
+    if department:
+        cond += f" AND te.department = '{department}'"
+    attendance_list = frappe.db.sql(f"""
         WITH AttSh AS (
             SELECT
                 tas.employee,
                 tas.employee_name,
                 SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
             FROM `tabAttendance Shortage` tas
-            WHERE tas.is_shortage = 1 AND tas.attendance_date BETWEEN %s AND %s
+            WHERE tas.is_shortage = 1 AND tas.attendance_date BETWEEN {date_from} AND {date_to}
             GROUP BY employee
         ),
         LeaveSH AS (
@@ -307,7 +309,7 @@ def get_employee_attendance(date_from, date_to):
                 tsla.employee_name,
                 SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
             FROM `tabShort Leave Application` tsla
-            WHERE tsla.posting_date BETWEEN %s AND %s
+            WHERE tsla.posting_date BETWEEN {date_from} AND {date_to}
             GROUP BY employee
         )
         SELECT
@@ -318,7 +320,8 @@ def get_employee_attendance(date_from, date_to):
             IFNULL(shortage_hours, 0) - IFNULL(leave_hours, 0) AS not_covered_hours
         FROM AttSh a
         LEFT JOIN LeaveSh l ON a.employee = l.employee
-    """, (date_from, date_to, date_from, date_to), as_dict=True)
+        INNER JOIN tabEmployee te ON a.employee = te.name {cond}
+    """, as_dict=True)
     for attendance in attendance_list:
         result = get_salary_structure_assignment(attendance.employee)
         ############## mahmoud child table start code

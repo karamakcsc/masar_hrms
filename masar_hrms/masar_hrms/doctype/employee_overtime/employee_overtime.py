@@ -64,15 +64,18 @@ def get_salary_structure_assignment(employee=None):
 
 
 @frappe.whitelist()
-def get_employee_attendance(date_from, date_to):
-    attendance_list = frappe.db.sql("""
+def get_employee_attendance(date_from, date_to, department=None):
+    cond = ""
+    if department:
+        cond += f" AND te.department = '{department}'"
+    attendance_list = frappe.db.sql(f"""
         WITH AttSh AS (
             SELECT
                 tas.employee,
                 tas.employee_name,
                 SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
             FROM `tabAttendance Shortage` tas
-            WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN %s AND %s
+            WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN {date_from} AND {date_to}
             GROUP BY employee
         ),
         ATTSH_OFD AS (
@@ -81,7 +84,7 @@ def get_employee_attendance(date_from, date_to):
                 tas.employee_name,
                 SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours_wofd
             FROM `tabAttendance Shortage` tas
-            WHERE tas.working_off_day = 1 AND tas.attendance_date BETWEEN %s AND %s
+            WHERE tas.working_off_day = 1 AND tas.attendance_date BETWEEN {date_from} AND {date_to}
             GROUP BY employee
         ),
         LeaveSH AS (
@@ -90,7 +93,7 @@ def get_employee_attendance(date_from, date_to):
                 tsla.employee_name,
                 SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
             FROM `tabShort Leave Application` tsla
-            WHERE tsla.posting_date BETWEEN %s AND %s
+            WHERE tsla.posting_date BETWEEN {date_from} AND {date_to}
             GROUP BY employee
         )
         SELECT
@@ -103,8 +106,8 @@ def get_employee_attendance(date_from, date_to):
         FROM AttSh a
         LEFT JOIN LeaveSH l ON a.employee = l.employee
         LEFT JOIN ATTSH_OFD o ON a.employee = o.employee
-        INNER JOIN tabEmployee te ON a.employee = te.name AND te.is_overtime_applicable =1
-    """, (date_from, date_to, date_from, date_to, date_from, date_to), as_dict=True)
+        INNER JOIN tabEmployee te ON a.employee = te.name AND te.is_overtime_applicable =1 {cond}
+    """, as_dict=True)
 
     for attendance in attendance_list:
         result = get_salary_structure_assignment(attendance.employee)
@@ -113,7 +116,8 @@ def get_employee_attendance(date_from, date_to):
             "overtime_hours_working_day": attendance.shortage_hours,
             "overtime_hours_off_day": attendance.shortage_hours_wofd,
             "not_covered_hours": attendance.not_covered_hours,
-            "salary_structure_assignment": result
+            "salary_structure_assignment": result,
+            "posting_date": date_to
         }
         overtime_doc = frappe.new_doc("Employee Overtime")
         overtime_doc.update(entry)
