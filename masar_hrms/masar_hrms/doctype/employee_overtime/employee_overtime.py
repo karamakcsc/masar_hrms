@@ -75,7 +75,7 @@ def get_employee_attendance(date_from, date_to, department=None):
                 tas.employee_name,
                 SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
             FROM `tabAttendance Shortage` tas
-            WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN {date_from} AND {date_to}
+            WHERE tas.is_overtime = 1 AND tas.attendance_date BETWEEN '{date_from}' AND '{date_to}'
             GROUP BY employee
         ),
         ATTSH_OFD AS (
@@ -84,7 +84,7 @@ def get_employee_attendance(date_from, date_to, department=None):
                 tas.employee_name,
                 SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours_wofd
             FROM `tabAttendance Shortage` tas
-            WHERE tas.working_off_day = 1 AND tas.attendance_date BETWEEN {date_from} AND {date_to}
+            WHERE tas.working_off_day = 1 AND tas.attendance_date BETWEEN '{date_from}' AND '{date_to}'
             GROUP BY employee
         ),
         LeaveSH AS (
@@ -93,7 +93,7 @@ def get_employee_attendance(date_from, date_to, department=None):
                 tsla.employee_name,
                 SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
             FROM `tabShort Leave Application` tsla
-            WHERE tsla.posting_date BETWEEN {date_from} AND {date_to}
+            WHERE tsla.posting_date BETWEEN '{date_from}' AND '{date_to}'
             GROUP BY employee
         )
         SELECT

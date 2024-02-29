@@ -257,6 +257,7 @@ class AttendanceShortageProcessing(Document):
             "currency": frappe.get_doc("Company", self.company).default_currency,
             "amount": flt(deduct_amount),
             "payroll_date": self.date_to,
+
         }
         (frappe.new_doc("Additional Salary")
             .update(entry)
@@ -289,8 +290,8 @@ def calculate_working_hours(employee, posting_date):
     return working_hours
 
 @frappe.whitelist()
-def get_employee_attendance(date_from, date_to ,department=None):
-    cond = ""
+def get_employee_attendance(date_from, date_to , department =None):
+    cond =" "
     if department:
         cond += f" AND te.department = '{department}'"
     attendance_list = frappe.db.sql(f"""
@@ -300,7 +301,7 @@ def get_employee_attendance(date_from, date_to ,department=None):
                 tas.employee_name,
                 SUM(IFNULL(tas.difference_hours, 0)) AS shortage_hours
             FROM `tabAttendance Shortage` tas
-            WHERE tas.is_shortage = 1 AND tas.attendance_date BETWEEN {date_from} AND {date_to}
+            WHERE tas.is_shortage = 1 AND tas.attendance_date BETWEEN '{date_from}' AND '{date_to}'
             GROUP BY employee
         ),
         LeaveSH AS (
@@ -309,7 +310,7 @@ def get_employee_attendance(date_from, date_to ,department=None):
                 tsla.employee_name,
                 SUM(IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
             FROM `tabShort Leave Application` tsla
-            WHERE tsla.posting_date BETWEEN {date_from} AND {date_to}
+            WHERE tsla.posting_date BETWEEN '{date_from}' AND '{date_to}'
             GROUP BY employee
         )
         SELECT
