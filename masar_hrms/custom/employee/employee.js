@@ -19,7 +19,7 @@ frappe.ui.form.on("Employee","refresh", function(frm) {
 
 
 frappe.ui.form.on('Employee' , {
-    onload : function(frm){
+    validate : function(frm){
         frappe.call({
             method : "masar_hrms.custom.employee.employee.employee_full_name" , 
             args:{

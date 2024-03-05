@@ -292,3 +292,10 @@ from hrms.payroll.doctype.payroll_entry.payroll_entry import PayrollEntry
 # payroll_entry.get_filter_condition = _payroll_entry.get_filter_condition
 PayrollEntry.fill_employee_details = _payroll_entry.fill_employee_details
 # PayrollEntry.make_filters = _payroll_entry.make_filters
+
+from masar_hrms.override import _shift_assignment
+from hrms.hr.doctype.shift_assignment import shift_assignment
+# from masar_hrms.override import _salary_slip
+from hrms.hr.doctype.shift_assignment.shift_assignment import ShiftAssignment
+
+ShiftAssignment.throw_overlap_error = _shift_assignment.throw_overlap_error
