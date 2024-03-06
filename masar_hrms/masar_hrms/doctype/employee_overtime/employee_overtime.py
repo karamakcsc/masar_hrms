@@ -137,6 +137,7 @@ def calculate_overtime_employee(employee, overtime_doc):
     overtime_rate_off_day = float(data[0]['overtime_rate_off_day'])
     overtime_hours_working_day = float(data[0]['overtime_hours_working_day'])  
     overtime_hours_off_day =  float(data[0]['overtime_hours_off_day'])
+    
     rate_hours_working_day = ( basic_salary /240) * overtime_rate_working_hour
     rate_hours_off_day  = (basic_salary /240 ) * overtime_rate_off_day
     amount_working_day = rate_hours_working_day * overtime_hours_working_day
