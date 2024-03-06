@@ -6,28 +6,28 @@ from frappe import _
 
 @frappe.whitelist()
 def fill_employee_details(self):
-    cond =" "
+    cond  = "1=1 "
     if self.branch:
-        cond = f" AND te.branch = '{self.branch}'"
+        cond += f" AND te.branch = '{self.branch}'"
     if self.designation:
-        cond = f" AND te.designation = '{self.designation}'"
+        cond += f" AND te.designation = '{self.designation}'"
     if self.department:
-        cond = f" AND te.department ='{self.department}' "
+        cond += f" AND te.department ='{self.department}' "
     if self.grade:
-        cond = f" AND te.grade ='{self.grade}' "
+        cond += f" AND te.grade ='{self.grade}' "
     if self.work_type:
-        cond = f" AND te.work_type ='{self.work_type}' "
+        cond += f" AND te.work_type ='{self.work_type}' "
 
     results = frappe.db.sql(f"""
         SELECT 
             te.employee ,
             te.employee_name ,
             te.department ,
-            te.designation 
+            te.designation,
+            te.work_type
         FROM 
             tabEmployee te 
         WHERE 
-            1=1
             {cond}
         """ , as_dict = True)
     
