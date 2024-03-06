@@ -114,7 +114,7 @@ def get_employee_attendance(date_from, date_to, department=None):
         entry = {
             "employee": attendance.employee,
             "overtime_hours_working_day": attendance.shortage_hours,
-            "overtime_hours_off_day": float(attendance.shortage_hours_wofd),
+            "overtime_hours_off_day": attendance.shortage_hours_wofd,
             "not_covered_hours": attendance.not_covered_hours,
             "salary_structure_assignment": result,
             "posting_date": date_to
