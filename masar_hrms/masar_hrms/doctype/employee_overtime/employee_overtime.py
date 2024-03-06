@@ -114,7 +114,7 @@ def get_employee_attendance(date_from, date_to, department=None):
         entry = {
             "employee": attendance.employee,
             "overtime_hours_working_day": attendance.shortage_hours,
-            "overtime_hours_off_day": attendance.shortage_hours_wofd,
+            "overtime_hours_off_day": float(attendance.shortage_hours_wofd),
             "not_covered_hours": attendance.not_covered_hours,
             "salary_structure_assignment": result,
             "posting_date": date_to
@@ -137,17 +137,19 @@ def calculate_overtime_employee(employee, overtime_doc):
     overtime_rate_off_day = float(data[0]['overtime_rate_off_day'])
     overtime_hours_working_day = float(data[0]['overtime_hours_working_day'])  
     overtime_hours_off_day =  float(data[0]['overtime_hours_off_day'])
+    frappe.msgprint(str(overtime_hours_off_day))
     
     # frappe.msgprint(str(overtime_rate_working_hour))
     rate_hours_working_day = ( basic_salary /240) * overtime_rate_working_hour
     rate_hours_off_day  = (basic_salary /240 ) * overtime_rate_off_day
     amount_working_day = rate_hours_working_day * overtime_hours_working_day
-    amount_off_day = rate_hours_off_day *overtime_hours_off_day
+    amount_off_day = rate_hours_off_day * overtime_hours_off_day
     total_amount = amount_working_day + amount_off_day
     entry = {
         "rate_hours_working_day":rate_hours_working_day,
         "rate_hours_off_day": rate_hours_off_day,
         "amount_working_day": amount_working_day,
+        "overtime_hours_off_day": overtime_hours_off_day,
         "amount_off_day": amount_off_day,
         "total_amount": total_amount
     }
