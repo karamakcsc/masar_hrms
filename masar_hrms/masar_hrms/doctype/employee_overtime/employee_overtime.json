@@ -31,6 +31,10 @@
   "column_break_1iwvc",
   "overtime_rate_off_day",
   "rate_hours_off_day",
+  "unallocated_hours_section",
+  "unallocated_wd",
+  "column_break_1wrue",
+  "unallocated_off_day",
   "overtime_totals_section",
   "amount_working_day",
   "total_amount",
@@ -243,12 +247,32 @@
    "options": "Employee Overtime",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "unallocated_hours_section",
+   "fieldtype": "Section Break",
+   "label": "Unallocated Hours"
+  },
+  {
+   "fieldname": "unallocated_wd",
+   "fieldtype": "Float",
+   "label": "Unallocated Overtime For Working Day"
+  },
+  {
+   "fieldname": "column_break_1wrue",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "unallocated_off_day",
+   "fieldtype": "Data",
+   "label": "Unallocated Overtime For Off-Day"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-02-27 09:08:48.451908",
+ "modified": "2024-03-28 00:00:00.903705",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Overtime",

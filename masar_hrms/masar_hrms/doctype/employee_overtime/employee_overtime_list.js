@@ -41,7 +41,9 @@ frappe.listview_settings['Employee Overtime'] = {
                                 date_to: values.date_to,
                                 department:values.department,
                             },
-                            callback: function(ret) {},
+                            callback: function(ret) {
+                                frm.reload_doc();
+                            },
                         });
                         frappe.show_alert({
                             message: __('Sync has started in the background.'),

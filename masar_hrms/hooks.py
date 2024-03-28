@@ -271,7 +271,8 @@ fixtures = [
         "Company-custom_social_security_expenses",
         "Company-custom_section_break_9o0od" , 
         "Shift Assignment-custom_employee_shift_management", 
-        "Company-custom_ss_cost_center"
+        "Company-custom_ss_cost_center",
+        "Employee-custom_column_break_bba4s"
             ]
         ]
     ]}
