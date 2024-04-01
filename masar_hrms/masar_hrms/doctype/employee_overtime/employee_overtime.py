@@ -87,50 +87,47 @@ def get_draft_overtime(date_from, date_to, department=None):
     cond = ""
     if department:
         cond += f" AND te.department = '{department}'"
-    attendance_list = frappe.db.sql(f"""
-      WITH AttSh AS (
+    attendance_list = frappe.db.sql(f"""             
+            WITH overtime AS (     
             SELECT
                 tas.employee,
                 tas.employee_name,
                 tas.attendance_date,
-               (IFNULL(tas.difference_hours, 0)) AS shortage_hours
+                CASE 
+                    WHEN tas.is_overtime = 1 THEN IFNULL(tas.difference_hours, 0)   
+                    ELSE 0
+                END AS overtime_hours,
+                CASE 
+                    WHEN tas.working_off_day = 1 THEN IFNULL(tas.working_hours, 0)
+                    ELSE 0
+                END AS off_day
             FROM `tabAttendance Shortage` tas
-            WHERE tas.is_overtime = 1 
-            AND tas.attendance_date BETWEEN '{date_from}' AND '{date_to}'
-        ),
-        ATTSH_OFD AS (
-            SELECT
-                tas.employee,
-                tas.employee_name,
-                (IFNULL(tas.difference_hours, 0)) AS shortage_hours_wofd
-            FROM `tabAttendance Shortage` tas
-            WHERE tas.working_off_day = 1 
-            AND tas.attendance_date BETWEEN '{date_from}' AND '{date_to}'
-        ),
-        LeaveSH AS (
-            SELECT
-                tsla.employee,
-                tsla.employee_name,
-                (IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
-            FROM `tabShort Leave Application` tsla
-            WHERE tsla.posting_date BETWEEN '{date_from}' AND '{date_to}'
-            GROUP BY employee
-        )
-        SELECT
-            a.employee,
-            a.employee_name,
-            a.attendance_date , 
-            IFNULL(a.shortage_hours, 0) AS shortage_hours,
-            IFNULL(o.shortage_hours_wofd, 0) AS shortage_hours_wofd,
-            IFNULL(l.leave_hours, 0) AS leave_hours,
-            IFNULL(a.shortage_hours, 0) - IFNULL(l.leave_hours, 0) AS not_covered_hours,
-            te.overtime_ceiling 
-        FROM AttSh a
-        LEFT JOIN LeaveSH l ON a.employee = l.employee
-        LEFT JOIN ATTSH_OFD o ON a.employee = o.employee
-        INNER JOIN tabEmployee te ON a.employee = te.name AND te.is_overtime_applicable = 1 AND te.status = 'Active' {cond} 
-        ORDER BY a.attendance_date ASC
- 
+            WHERE (tas.is_overtime = 1 OR tas.working_off_day = 1)
+                AND tas.attendance_date BETWEEN '{date_from}' AND '{date_to}'
+            ORDER BY tas.attendance_date ASC
+            ),
+            LeaveSH AS (
+                        SELECT
+                            tsla.employee,
+                            tsla.employee_name,
+                            (IFNULL(tsla.total_leave_hours, 0)) AS leave_hours
+                        FROM `tabShort Leave Application` tsla
+                        WHERE tsla.posting_date BETWEEN '{date_from}' AND '{date_to}'
+                        GROUP BY employee
+            )
+            SELECT 
+                ot.employee , 
+                ot.employee_name ,
+                ot.attendance_date,
+                ot.overtime_hours, 
+                ot.off_day,
+                te.overtime_ceiling ,
+                IFNULL(lsh.leave_hours, 0) AS leave_hours,
+                IFNULL(ot.overtime_hours, 0) - IFNULL(lsh.leave_hours, 0) AS not_covered_hours
+            FROM overtime ot 
+            LEFT JOIN LeaveSH lsh ON lsh.employee = ot.employee
+            INNER JOIN tabEmployee te ON ot.employee = te.name AND te.is_overtime_applicable = 1   {cond} 
+            ORDER BY ot.attendance_date ASC
     """, as_dict=True)
 
     for attendance in attendance_list:
@@ -169,8 +166,8 @@ def get_draft_overtime(date_from, date_to, department=None):
                 else:
                     overtime_off_old = 0 
                 #### get new overtime hours for Employee
-                overtime_wd_new = float(attendance.get('shortage_hours'))
-                overtime_off_new = float(attendance.get('shortage_hours_wofd'))
+                overtime_wd_new = float(attendance.get('overtime_hours'))
+                overtime_off_new = float(attendance.get('off_day'))
                 out = 0.0 
                 in_off_hours = 0.0
                 in_wd_hours = 0.0
@@ -232,8 +229,8 @@ def get_draft_overtime(date_from, date_to, department=None):
         else:
             entry = {
                 "employee": attendance.get('employee'),
-                "overtime_hours_working_day": attendance.get('shortage_hours'),
-                "overtime_hours_off_day": attendance.get('shortage_hours_wofd'),
+                "overtime_hours_working_day": attendance.get('overtime_hours'),
+                "overtime_hours_off_day": attendance.get('off_day'),
                 "not_covered_hours": attendance.get('not_covered_hours'),
                 "salary_structure_assignment": result,
                 "posting_date": date_to
