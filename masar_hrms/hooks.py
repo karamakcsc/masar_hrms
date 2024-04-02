@@ -280,23 +280,29 @@ fixtures = [
 
 from masar_hrms.override import _leave_application
 from hrms.hr.doctype.leave_application import leave_application
+leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
+
+
+
 from masar_hrms.override import _salary_slip
 from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
 
-leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
 SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
 SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
+SalarySlip.calculate_tax_by_tax_slab = _salary_slip.calculate_tax_by_tax_slab
+
+
 
 from masar_hrms.override import _payroll_entry
 from hrms.payroll.doctype.payroll_entry import payroll_entry
 from hrms.payroll.doctype.payroll_entry.payroll_entry import PayrollEntry 
+
 # payroll_entry.get_filter_condition = _payroll_entry.get_filter_condition
 PayrollEntry.fill_employee_details = _payroll_entry.fill_employee_details
 # PayrollEntry.make_filters = _payroll_entry.make_filters
 
 from masar_hrms.override import _shift_assignment
 from hrms.hr.doctype.shift_assignment import shift_assignment
-# from masar_hrms.override import _salary_slip
 from hrms.hr.doctype.shift_assignment.shift_assignment import ShiftAssignment
 
 ShiftAssignment.throw_overlap_error = _shift_assignment.throw_overlap_error
