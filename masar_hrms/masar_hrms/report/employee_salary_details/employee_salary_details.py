@@ -24,50 +24,51 @@ def get_data(filters):
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
 
 	#SQL Query
-	data = frappe.db.sql(f"""SELECT
-								tss.name AS `Salary Slip No.`,
-								tss.employee AS `Employee No.`,
-								tss.employee_name AS `Employee Name`,
-								tss.branch AS `Branch`,
-								te.work_type AS `Work Type`,
-								tss.company AS `Company`,
-								tss.department AS `Department`,
-								tss.designation AS `Designation`,
-								te.date_of_joining AS `Date of Joining`,
-								Month(tss.start_date) As `Month`,
-					  			tssa.base AS 'Basic Salary',
-								tss.gross_pay AS `Reserved Salary`,
-								tss.leave_without_pay AS `Leave Without Pay`,
-								tss.payment_days AS `Payment Days`,
-								MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Reserved Basic Salary`,
-								MAX(CASE WHEN tsd.salary_component = 'Overtime Allowance' THEN tsd.amount END) AS `Overtime Allowance`,
-								MAX(CASE WHEN tsd.salary_component IN ('Awards IN __ OUT', 'Non Taxable Bonus', 'End Service Awards', 'Project Awards', 'Award', 'Bonus IN-OUT') THEN tsd.amount END) AS `Awards`,
-								(SELECT SUM(IF(tsd.salary_component NOT IN ('Overtime Allowance', 'Basic', 'Awards IN __ OUT', 'Non Taxable Bonus', 'End Service Awards', 'Project Awards', 'Award', 'Bonus IN-OUT'), tsd.amount, 0))
-								FROM `tabSalary Detail` tsd
-								WHERE tsd.parent = tss.name AND tsd.parentfield = 'earnings') AS `Other Earnings`,
-								tss.gross_pay AS `Total Earnings`,
-								MAX(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) AS `Social Security`,
-								MAX(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`,
-								(SELECT SUM(IF(tsd.salary_component NOT IN ('Income Tax', 'Social Security'), tsd.amount, 0))
-								FROM `tabSalary Detail` tsd
-								WHERE tsd.parent = tss.name AND tsd.parentfield = 'deductions') AS `Other Deductions`,
-								tss.total_deduction AS `Total Deductions`,
-								tss.net_pay AS `Net Pay`,
-								te.old_ref AS `Old Reference`,
-								tss.posting_date
-							FROM
-								`tabSalary Slip` tss
-							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-							INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
-							INNER JOIN `tabEmployee` te ON te.name = tss.employee
-							INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
-							WHERE
-								tss.docstatus = 1 AND tssa.docstatus = 1 AND tss_sub.name = tss.name
-								And (tss.posting_date BETWEEN '{_from}' AND '{to}') {conditions}
-							GROUP BY
-								tss.name, tss.net_pay, tssa.base
-								;
-							""")
+	data = frappe.db.sql(f"""
+		SELECT
+			tss.name AS `Salary Slip No.`,
+			tss.employee AS `Employee No.`,
+			tss.employee_name AS `Employee Name`,
+			tss.branch AS `Branch`,
+			te.work_type AS `Work Type`,
+			tss.company AS `Company`,
+			tss.department AS `Department`,
+			tss.designation AS `Designation`,
+			te.date_of_joining AS `Date of Joining`,
+			tssa.base AS 'Basic Salary',
+			tss.gross_pay AS `Reserved Salary`,
+			tss.leave_without_pay AS `Leave Without Pay`,
+			tss.payment_days AS `Payment Days`,
+			MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Reserved Basic Salary`,
+			MAX(CASE WHEN tsd.salary_component = 'Overtime Allowance' THEN tsd.amount END) AS `Overtime Allowance`,
+			MAX(CASE WHEN tsd.salary_component IN ('Awards IN __ OUT', 'Non Taxable Bonus', 'End Service Awards', 'Project Awards', 'Award', 'Bonus IN-OUT') THEN tsd.amount END) AS `Awards`,
+			(SELECT SUM(IF(tsd.salary_component NOT IN ('Overtime Allowance', 'Basic', 'Awards IN __ OUT', 'Non Taxable Bonus', 'End Service Awards', 'Project Awards', 'Award', 'Bonus IN-OUT'), tsd.amount, 0))
+			FROM `tabSalary Detail` tsd
+			WHERE tsd.parent = tss.name AND tsd.parentfield = 'earnings') AS `Other Earnings`,
+			tss.gross_pay AS `Total Earnings`,
+			MAX(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) AS `Social Security`,
+			MAX(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`,
+			(SELECT SUM(IF(tsd.salary_component NOT IN ('Income Tax', 'Social Security'), tsd.amount, 0))
+			FROM `tabSalary Detail` tsd
+			WHERE tsd.parent = tss.name AND tsd.parentfield = 'deductions') AS `Other Deductions`,
+			tss.total_deduction AS `Total Deductions`,
+			tss.net_pay AS `Net Pay`,
+			te.old_ref AS `Old Reference`,
+			DATE_FORMAT(tss.posting_date , '%M') as `Posting Month` , 
+			tss.mode_of_payment AS `Mod Of Payment`
+		FROM
+			`tabSalary Slip` tss
+		INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
+		INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
+		INNER JOIN `tabEmployee` te ON te.name = tss.employee
+		INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
+		WHERE
+			tss.docstatus = 1 AND tssa.docstatus = 1 AND tss_sub.name = tss.name
+			And (tss.posting_date BETWEEN '{_from}' AND '{to}') {conditions}
+		GROUP BY
+			tss.name, tss.net_pay, tssa.base
+			;
+		""")
 
 	return data
 
@@ -82,7 +83,7 @@ def get_columns():
 	   "Department: Data:200",
 	   "Designation: Data:200",
 	   "Date of Joining: Data:150 ",
-       "Month: Data:80",
+    #    "Month: Data:80",
 	   "Basic Salary: Currency:150",
 	   "Reserved Salary: Currency:150",
 	   "Leave Without Pay: Data:150",
@@ -99,8 +100,10 @@ def get_columns():
 	   "Other Deductions: Currency:150",
 	   "Total Deductions: Currency:150",
 	   "Net Pay: Currency:150",
-	   "Old Reference: Data:150"
-	   #"Posting Date: Date/Posting Date:150"
+	   "Old Reference: Data:150",
+	   "Posting Month: Data/Posting Month:150",
+	   "Mode Of Payment: Data/Mode Of Paymnet:150" 
+
 	   # "Tax Group: Data:200",
 	   # "Currency Code: Data:200"
 	   #"Status:150"

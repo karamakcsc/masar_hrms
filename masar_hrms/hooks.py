@@ -290,7 +290,7 @@ from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
 SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
 SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
 SalarySlip.calculate_tax_by_tax_slab = _salary_slip.calculate_tax_by_tax_slab
-
+SalarySlip.eval_tax_slab_condition = _salary_slip.eval_tax_slab_condition
 
 
 from masar_hrms.override import _payroll_entry

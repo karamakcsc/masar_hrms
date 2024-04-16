@@ -47,7 +47,10 @@ from hrms.payroll.doctype.payroll_period.payroll_period import (
 	get_period_factor,
 )
 from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
-from hrms.payroll.doctype.salary_slip.salary_slip import calculate_tax_by_tax_slab
+# from hrms.payroll.doctype.salary_slip.salary_slip import calculate_tax_by_tax_slab
+from hrms.payroll.doctype.salary_slip.salary_slip import eval_tax_slab_condition
+
+
 
 def calculate_variable_tax(self, tax_component):
 			self.previous_total_paid_taxes = self.get_tax_paid_in_period(
@@ -73,7 +76,7 @@ def calculate_variable_tax(self, tax_component):
 			# Total taxable earnings with additional earnings with full tax
 			self.full_tax_on_additional_earnings = 0.0
 			if self.current_additional_earnings_with_full_tax:
-				self.total_tax_amount = SalarySlip.calculate_tax_by_tax_slab(
+				self.total_tax_amount = calculate_tax_by_tax_slab(
 					self.total_taxable_earnings, self.tax_slab, self.whitelisted_globals, eval_locals
 				)
 				self.full_tax_on_additional_earnings = self.total_tax_amount - self.total_structured_tax_amount
@@ -189,3 +192,38 @@ def compute_taxable_earnings_for_year(self):
 #         interest_amounts.append(interest_amount)
 
 #     return principal_amounts, interest_amounts
+
+
+
+
+
+#########################3   override from mahmoud to calculate the income tax 
+def calculate_tax_by_tax_slab(
+	annual_taxable_earning, tax_slab, eval_globals=None, eval_locals=None
+):
+	eval_locals.update({"annual_taxable_earning": annual_taxable_earning})
+	tax_amount = 0
+	for slab in tax_slab.slabs:
+		cond = cstr(slab.condition).strip()
+		if cond and not eval_tax_slab_condition(cond, eval_globals, eval_locals):
+			continue
+		if not slab.to_amount and annual_taxable_earning >= slab.from_amount:
+			tax_amount += (annual_taxable_earning - slab.from_amount + 1) * slab.percent_deduction * 0.01
+			continue
+
+		if annual_taxable_earning >= slab.from_amount and annual_taxable_earning < slab.to_amount:
+			tax_amount += (annual_taxable_earning - slab.from_amount + 1) * slab.percent_deduction * 0.01
+		elif annual_taxable_earning >= slab.from_amount and annual_taxable_earning >= slab.to_amount:
+			tax_amount += (slab.to_amount - slab.from_amount + 1) * slab.percent_deduction * 0.01
+
+	# other taxes and charges on income tax
+	for d in tax_slab.other_taxes_and_charges:
+		if flt(d.min_taxable_income) and flt(d.min_taxable_income) > annual_taxable_earning:
+			continue
+
+		if flt(d.max_taxable_income) and flt(d.max_taxable_income) < annual_taxable_earning:
+			continue
+
+		tax_amount += tax_amount * flt(d.percent) / 100
+
+	return tax_amount

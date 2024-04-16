@@ -34,7 +34,6 @@ def get_data(filters):
 								tss.department AS `Department`,
 								tss.designation AS `Designation`,
 								te.date_of_joining AS `Date of Joining`,
-								Month(tss.start_date) As `Month`,
 					  			tssa.base AS 'Basic Salary',
 								tss.gross_pay AS `Reserved Salary`,
 								tss.leave_without_pay AS `Leave Without Pay`,
@@ -54,7 +53,8 @@ def get_data(filters):
 								tss.total_deduction AS `Total Deductions`,
 								tss.net_pay AS `Net Pay`,
 								te.old_ref AS `Old Reference`,
-								tss.posting_date
+								DATE_FORMAT(tss.posting_date , '%M') AS `Posting Month`,
+								tss.mode_of_payment AS `Mode of Payment`
 							FROM
 								`tabSalary Slip` tss
 							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
@@ -63,7 +63,7 @@ def get_data(filters):
 							INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
 							WHERE
 								tss.docstatus = 0 AND tssa.docstatus = 1 AND tss_sub.name = tss.name
-								And (tss.posting_date BETWEEN '{_from}' AND '{to}') {conditions}
+ 								And (tss.posting_date BETWEEN '{_from}' AND '{to}') {conditions}
 							GROUP BY
 								tss.name, tss.net_pay, tssa.base
 								;
@@ -82,7 +82,7 @@ def get_columns():
 	   "Department: Data:200",
 	   "Designation: Data:200",
 	   "Date of Joining: Data:150 ",
-	   "Month: Data:80",
+	#    "Month: Data:80",
 	   "Basic Salary: Currency:150",
 	   "Reserved Salary: Currency:150",
 	   "Leave Without Pay: Data:150",
@@ -99,8 +99,9 @@ def get_columns():
 	   "Other Deductions: Currency:150",
 	   "Total Deductions: Currency:150",
 	   "Net Pay: Currency:150",
-	   "Old Reference: Data:150"
-	   #"Posting Date: Date/Posting Date:150"
+	   "Old Reference: Data:150",
+	   "Posting Month: Data/Posting Month:150", 
+	   "Mode of Payment: Data/Mode of Payment"
 	   # "Tax Group: Data:200",
 	   # "Currency Code: Data:200"
 	   #"Status:150"
