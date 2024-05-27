@@ -35,11 +35,11 @@ def get_data(filters):
 			tss.department AS `Department`,
 			tss.designation AS `Designation`,
 			te.date_of_joining AS `Date of Joining`,
-			tssa.base AS 'Basic Salary',
+			-- tssa.base AS 'Basic Salary',
 			tss.gross_pay AS `Reserved Salary`,
 			tss.leave_without_pay AS `Leave Without Pay`,
 			tss.payment_days AS `Payment Days`,
-			MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Reserved Basic Salary`,
+			MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Basic Salary`,
 			MAX(CASE WHEN tsd.salary_component = 'Overtime Allowance' THEN tsd.amount END) AS `Overtime Allowance`,
 			MAX(CASE WHEN tsd.salary_component IN ('Awards IN __ OUT', 'Non Taxable Bonus', 'End Service Awards', 'Project Awards', 'Award', 'Bonus IN-OUT') THEN tsd.amount END) AS `Awards`,
 			(SELECT SUM(IF(tsd.salary_component NOT IN ('Overtime Allowance', 'Basic', 'Awards IN __ OUT', 'Non Taxable Bonus', 'End Service Awards', 'Project Awards', 'Award', 'Bonus IN-OUT'), tsd.amount, 0))
@@ -54,7 +54,7 @@ def get_data(filters):
 			tss.total_deduction AS `Total Deductions`,
 			tss.net_pay AS `Net Pay`,
 			te.old_ref AS `Old Reference`,
-			DATE_FORMAT(tss.posting_date , '%M') as `Posting Month` , 
+			DATE_FORMAT(tss.start_date , '%M') as `Posting Month` , 
 			tss.mode_of_payment AS `Mod Of Payment`
 		FROM
 			`tabSalary Slip` tss
@@ -84,12 +84,13 @@ def get_columns():
 	   "Designation: Data:200",
 	   "Date of Joining: Data:150 ",
     #    "Month: Data:80",
-	   "Basic Salary: Currency:150",
+	#    "Basic Salary: Currency:150",
 	   "Reserved Salary: Currency:150",
 	   "Leave Without Pay: Data:150",
 	   #"Absent Days: Data:200",
 	   "Payment Days: Data:150",
-	   "Reserved Basic Salary: Currency:150",
+	#    "Reserved Basic Salary: Currency:150",
+	 	"Basic Salary: Currency:150",
 	   "Overtime Allowance: Currency:150",
 	   "Awards: Currency:150",
 	   "Other Earnings: Currency:150",
