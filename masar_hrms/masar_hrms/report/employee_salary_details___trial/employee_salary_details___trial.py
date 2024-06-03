@@ -62,8 +62,8 @@ def get_data(filters):
 							INNER JOIN `tabEmployee` te ON te.name = tss.employee
 							INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
 							WHERE
-								tss.docstatus = 0 AND  tss_sub.name = tss.name
- 								And (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
+								tss.docstatus = 0 AND tss_sub.name = tss.name AND tssa.docstatus = 1
+								And (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
 							GROUP BY
 								tss.name, tss.net_pay, tssa.base
 								;
