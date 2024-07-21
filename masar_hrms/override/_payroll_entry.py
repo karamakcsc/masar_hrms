@@ -176,37 +176,83 @@ class PayrollEntry(Document):
 			filters.update(dict(payroll_frequency=self.payroll_frequency))
 
 		return filters
-
+	
+	###########################3 Override 
 	@frappe.whitelist()
 	def fill_employee_details(self):
-		filters = self.make_filters()
-		employees = get_employee_list(filters=filters, as_dict=True, ignore_match_conditions=True)
+		cond  = "1=1 "
+		if self.branch:
+			cond += f" AND te.branch = '{self.branch}'"
+		if self.designation:
+			cond += f" AND te.designation = '{self.designation}'"
+		if self.department:
+			cond += f" AND te.department ='{self.department}' "
+		if self.grade:
+			cond += f" AND te.grade ='{self.grade}' "
+		if self.work_type:
+			cond += f" AND te.work_type ='{self.work_type}' "
+
+		results = frappe.db.sql(f"""
+			SELECT 
+				te.employee ,
+				te.employee_name ,
+				te.department ,
+				te.designation,
+				te.work_type
+			FROM 
+				tabEmployee te 
+			WHERE 
+				{cond}
+			""" , as_dict = True)
+		
+		doc = frappe.get_doc("Payroll Entry" , self.name)
+		doc.number_of_employees = len(results)
+
 		self.set("employees", [])
+		attendance = []
+		for result in results:
+	
+			attendance.append({
+				"employee":result.get('employee'), 
+				"employee_name":  result.get('employee_name'), 
+				"department" : result.get('department'), 
+				"designation" : result.get('designation')				
+				})
+		self.set("employees", attendance)
+		self.number_of_employees = len(results)
 
-		if not employees:
-			error_msg = _(
-				"No employees found for the mentioned criteria:<br>Company: {0}<br> Currency: {1}<br>Payroll Payable Account: {2}"
-			).format(
-				frappe.bold(self.company),
-				frappe.bold(self.currency),
-				frappe.bold(self.payroll_payable_account),
-			)
-			if self.branch:
-				error_msg += "<br>" + _("Branch: {0}").format(frappe.bold(self.branch))
-			if self.department:
-				error_msg += "<br>" + _("Department: {0}").format(frappe.bold(self.department))
-			if self.designation:
-				error_msg += "<br>" + _("Designation: {0}").format(frappe.bold(self.designation))
-			if self.start_date:
-				error_msg += "<br>" + _("Start date: {0}").format(frappe.bold(self.start_date))
-			if self.end_date:
-				error_msg += "<br>" + _("End date: {0}").format(frappe.bold(self.end_date))
-			frappe.throw(error_msg, title=_("No employees found"))
 
-		self.set("employees", employees)
-		self.number_of_employees = len(self.employees)
+	###############################
+	# @frappe.whitelist()
+	# def fill_employee_details(self):
+	# 	filters = self.make_filters()
+	# 	employees = get_employee_list(filters=filters, as_dict=True, ignore_match_conditions=True)
+	# 	self.set("employees", [])
 
-		return self.get_employees_with_unmarked_attendance()
+	# 	if not employees:
+	# 		error_msg = _(
+	# 			"No employees found for the mentioned criteria:<br>Company: {0}<br> Currency: {1}<br>Payroll Payable Account: {2}"
+	# 		).format(
+	# 			frappe.bold(self.company),
+	# 			frappe.bold(self.currency),
+	# 			frappe.bold(self.payroll_payable_account),
+	# 		)
+	# 		if self.branch:
+	# 			error_msg += "<br>" + _("Branch: {0}").format(frappe.bold(self.branch))
+	# 		if self.department:
+	# 			error_msg += "<br>" + _("Department: {0}").format(frappe.bold(self.department))
+	# 		if self.designation:
+	# 			error_msg += "<br>" + _("Designation: {0}").format(frappe.bold(self.designation))
+	# 		if self.start_date:
+	# 			error_msg += "<br>" + _("Start date: {0}").format(frappe.bold(self.start_date))
+	# 		if self.end_date:
+	# 			error_msg += "<br>" + _("End date: {0}").format(frappe.bold(self.end_date))
+	# 		frappe.throw(error_msg, title=_("No employees found"))
+
+	# 	self.set("employees", employees)
+	# 	self.number_of_employees = len(self.employees)
+
+	# 	return self.get_employees_with_unmarked_attendance()
 
 	@frappe.whitelist()
 	def create_salary_slips(self):
@@ -1640,51 +1686,5 @@ def employee_query(doctype, txt, searchfield, start, page_len, filters):
 
 ############################################
 
-
-
-
-
-@frappe.whitelist()
-def fill_employee_details(self):
-    cond  = "1=1 "
-    if self.branch:
-        cond += f" AND te.branch = '{self.branch}'"
-    if self.designation:
-        cond += f" AND te.designation = '{self.designation}'"
-    if self.department:
-        cond += f" AND te.department ='{self.department}' "
-    if self.grade:
-        cond += f" AND te.grade ='{self.grade}' "
-    if self.work_type:
-        cond += f" AND te.work_type ='{self.work_type}' "
-
-    results = frappe.db.sql(f"""
-        SELECT 
-            te.employee ,
-            te.employee_name ,
-            te.department ,
-            te.designation,
-            te.work_type
-        FROM 
-            tabEmployee te 
-        WHERE 
-            {cond}
-        """ , as_dict = True)
-    
-    doc = frappe.get_doc("Payroll Entry" , self.name)
-    doc.number_of_employees = len(results)
-
-    self.set("employees", [])
-    attendance = []
-    for result in results:
- 
-        attendance.append({
-            "employee":result.get('employee'), 
-            "employee_name":  result.get('employee_name'), 
-            "department" : result.get('department'), 
-            "designation" : result.get('designation')				
-            })
-    self.set("employees", attendance)
-    self.number_of_employees = len(results)
 
 
