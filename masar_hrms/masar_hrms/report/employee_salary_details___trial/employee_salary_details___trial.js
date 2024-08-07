@@ -25,7 +25,7 @@ frappe.query_reports["Employee Salary Details - Trial"] = {
 			"fieldtype": "Date",
 			"width": 80,
 			"reqd": 1,
-			"default": dateutil.year_start()
+			"default": frappe.datetime.year_start()
 		 },
 		 {
 			"fieldname": "to",
@@ -33,7 +33,7 @@ frappe.query_reports["Employee Salary Details - Trial"] = {
 			"fieldtype": "Date",
 			"width": 80,
 			"reqd": 1,
-			"default": dateutil.year_end()
+			"default": frappe.datetime.year_end()
 		},
 	  {
 			"fieldname": "emp_name",

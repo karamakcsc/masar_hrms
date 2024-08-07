@@ -25,7 +25,7 @@ def get_data(filters):
 
 	#SQL Query
 	data = frappe.db.sql(f"""
-		SELECT
+		SELECT DISTINCT
 			tss.name AS `Salary Slip No.`,
 			tss.employee AS `Employee No.`,
 			tss.employee_name AS `Employee Name`,

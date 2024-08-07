@@ -24,7 +24,7 @@ def get_data(filters):
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
 
 	#SQL Query
-	data = frappe.db.sql(f"""SELECT
+	data = frappe.db.sql(f"""SELECT DISTINCT
 								tss.name AS `Salary Slip No.`,
 								tss.employee AS `Employee No.`,
 								tss.employee_name AS `Employee Name`,

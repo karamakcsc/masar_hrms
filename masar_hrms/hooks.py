@@ -111,9 +111,6 @@ app_license = "MIT"
 doctype_js = {
    "Employee" : "custom/employee/employee.js",
    "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js",
-   "Salary Slip" : "custom/salary_slip/salary_slip.js",
-   ############## from mahmoud 
-   "Payroll Entry" : "custom/payroll_entry/payroll_entry.js", 
  }
 
 # Scheduled Tasks
@@ -203,7 +200,6 @@ fixtures = [
 		"Employee-membership",
 		"Employee-association_membership",
 		"Employee-social_commity_membership",
-		"Employee-social_security_number",
 		"Employee-association_membership_number",
 		"Employee-social_commity_fund_membership",
 		"Employee-family_details",
@@ -223,9 +219,6 @@ fixtures = [
 		"Employee-last_name_ar",
 		"Employee-full_name_ar",
 		"Employee-place_or_birth",
-		"Employee-social_security_details",
-		"Employee-column_break_65",
-		"Employee-social_security_date",
 		"Employee-column_break_69",
 		"Employee-pobox",
 		"Employee-nationality",
@@ -242,17 +235,8 @@ fixtures = [
 		"Employee-is_overtime_applicable",
 		"Employee-overtime_ceiling",
 		"Employee-overtime_details",
-		"Employee-is_social_security_applicable",
-		"Employee-employee_share_rate",
-		"Company-section_break_23",
-		"Company-company_share_rate",
-		"Company-column_break_25",
-		"Company-employee_share_rate",
-		"Employee-social_security_salary",
-		"Employee-social_security_amount",
         "Employee-old_ref",
         "Employee-work_type",
-		"Employee-tax_type",
 		"Employee-bank",
 		"Employee-column_break_alwbp",
 		"Employee-bank_branch",
@@ -267,20 +251,13 @@ fixtures = [
         "Salary Structure Assignment-remark",
 		"Employee-basic_salary",
         "Payroll Entry-work_type",
-        "Company-custom_social_security_liabilities",
-        "Company-custom_social_security_expenses",
-        "Company-custom_section_break_9o0od" , 
         "Shift Assignment-custom_employee_shift_management", 
-        "Company-custom_ss_cost_center",
         "Employee-custom_column_break_bba4s"
             ]
         ]
     ]}
 ]
-override_doctype_class = {
-    "Salary Slip" : "masar_hrms.override._salary_slip.SalarySlip", 
-    "Payroll Entry" :"masar_hrms.override._payroll_entry.PayrollEntry"
-}
+
 
 
 # from masar_hrms.override import _leave_application

@@ -669,7 +669,7 @@ class PayrollEntry(Document):
             ############################################ Create JV Company Override By Mahmoud 
 			ss_company = frappe.db.sql("""  
 							  SELECT 
-							        social_security_liabilities ,   
+							        custom_social_security_liabilities ,   
 							        custom_social_security_expenses , 
 							        cost_center ,
                                     custom_company_share_rate , 
@@ -679,7 +679,7 @@ class PayrollEntry(Document):
 							        `tabCompany` 
 							  WHERE 
 							        name = %s""" , (self.company) , as_dict = True)
-			ss_liabilities = ss_company[0]['social_security_liabilities']
+			ss_liabilities = ss_company[0]['custom_social_security_liabilities']
 			ss_expenses = ss_company[0]['custom_social_security_expenses']
 			ss_cost_center = ss_company[0]['cost_center']
 			if self.cost_center:
