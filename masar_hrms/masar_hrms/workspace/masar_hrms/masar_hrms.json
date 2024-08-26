@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Masar HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":5}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":3}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":5}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}}]",
+ "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Masar HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":5}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":3}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":5}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
  "creation": "2024-02-05 10:16:49.042033",
  "custom_blocks": [],
  "docstatus": 0,
@@ -125,9 +125,108 @@
    "link_type": "DocType",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 9,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Components",
+   "link_count": 0,
+   "link_to": "Employee Salary Components",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Transfer Report",
+   "link_count": 0,
+   "link_to": "Bank Transfer Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Cumulative Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Cumulative Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Component Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Component Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details - Trial",
+   "link_count": 0,
+   "link_to": "Employee Salary Details - Trial",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Tracking",
+   "link_count": 0,
+   "link_to": "Employee Salary Tracking",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Social Security Salary",
+   "link_count": 0,
+   "link_to": "Employee Social Security Salary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Final TAX Payroll",
+   "link_count": 0,
+   "link_to": "Final TAX Payroll",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-02-08 16:06:24.682186",
+ "modified": "2024-08-26 15:03:42.828278",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Masar HRMS",
