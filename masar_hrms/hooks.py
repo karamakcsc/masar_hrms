@@ -259,7 +259,10 @@ fixtures = [
 ]
 
 
-
+override_doctype_class = {
+    "Salary Slip" : "masar_hrms.override._salary_slip.SlarySlip",
+    "Payroll Entry" :"masar_hrms.override._payroll_entry.PayrollEntry"
+}
 # from masar_hrms.override import _leave_application
 # from hrms.hr.doctype.leave_application import leave_application
 # leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
