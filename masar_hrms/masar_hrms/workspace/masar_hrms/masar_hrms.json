@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Masar HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":5}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":3}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":5}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Masar HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":5}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":3}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":5}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"XRVyPWOQzU\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
  "creation": "2024-02-05 10:16:49.042033",
  "custom_blocks": [],
  "docstatus": 0,
@@ -224,9 +224,88 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Other Reports",
+   "link_count": 7,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Bank Details",
+   "link_count": 0,
+   "link_to": "Employee Bank Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Joining Report",
+   "link_count": 0,
+   "link_to": "Employee Joining Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Qualification",
+   "link_count": 0,
+   "link_to": "Employee Qualification",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Overtime Report",
+   "link_count": 0,
+   "link_to": "Employee Overtime Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Leave Balance",
+   "link_count": 0,
+   "link_to": "Employee Leave Balance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Exits",
+   "link_count": 0,
+   "link_to": "Employee Exits",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Shift Attendance",
+   "link_count": 0,
+   "link_to": "Shift Attendance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-08-26 15:03:42.828278",
+ "modified": "2024-10-24 11:40:12.171049",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Masar HRMS",
