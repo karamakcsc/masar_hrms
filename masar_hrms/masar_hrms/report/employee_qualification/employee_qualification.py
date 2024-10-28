@@ -17,6 +17,10 @@ def get_data(filters):
         conditons += f" AND tee.qualification LIKE '%{filters.get('qualification')}%'"
     if filters.get('major'):
         conditons += f" AND tee.maj_opt_subj LIKE '%{filters.get('major')}%'"
+    if filters.get("is_training"):
+        conditons += f" AND tee.custom_is_training = '{filters.get('is_training')}'"
+    if filters.get("is_qualification"):
+        conditons += f" AND tee.custom_is_qualification = '{filters.get('is_qualification')}'"
         
     sql = frappe.db.sql(f"""
                         SELECT 
@@ -26,6 +30,8 @@ def get_data(filters):
 						LEFT JOIN 
 							`tabEmployee Education` tee ON tee.parent = te.name
 						WHERE {conditons}
+						ORDER BY
+							te.name ASC;
 					""")
     
     return sql

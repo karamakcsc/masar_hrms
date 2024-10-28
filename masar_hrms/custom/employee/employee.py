@@ -12,6 +12,9 @@ def p_on_submit(self, method):
 
 def p_on_cancel(self, method):
     delete_cheque(self)
+    
+def validate(self, method):
+    employee_full_name(self)
 
 def set_cheque_status(self):
     if self.mode_of_payment == "Cheque":
@@ -76,34 +79,23 @@ def delete_cheque(self):
 
 
 #### from mahmoud to get full name to employee 
-@frappe.whitelist()
-def employee_full_name(name =None):
-    result_en = frappe.get_list(
-        doctype='Employee',  
-        fields=['first_name', 'middle_name','third_name', 'last_name'],
-        filters={'name': name},
-        order_by='creation DESC',
-        limit=1
-    )
-    result_ar = frappe.get_list(
-        doctype='Employee',  
-        fields=['first_name_ar', 'middle_name_ar','third_name_ar', 'last_name_ar'],
-        filters={'name': name},
-        order_by='creation DESC',
-        limit=1
-    )
-    if result_en:
-        full_name = result_en[0]
-        full_name_en =  f"{full_name.get('first_name')} {full_name.get('middle_name')} {full_name.get('third_name')} {full_name.get('last_name')}"
-    if result_ar:
-        full_ar = result_ar[0]
-        full_name_ar =  f"{full_ar.get('first_name_ar')} {full_ar.get('middle_name_ar')} {full_ar.get('third_name_ar')} {full_ar.get('last_name_ar')}"
 
-    if not result_ar and not result_en:
-        return"Employee Name Not Found"
     
-    return {
-        'full_name_en': full_name_en, 
-        'full_name_ar' : full_name_ar
-    }
     
+def employee_full_name(self):
+        full_name_en = None
+        full_name_ar = None
+    
+    # if self.first_name and self.middle_name and self.third_name and self.last_name:
+        full_name_en = f"{self.first_name} {self.middle_name} {self.third_name} {self.last_name}"
+    # else:
+    #     frappe.throw("Please set the employee's full name")
+    # if self.first_name_ar and self.middle_name_ar and self.third_name_ar and self.last_name_ar:
+        full_name_ar = f"{self.first_name_ar} {self.middle_name_ar} {self.third_name_ar} {self.last_name_ar}"
+    # else:
+    #     frappe.throw("Please set the employee's arabic full name")
+    
+        if full_name_en:
+            self.employee_name = full_name_en
+        if full_name_ar:
+            self.full_name_ar = full_name_ar

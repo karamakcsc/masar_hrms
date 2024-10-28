@@ -103,11 +103,14 @@ app_license = "MIT"
 #		"on_trash": "method"
 #	}
 # }
-# doc_events = {
-# #  	# "Salary Slip": {
-# # 	# 	"before_insert": "masar_hrms.utilities.hourly_leave_calc.SetHourlyLeaveForEmployee"
-# # 	# }
-#  }
+doc_events = {
+#  	# "Salary Slip": {
+# 	# 	"before_insert": "masar_hrms.utilities.hourly_leave_calc.SetHourlyLeaveForEmployee"
+# 	# }
+	"Employee": {
+		"validate": "masar_hrms.custom.employee.employee.validate"
+	}
+ }
 doctype_js = {
    "Employee" : "custom/employee/employee.js",
    "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js",
@@ -252,7 +255,12 @@ fixtures = [
 		"Employee-basic_salary",
         "Payroll Entry-work_type",
         "Shift Assignment-custom_employee_shift_management", 
-        "Employee-custom_column_break_bba4s"
+        "Employee-custom_column_break_bba4s",
+        "Employee Education-custom_column_break_4caaw",
+        "Employee Education-custom_is_qualification",
+        "Employee Education-custom_is_training",
+        "Employee External Work History-custom_from_date",
+        "Employee External Work History-custom_to_date"
             ]
         ]
     ]}

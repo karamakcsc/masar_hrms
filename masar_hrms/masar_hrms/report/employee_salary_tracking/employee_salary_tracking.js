@@ -5,14 +5,6 @@
 frappe.query_reports["Employee Salary Tracking"] = {
 	"filters": [
 		{
-			"fieldname": "ss_no",
-			"label": __("SSalary Structure Assignment"),
-			"fieldtype": "Link",
-			"options": "Salary Structure Assignment",
-			"width": 100,
-			"reqd": 0,
-		},
-		{
 			"fieldname": "from",
 			"label": __("From Date"),
 			"fieldtype": "Date",
@@ -28,54 +20,22 @@ frappe.query_reports["Employee Salary Tracking"] = {
 			"reqd": 1,
 			"default":  frappe.datetime.year_end()
 		},
-	  {
-			"fieldname": "emp_name",
-			"label": __("Employee Name"),
+	  	{
+			"fieldname": "employee",
+			"label": __("Employee"),
 			"fieldtype": "Link",
 			"options": "Employee",
 			"width": 100,
 			"reqd": 0,
 		},
-		// {
-		// 	"fieldname": "branch",
-		// 	"label": __("Branch"),
-		// 	"fieldtype": "Link",
-		// 	"options": "Branch",
-		// 	"width": 100,
-		// 	"reqd": 0,
-		// },
 		{
-			"fieldname": "dep",
-			"label": __("Department"),
+			"fieldname": "s_component",
+			"label": __("Salary Component"),
 			"fieldtype": "Link",
-			"options": "Department",
-			"width": 150,
+			"options": "Salary Component",
+			"width": 100,
 			"reqd": 0,
 		}
-		// {
-		// 	"fieldname": "des",
-		// 	"label": __("Designation"),
-		// 	"fieldtype": "Link",
-		// 	"options": "Designation",
-		// 	"width": 150,
-		// 	"reqd": 0,
-		// },
-		// {
-		// 	"fieldname": "work_type",
-		// 	"label": __("Work Type"),
-		// 	"fieldtype": "Select",
-		// 	"options": ["\n","Daily","Monthly"],
-		// 	"width": 100,
-		// 	"reqd": 0,
-		// },
-		// {
-		// 	"fieldname": "company",
-		// 	"label": __("Company"),
-		// 	"fieldtype": "Link",
-		// 	"options": "Company",
-		// 	"width": 100,
-		// 	"reqd": 0,
-		// }
 
 ]
 };

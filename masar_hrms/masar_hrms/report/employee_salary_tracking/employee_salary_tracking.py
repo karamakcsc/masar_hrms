@@ -14,33 +14,40 @@ def get_data(filters):
 	_from, to = filters.get('from'), filters.get('to') #date range
 	#Conditions
 	conditions = " AND 1=1 "
-	if(filters.get('ss_no')):conditions += f" AND name LIKE '%{filters.get('ss_no')}' "
-	# if(filters.get('company')):conditions += f" AND tss.company='{filters.get('company')}' "
-	if(filters.get('emp_name')):conditions += f" AND employee LIKE '%{filters.get('emp_name')}' "
-	# if(filters.get('des')):conditions += f" AND tss.designation LIKE '%{filters.get('des')}' "
-	# if(filters.get('work_type')):conditions += f" AND te.work_type='{filters.get('work_type')}' "
-	# if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
-	if(filters.get('dep')):conditions += f" AND department LIKE '%{filters.get('dep')}' "
-
+	if(filters.get('employee')):conditions += f" AND te.employee = '{filters.get('employee')}' "
+	if(filters.get('s_component')):conditions += f" AND test.salary_component = '{filters.get('s_component')}' "
+	if(_from and to): conditions += f" AND test.date BETWEEN '{_from}' AND '{to}'"
 	#SQL Query
-	data = frappe.db.sql(f"""select name, employee, employee_name, department, old_basic, change_amount, base, change_from_date, change_to_date, remark 
-								from `tabSalary Structure Assignment` tssa 
-								where change_basic_amount = 1
-										And (change_to_date BETWEEN '{_from}' AND '{to}')
-										{conditions} ;""")
+	data = frappe.db.sql(f"""
+					SELECT
+						te.name AS `Employee`, 
+						te.employee_name AS `Employee Name`, 
+						test.salary_component AS `Salary Component`,
+						test.is_active AS `Is Active`, 
+						test.esc_amount AS `Amount`,
+						test.`date` AS `Date`, 
+						test.remarks AS `Remarks`
+					FROM 
+						tabEmployee te
+					INNER JOIN 
+						`tabEmployee Salary Table` test ON test.parent = te.name
+					INNER JOIN 
+						`tabSalary Component` tsc ON test.salary_component = tsc.salary_component
+					WHERE 
+						tsc.`type` = 'Earning' {conditions}
+      				ORDER BY
+          				te.employee ASC;
+			""")
 
 	return data
 
 def get_columns():
 	return [
-	   "Salary Structure Assignment: Link/Salary Structure Assignment:300",
-	   "Employee No.:Link/Employee:200",
+	   "Employee: Link/Employee:200",
 	   "Employee Name: Data:200",
-	   "Department: Data:200",
-	   "Old Basic Salary: Data: Currency:200",
-	   "Change Amount: Data: Currency:200",
-	   "New Basic Salary: Data: Currency:200",
-	   "From Date: Data:200",
-	   "To Date: Data:200",
-	   "Remarks: Data:300"
+	   "Salary Component: Link/Salary Component:200",
+	   "Is Active: Check:100",
+	   "Amount: Currency:200",
+	   "Date: Date:200",
+	   "Remarks: Data:250"
 	]

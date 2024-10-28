@@ -29,6 +29,7 @@ def get_data(filters):
 							LEFT JOIN tabBank tb ON te.bank = tb.name
 							LEFT JOIN `tabSalary Slip` tss ON tss.employee = te.employee
 							WHERE {conditions}
+							ORDER BY te.employee ASC;
                          """)
     
     return sql

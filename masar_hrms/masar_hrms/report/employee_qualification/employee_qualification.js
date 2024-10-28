@@ -31,6 +31,20 @@ frappe.query_reports["Employee Qualification"] = {
 			"fieldtype": "Data",
 			"width": 100,
 			"reqd": 0,
-		}
+		},
+		{
+			"fieldname": "is_training",
+			"label": __("Is Training"),
+			"fieldtype": "Check",
+			"width": 100,
+			"reqd": 0,
+		},
+		{
+			"fieldname": "is_qualification",
+			"label": __("Is Qualification"),
+			"fieldtype": "Check",
+			"width": 100,
+			"reqd": 0,
+		},
 	]
 };

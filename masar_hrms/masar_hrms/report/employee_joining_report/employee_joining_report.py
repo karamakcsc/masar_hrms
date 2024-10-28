@@ -23,6 +23,7 @@ def get_data(filters):
                         SELECT te.employee, te.employee_name, te.department, te.designation, te.date_of_joining 
 						FROM tabEmployee te 
 						WHERE te.status = 'Active' {conditions}
+                        ORDER BY te.employee ASC;
 					""")
     
     return sql

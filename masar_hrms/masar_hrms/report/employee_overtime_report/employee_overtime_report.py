@@ -21,6 +21,7 @@ def get_data(filters):
                         SELECT tas.employee, tas.employee_name, tas.department, tas.amount, tas.payroll_date 
 						FROM `tabAdditional Salary` tas
 						WHERE tas.salary_component = 'Overtime Allowance' {conditions}
+                        ORDER BY tas.employee ASC;
 					""")
     
     return sql
