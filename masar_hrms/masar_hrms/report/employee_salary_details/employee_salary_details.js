@@ -82,6 +82,11 @@ frappe.query_reports["Employee Salary Details"] = {
 			"options": "Company",
 			"width": 100,
 			"reqd": 0,
+		},
+		{
+			"fieldname": "is_hazard",
+			"label": __("Is Hazard"),
+			"fieldtype": "Check"
 		}
 
 ]

@@ -22,6 +22,7 @@ def get_data(filters):
 	if(filters.get('work_type')):conditions += f" AND te.work_type='{filters.get('work_type')}' "
 	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
+	if(filters.get('is_hazard')):conditions += f" AND te.custom_is_hazard = '{filters.get('is_hazard')}'"
 
 	#SQL Query
 	data = frappe.db.sql(f"""
@@ -35,6 +36,7 @@ def get_data(filters):
 			tss.department AS `Department`,
 			tss.designation AS `Designation`,
 			te.date_of_joining AS `Date of Joining`,
+			te.custom_is_hazard AS `Is Hazard`,
 			tss.gross_pay AS `Reserved Salary`,
 			tss.leave_without_pay AS `Leave Without Pay`,
 			tss.payment_days AS `Payment Days`,
@@ -68,21 +70,18 @@ def get_data(filters):
 			MAX(CASE WHEN tsd.salary_component = 'Social Security Company' THEN tsd.amount END) AS `Social Security Company`,
 			MAX(CASE WHEN tsd.salary_component = 'Other Deduction' THEN tsd.amount END) AS `Other Deduction`,
 			MAX(CASE WHEN tsd.salary_component = 'Catering Deduction' THEN tsd.amount END) AS `Catering Deduction`,
+			MAX(CASE WHEN tsd.salary_component = 'Health Insurance Fees' THEN tsd.amount END) AS `Health Insurance Fees`,
 			MAX(CASE WHEN tsd.salary_component = 'Hussein Cancer Center Donation' THEN tsd.amount END) AS `Hussein Cancer Center Donation`,
 			MAX(CASE WHEN tsd.salary_component = 'Penalty Internal Law' THEN tsd.amount END) AS `Penalty Internal Law`,
 			MAX(CASE WHEN tsd.salary_component = 'Traffic Violation' THEN tsd.amount END) AS `Traffic Violation`,
-			MAX(CASE WHEN tsd.salary_component = 'Health Insurance Fees' THEN tsd.amount END) AS `Health Insurance Fees`,
 			MAX(CASE WHEN tsd.salary_component = 'Jordan Engineers Association subscriptions and loans' THEN tsd.amount END) AS `Jordan Engineers Association subscriptions and loans`,
 			MAX(CASE WHEN tsd.salary_component = 'Loan' THEN tsd.amount END) AS `Loan`,
 			MAX(CASE WHEN tsd.salary_component = 'Attendance Shortage' THEN tsd.amount END) AS `Attendance Shortage`,
-			(SELECT SUM(IF(tsd.salary_component NOT IN ('Income Tax', 'Social Security'), tsd.amount, 0))
-			FROM `tabSalary Detail` tsd
-			WHERE tsd.parent = tss.name AND tsd.parentfield = 'deductions') AS `Other Deductions`,
 			tss.total_deduction AS `Total Deductions`,
 			tss.net_pay AS `Net Pay`,
 			te.old_ref AS `Old Reference`,
 			DATE_FORMAT(tss.start_date , '%M') as `Posting Month` , 
-			tss.mode_of_payment AS `Mod Of Payment`
+			tss.mode_of_payment AS `Mode Of Payment`
 		FROM
 			`tabSalary Slip` tss
 		INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
@@ -110,6 +109,7 @@ def get_columns():
 	   "Department: Data:200",
 	   "Designation: Data:200",
 	   "Date of Joining: Data:150 ",
+		"Is Hazard: Check:100",
     #    "Month: Data:80",
 	   "Reserved Salary: Currency:150",
 	   "Leave Without Pay: Data:150",
@@ -147,14 +147,13 @@ def get_columns():
 	   "Social Security Company: Currency:150",
 	   "Other Deduction: Currency:150",
        "Catering Deduction: Currency:150",
+       "Health Insurance Fees: Currency:150",
        "Hussein Cancer Center Donation: Currency:150",
        "Penalty Internal Law: Currency:150",
        "Traffic Violation: Currency:150",
-       "Health Insurance Fees: Currency:150",
        "Jordan Engineers Association subscriptions and loans: Currency:150",
        "Loan: Currency:150",
        "Attendance Shortage: Currency:150",
-	   "Other Deductions: Currency:150",
 	   "Total Deductions: Currency:150",
 	   "Net Pay: Currency:150",
 	   "Old Reference: Data:150",
