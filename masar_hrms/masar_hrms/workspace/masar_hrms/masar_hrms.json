@@ -229,7 +229,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Other Reports",
-   "link_count": 7,
+   "link_count": 10,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -303,9 +303,39 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Experience Report",
+   "link_count": 0,
+   "link_to": "Employee Experience Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Ministry of Labor Report",
+   "link_count": 0,
+   "link_to": "Ministry of Labor Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Cumulative Salary And Tax",
+   "link_count": 0,
+   "link_to": "Employee Cumulative Salary And Tax",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-10-24 11:40:12.171049",
+ "modified": "2024-11-06 10:06:15.765364",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Masar HRMS",

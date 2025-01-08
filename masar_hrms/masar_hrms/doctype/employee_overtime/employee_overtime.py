@@ -62,7 +62,19 @@ def get_salary_structure_assignment(employee=None):
 		return result[0].name
 	else:
 		return 0
-
+@frappe.whitelist()
+def get_basic_salary(company , employee):
+    basic_componmet = frappe.db.get_value('Company', filters={'name' : company} , fieldname=['custom_basic_salary_component'] )
+    if basic_componmet is None: 
+        frappe.throw('Set Basic Salary Companent in Company')
+        return 
+    doc = frappe.get_doc('Employee' , employee)
+    for sc in doc.custom_salary_component_table: 
+        if (sc.salary_component == basic_componmet ) and sc.is_active ==1: 
+            return sc.esc_amount if sc.esc_amount else 0  
+    frappe.msgprint('Basic Salary For Employee {emp}'.format(emp=employee) , alert=True , indicator='red')
+    
+    return 0 
 
 @frappe.whitelist()
 def get_employee_attendance(date_from, date_to, department=None):
@@ -75,7 +87,7 @@ def get_employee_attendance(date_from, date_to, department=None):
         """, as_dict=True)
     for emp in exist_employee:
         overtime_doc =frappe.get_doc("Employee Overtime" , emp['name'] )
-        overtime_doc.save()
+        # overtime_doc.save()
         overtime_doc.submit()
         frappe.db.commit()        
     # frappe.msgprint(str(exist_employee))
@@ -246,7 +258,8 @@ def calculate_overtime_employee(employee, overtime_doc , date_to):
             FROM `tabEmployee Overtime` teo 
             WHERE teo.employee =%s AND posting_date = %s
         """ , (employee , date_to), as_dict = True)
-    basic_salary =float(data[0]['basic_salary'])
+    emp_doc = frappe.get_doc('Employee' , employee)
+    basic_salary =float(get_basic_salary(emp_doc.company , employee))
     overtime_rate_working_hour = float(data[0]['overtime_rate_working_hour'])
     overtime_rate_off_day = float(data[0]['overtime_rate_off_day'])
     overtime_hours_working_day = float(data[0]['overtime_hours_working_day'])  

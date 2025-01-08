@@ -27,5 +27,17 @@ frappe.query_reports["Employee Experience Report"] = {
 			"width": 100,
 			"reqd": 0,
 		},
+		{
+			"fieldname": "from",
+			"label": __("From Date"),
+			"fieldtype": "Date",
+			"width": 100,
+		 },
+		 {
+			"fieldname": "to",
+			"label": __("To Date"),
+			"fieldtype": "Date",
+			"width": 100,
+		},
 	]
 };

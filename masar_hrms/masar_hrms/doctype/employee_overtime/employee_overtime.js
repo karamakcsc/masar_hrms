@@ -36,12 +36,12 @@ cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
 
 
 frappe.ui.form.on("Employee Overtime", {
-    refresh: function(frm) {
-        if(frm.doc.docstatus !=1){
-        rate_wd(frm);
-        rate_off_day(frm);
-        }
-    },
+    // refresh: function(frm) {
+    //     if(frm.doc.docstatus !=1){
+    //     rate_wd(frm);
+    //     rate_off_day(frm);
+    //     }
+    // },
     overtime_hours_working_day: function(frm) {
         if(frm.doc.docstatus !=1){
         rate_wd(frm);
@@ -63,43 +63,81 @@ frappe.ui.form.on("Employee Overtime", {
         calculate_total(frm);
         }
     },
-    setup: function(frm) {
-        if(frm.doc.docstatus !=1){
-        rate_off_day(frm);
-        amount_off_day(frm);
-        calculate_total(frm);
-        }
-    },
+    // setup: function(frm) {
+    //     if(frm.doc.docstatus !=1){
+    //     rate_off_day(frm);
+    //     amount_off_day(frm);
+    //     calculate_total(frm);
+    //     }
+    // },
     on_submit: function(frm) {
         if(frm.doc.docstatus !=1){
         rate_off_day(frm);
         amount_off_day(frm);
         calculate_total(frm);
-        }
-}
+    }
+    } ,
+    employee: function(frm){
+        GetBasicSalary(frm);
+    }
 });
-
 var rate_wd = function(frm) {
     var doc = frm.doc;
-    frm.set_value("rate_hours_working_day", doc.basic_salary / 240 * doc.overtime_rate_working_hour);
+    if (doc.basic_salary && doc.overtime_rate_working_hour) {
+        frm.set_value("rate_hours_working_day", flt(doc.basic_salary / 240 * doc.overtime_rate_working_hour));
+        frm.refresh_field('rate_hours_working_day');
+    }
 };
 
 var rate_off_day = function(frm) {
     var doc = frm.doc;
-    frm.set_value("rate_hours_off_day", doc.basic_salary / 240 * doc.overtime_rate_off_day);
+    if (doc.basic_salary && doc.overtime_rate_off_day) {
+        frm.set_value("rate_hours_off_day", flt(doc.basic_salary / 240 * doc.overtime_rate_off_day));
+        frm.refresh_field('rate_hours_off_day');
+    }
 };
 
 var amount_wd = function(frm) {
     var doc = frm.doc;
-    frm.set_value("amount_working_day", doc.rate_hours_working_day * doc.overtime_hours_working_day);
+    if (doc.rate_hours_working_day && doc.overtime_hours_working_day) {
+        frm.set_value("amount_working_day", flt(doc.rate_hours_working_day * doc.overtime_hours_working_day));
+        frm.refresh_field('amount_working_day');
+    }
 };
 
 var amount_off_day = function(frm) {
     var doc = frm.doc;
-    frm.set_value("amount_off_day", doc.rate_hours_off_day * doc.overtime_hours_off_day);
+    if (doc.rate_hours_off_day && doc.overtime_hours_off_day) {
+        frm.set_value("amount_off_day", flt(doc.rate_hours_off_day * doc.overtime_hours_off_day));
+        frm.refresh_field('amount_off_day');
+    }
 };
 
 var calculate_total = function(frm) {
     var doc = frm.doc;
-    frm.set_value("total_amount", flt(doc.amount_working_day) + flt(doc.amount_off_day));
+    if (doc.amount_working_day && doc.amount_off_day) {
+        frm.set_value("total_amount", flt(doc.amount_working_day) + flt(doc.amount_off_day));
+        frm.refresh_field('total_amount');
+    }
 };
+
+
+function GetBasicSalary(frm){
+    if (frm.doc.employee){
+    frappe.call({
+        method:'masar_hrms.masar_hrms.doctype.employee_overtime.employee_overtime.get_basic_salary', 
+        args: 
+        {
+            employee: frm.doc.employee, 
+            company: frm.doc.company
+        }, 
+        callback:function(r){
+            frm.set_value('basic_salary', r.message);
+            frm.refresh_field('basic_salary');
+        }
+    }); 
+    }else { 
+        frm.set_value('basic_salary', null);
+        frm.refresh_field('basic_salary');
+    }
+}

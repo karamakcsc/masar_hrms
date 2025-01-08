@@ -64,9 +64,15 @@ def get_data(filters):
 								tss.gross_pay AS `Total Earnings`,
 								te.social_security_salary AS `Social Security Salary`,
 								MAX(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) AS `Social Security`,
-								CASE WHEN te.custom_is_hazard = 1 THEN IFNULL(te.social_security_salary, 0) * 0.15250 ELSE IFNULL(te.social_security_salary, 0) * 0.14250 END AS `Social Security Company Share`,
+								CASE 
+									WHEN tss.payment_days < 16 THEN 0
+									ELSE 
+										CASE 
+											WHEN te.custom_is_hazard = 1 THEN IFNULL(te.social_security_salary, 0) * 0.15250 
+											ELSE IFNULL(te.social_security_salary, 0) * 0.14250 
+										END
+								END AS `Social Security Company Share`,
 								MAX(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`,
-								MAX(CASE WHEN tsd.salary_component = 'Social Security Company' THEN tsd.amount END) AS `Social Security Company`,
 								MAX(CASE WHEN tsd.salary_component = 'Other Deduction' THEN tsd.amount END) AS `Other Deduction`,
 								MAX(CASE WHEN tsd.salary_component = 'Catering Deduction' THEN tsd.amount END) AS `Catering Deduction`,
 								MAX(CASE WHEN tsd.salary_component = 'Health Insurance Fees' THEN tsd.amount END) AS `Health Insurance Fees`,
@@ -143,7 +149,6 @@ def get_columns():
 		"Social Security Company Share: Currency:150",
 	   "Income Tax: Currency:150",
 	   #"Loan: Currency:200",
-	   "Social Security Company: Currency:150",
 	   "Other Deduction: Currency:150",
        "Catering Deduction: Currency:150",
        "Health Insurance Fees: Currency:150",

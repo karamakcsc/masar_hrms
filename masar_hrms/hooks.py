@@ -260,7 +260,8 @@ fixtures = [
         "Employee Education-custom_is_qualification",
         "Employee Education-custom_is_training",
         "Employee External Work History-custom_from_date",
-        "Employee External Work History-custom_to_date"
+        "Employee External Work History-custom_to_date", 
+        "Company-custom_basic_salary_component"
             ]
         ]
     ]}
