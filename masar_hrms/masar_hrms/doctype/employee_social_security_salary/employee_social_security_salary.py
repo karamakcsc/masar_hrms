@@ -2,94 +2,115 @@
 # For license information, please see license.txt
 
 import frappe
-# from frappe.model.document import Document
-#
-# class EmployeeSocialSecuritySalary(Document):
-# 	pass
-
-import erpnext, json
-from frappe import _, scrub, ValidationError
-from frappe.utils import flt, comma_or, nowdate, getdate
-import datetime
-
+from frappe.query_builder.functions import NullIf, Sum
 from frappe.model.document import Document
 
+
+#### Last Update By Mahmoud 26-1-2025
 class EmployeeSocialSecuritySalary(Document):
-	def validate(self):
-		pass
-
-	def on_submit(self):
-		fill_social_security_salary(self.employee, 1, self.amount, self.ss_emp_share_amount, self.ss_company_share_amount)
-
-	def on_cancel(self):
-		fill_social_security_salary(self.employee, 0)
-
-
 	@frappe.whitelist()
-	def calculate_social_security_amount(self):
-		posting_date = datetime.datetime.strptime(self.posting_date, '%Y-%m-%d')
-		if len(get_ss_doc(self.employee, posting_date.year)):
-			frappe.throw(self.employee+" already have submitted document")
-		ss_salary_slip=get_ss_salary_slip(self.employee, posting_date.year)
-		total_ss_amount=0
-		#if not len(ss_salary_slip):
-		#frappe.throw(self.employee + " don't have submitted salary slip for this date")
-		salary_date  = datetime.date(posting_date.year + 1, 1, 1) - datetime.timedelta(days=1)
-		entry = {
-			"employee": self.employee,
-			"posting_date": salary_date
-		}
-		salary_slip = frappe.new_doc('Salary Slip')
-		salary_slip.update(entry)
-		salary_slip.get_emp_and_working_day_details()
-		for item in salary_slip.earnings:
-			if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-				total_ss_amount+=item.amount
-		for item in salary_slip.deductions:
-			if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-				total_ss_amount-=item.amount
-		total_ss_amount=max(0,total_ss_amount)
-		total_ss_amount=min(5000,total_ss_amount)
-		# else:
-		# 	frappe.msgprint("Yes Salary Slip")
-		# 	salary_slip_name=ss_salary_slip[0].name
-		# 	salary_slip=frappe.get_doc("Salary Slip", salary_slip_name)
-		# 	for item in salary_slip.earnings:
-		# 		if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-		# 			total_ss_amount+=item.amount
-		# 	for item in salary_slip.deductions:
-		# 		if frappe.get_doc("Salary Component", item.salary_component).is_social_security_applicable:
-		# 			total_ss_amount-=item.amount
-		# 	total_ss_amount=max(0,total_ss_amount)
-		# 	total_ss_amount=min(5000,total_ss_amount)
-		# 	# self.amount=total_ss_amount
-		# 	# self.ss_company_share_amount=total_ss_amount*flt(self.company_share_rate)
-		# 	# self.ss_emp_share_amount=total_ss_amount*flt(self.employee_share_rate)
-		return total_ss_amount
+	def get_share_persent(self):
+		"""
+		Get Employee Share Rate from Employee Doctype if Null Get the Default from Company
+		then , 
+		Get the Company Share Rate from Company depends on Employee Is Hazard to check if Dangerous or not 
+		"""
+		if self.employee:
+			emp_share_rate  , company_share_rate = 0 , 0 
+			company_doc = frappe.get_doc('Company' , self.company)
+			emp_doc = frappe.get_doc('Employee' , self.employee)
+			if emp_doc.employee_share_rate not in [None , 0]:
+				emp_share_rate = emp_doc.employee_share_rate
+			else: 
+				emp_share_rate = company_doc.employee_share_rate
+			if emp_doc.custom_is_hazard == 0:
+				company_share_rate = company_doc.company_share_rate
+			else:
+				company_share_rate = company_doc.custom_company_share_rate_dangerous
+			self.employee_share_rate = emp_share_rate
+			self.company_share_rate = company_share_rate
+			return True
 
-@frappe.whitelist()
-def get_ss_salary_slip(employee, year):
-	return frappe.db.sql(f"""
-		select name
-		from `tabSalary Slip` tss
-		where tss.docstatus=1 and employee='{employee}' and year(posting_date)='{year}'
-		order by month(posting_date) desc""",as_dict=True)
-
-@frappe.whitelist()
-def get_ss_doc(employee, year):
-	return frappe.db.sql(f"""
-		select name
-		from `tabEmployee Social Security Salary` tsss
-		where tsss.docstatus=1 and employee='{employee}' and year(posting_date)='{year}'""",as_dict=True)
-
-@frappe.whitelist()
-def fill_social_security_salary(employee, status, amount=0, emp_share=0, company_share=0):
-	employee_doc=frappe.get_doc("Employee", employee)
-	if status==1:
-		employee_doc.social_security_salary=amount
-		employee_doc.social_security_amount=emp_share
-		employee_doc.save()
-	elif status==0:
-		employee_doc.social_security_salary=0
-		employee_doc.social_security_amount=0
-		employee_doc.save()
+		return False
+	@frappe.whitelist()
+	def get_social_security_salary(self):
+		"""
+			Get the Default Social Security Salary From the Active and SS applicable Components
+  		"""
+		sc = frappe.qb.DocType('Salary Component')
+		est = frappe.qb.DocType('Employee Salary Table')
+		amount_sql  = (
+			frappe.qb.from_(est)
+			.select((NullIf(Sum( est.esc_amount) , 0 )).as_('amount'))
+			.left_join(sc).on(est.salary_component ==sc.name )
+			.where(est.is_active == 1).where( sc.is_social_security_applicable == 1 )
+			.where(est.parent == self.employee)
+		).run()
+		amount = 0 
+		if amount_sql:
+			amount = amount_sql[0][0]
+		self.social_security_salary = amount
+		return True
+	@frappe.whitelist()
+	def calculate_share_amount(self):
+		"""
+			Depends on Social Salary and Rates get the amount for Employee and Company
+  		"""
+		if self.employee_share_rate: 
+			self.ss_emp_share_amount = (
+				(float(self.employee_share_rate) if self.employee_share_rate else 0 )
+												*
+				(float(self.social_security_salary) if self.social_security_salary else 0 )
+			)/100
+		else : 
+			self.ss_emp_share_amount = 0 
+   
+		if self.employee_share_rate: 
+			self.ss_company_share_amount = (
+				(float(self.company_share_rate) if self.company_share_rate else 0 )
+												*
+				(float(self.social_security_salary) if self.social_security_salary else 0 )
+			)/100
+		else : 
+			self.ss_company_share_amount = 0 
+	def validate(self): 
+		self.calculate_share_amount()
+	def on_submit(self):
+		self.ss_amount_validation()
+		self.filled_in_employee()
+	def on_cancel(self): 
+		self.reset_in_employee()
+  
+  
+	def ss_amount_validation(self): 
+		if self.ss_emp_share_amount in [None , 0 ]: 
+			frappe.throw('''
+                The Employee Share amount must be greater than zero. Please verify the Employee Share Rate for the Social Security Salary.'''
+             , title= frappe._('Employee Share Validation')
+            )
+	def filled_in_employee(self):
+		"""
+			Set the Effect to Employee File 
+  		"""
+		emp_doc = frappe.get_doc('Employee' , self.employee)
+		emp_doc.social_security_salary = self.social_security_salary
+		emp_doc.social_security_amount = self.ss_emp_share_amount
+		emp_doc.save()
+		frappe.msgprint(
+      			'Employee Social Security Details Updated Successfully' , 
+         		alert = True , 
+           		indicator='green')
+	def reset_in_employee(self):
+		"""
+			Reset the Employee Social Security Details to Zero 
+  		"""
+		emp_doc = frappe.get_doc('Employee' , self.employee)
+		emp_doc.social_security_salary = 0
+		emp_doc.social_security_amount = 0
+		emp_doc.save()
+		frappe.msgprint(
+      			'Employee Social Security Details Updated Successfully' , 
+         		alert = True , 
+           		indicator='green')
+  
+  

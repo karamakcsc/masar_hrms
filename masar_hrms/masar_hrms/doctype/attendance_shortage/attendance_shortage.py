@@ -146,7 +146,7 @@ def get_salary_structure_assignment(employee=None):
         return result[0].name
     else:
         return 0
-    doc.save()
+    doc.save() ## WHY ??!!!!
 
 # @frappe.whitelist()
 # def get_employee_attendance(date_from, date_to):
