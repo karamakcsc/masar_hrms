@@ -17,8 +17,10 @@
   "section_break_17",
   "branch",
   "department",
+  "work_type",
   "column_break_21",
   "designation",
+  "employee_status",
   "number_of_employees",
   "section_break_24",
   "employees",
@@ -27,7 +29,8 @@
   "failure_details_section",
   "error_message",
   "section_break_41",
-  "amended_from"
+  "amended_from",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -56,6 +59,7 @@
    "fieldtype": "Column Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "status",
    "fieldtype": "Select",
    "label": "Status",
@@ -158,12 +162,36 @@
    "options": "Social Security Salary Entry",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "default": "Active",
+   "fieldname": "employee_status",
+   "fieldtype": "Select",
+   "label": "Employee Status",
+   "options": "\nActive\nInactive\nSuspended\nLeft"
+  },
+  {
+   "fieldname": "work_type",
+   "fieldtype": "Select",
+   "label": "Work Type",
+   "options": "\nDaily\nMonthly"
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   }
  ],
  "icon": "fa fa-cog",
  "is_submittable": 1,
- "links": [],
- "modified": "2024-01-18 09:19:39.730123",
+ "links": [
+  {
+   "link_doctype": "Employee Social Security Salary",
+   "link_fieldname": "social_security_salary_entry"
+  }
+ ],
+ "modified": "2025-01-26 15:31:02.366984",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Social Security Salary Entry",

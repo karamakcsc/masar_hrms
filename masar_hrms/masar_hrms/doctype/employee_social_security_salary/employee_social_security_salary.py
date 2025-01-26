@@ -74,20 +74,34 @@ class EmployeeSocialSecuritySalary(Document):
 		else : 
 			self.ss_company_share_amount = 0 
 	def validate(self): 
+		if self.social_security_salary_entry is not None: 
+			self.get_share_persent()
+			self.get_social_security_salary()
+			self.calculate_share_amount()
 		self.calculate_share_amount()
 	def on_submit(self):
-		self.ss_amount_validation()
+		cont = self.ss_amount_validation()
+		if not cont:
+			frappe.db.set_value(self.doctype , self.name ,'docstatus', 0)
+			return
 		self.filled_in_employee()
 	def on_cancel(self): 
 		self.reset_in_employee()
   
   
 	def ss_amount_validation(self): 
-		if self.ss_emp_share_amount in [None , 0 ]: 
-			frappe.throw('''
-                The Employee Share amount must be greater than zero. Please verify the Employee Share Rate for the Social Security Salary.'''
+		msg = f'''Employee <b>{self.employee}</b> : The Employee Share amount must be greater than zero. Please verify the Employee Share Rate for the Social Security Salary.'''
+		if self.ss_emp_share_amount in [None , 0 ] and self.social_security_salary_entry is None: 
+			frappe.throw( msg
              , title= frappe._('Employee Share Validation')
             )
+		elif self.ss_emp_share_amount in [None , 0 ] and self.social_security_salary_entry is not  None: 
+			frappe.msgprint( msg
+             , title= frappe._('Employee Share Validation'),
+             indicator='red'
+            )
+			return False
+		return True
 	def filled_in_employee(self):
 		"""
 			Set the Effect to Employee File 
@@ -111,6 +125,6 @@ class EmployeeSocialSecuritySalary(Document):
 		frappe.msgprint(
       			'Employee Social Security Details Updated Successfully' , 
          		alert = True , 
-           		indicator='green')
+           		indicator='blue')
   
   
