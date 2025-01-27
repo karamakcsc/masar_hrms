@@ -239,7 +239,7 @@
    "hidden": 0,
    "is_query_report": 0,
    "label": "Reports",
-   "link_count": 11,
+   "link_count": 12,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -353,9 +353,19 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Active",
+   "link_count": 0,
+   "link_to": "Social Security - Active",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2025-01-27 10:07:15.539894",
+ "modified": "2025-01-27 10:57:47.552005",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Masar HRMS",

@@ -262,7 +262,8 @@ fixtures = [
         "Employee External Work History-custom_from_date",
         "Employee External Work History-custom_to_date", 
         "Company-custom_basic_salary_component",
-        "Employee-custom_id_card_no"
+        "Employee-custom_id_card_no",
+        "Company-custom_establishment_number"
             ]
         ]
     ]}

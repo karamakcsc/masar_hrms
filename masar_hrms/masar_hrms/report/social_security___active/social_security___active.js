@@ -3,6 +3,27 @@
 
 frappe.query_reports["Social Security - Active"] = {
 	"filters": [
+		{
+			"fieldname": "employee",
+			"label": __("Employee"),
+			"fieldtype": "Link",
+			"options": "Employee",
+			"width": 100,
+		},
+		{
+			"fieldname": "from",
+			"label": __("From Date"),
+			"fieldtype": "Date",
+			"width": 80,
+			"default":  frappe.datetime.year_start()
+		 },
+		 {
+			"fieldname": "to",
+			"label": __("To Date"),
+			"fieldtype": "Date",
+			"width": 80,
+			"default":  frappe.datetime.add_months(frappe.datetime.year_start(), 1)
+		},
 
 	]
 };
