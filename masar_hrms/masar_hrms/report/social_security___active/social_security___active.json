@@ -1,7 +1,7 @@
 {
  "add_total_row": 0,
  "columns": [],
- "creation": "2025-01-26 15:59:19.930997",
+ "creation": "2025-01-27 10:12:30.531273",
  "disabled": 0,
  "docstatus": 0,
  "doctype": "Report",
@@ -10,14 +10,14 @@
  "is_standard": "Yes",
  "letter_head": "Mid Contracting",
  "letterhead": null,
- "modified": "2025-01-26 16:19:52.157878",
+ "modified": "2025-01-27 10:12:30.531273",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
- "name": "Social Security Monthly Subscriptions Report",
+ "name": "Social Security - Active",
  "owner": "Administrator",
  "prepared_report": 0,
  "ref_doctype": "Salary Slip",
- "report_name": "Social Security Monthly Subscriptions Report",
+ "report_name": "Social Security - Active",
  "report_type": "Script Report",
  "roles": [
   {

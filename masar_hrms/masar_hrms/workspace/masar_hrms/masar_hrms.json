@@ -129,105 +129,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Reports",
-   "link_count": 9,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Components",
-   "link_count": 0,
-   "link_to": "Employee Salary Components",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Bank Transfer Report",
-   "link_count": 0,
-   "link_to": "Bank Transfer Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Cumulative Salary Details",
-   "link_count": 0,
-   "link_to": "Employee Cumulative Salary Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Component Details",
-   "link_count": 0,
-   "link_to": "Employee Salary Component Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Details",
-   "link_count": 0,
-   "link_to": "Employee Salary Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Details - Trial",
-   "link_count": 0,
-   "link_to": "Employee Salary Details - Trial",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Tracking",
-   "link_count": 0,
-   "link_to": "Employee Salary Tracking",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Social Security Salary",
-   "link_count": 0,
-   "link_to": "Employee Social Security Salary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Final TAX Payroll",
-   "link_count": 0,
-   "link_to": "Final TAX Payroll",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Other Reports",
    "link_count": 10,
    "link_type": "DocType",
@@ -333,9 +234,128 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 11,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Components",
+   "link_count": 0,
+   "link_to": "Employee Salary Components",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Transfer Report",
+   "link_count": 0,
+   "link_to": "Bank Transfer Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Cumulative Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Cumulative Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Component Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Component Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details - Trial",
+   "link_count": 0,
+   "link_to": "Employee Salary Details - Trial",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Tracking",
+   "link_count": 0,
+   "link_to": "Employee Salary Tracking",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Social Security Salary",
+   "link_count": 0,
+   "link_to": "Employee Social Security Salary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Final TAX Payroll",
+   "link_count": 0,
+   "link_to": "Final TAX Payroll",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security Monthly Subscriptions Report",
+   "link_count": 0,
+   "link_to": "Social Security Monthly Subscriptions Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Inactive",
+   "link_count": 0,
+   "link_to": "Social Security - Inactive",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2024-11-06 10:06:15.765364",
+ "modified": "2025-01-27 10:07:15.539894",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Masar HRMS",
