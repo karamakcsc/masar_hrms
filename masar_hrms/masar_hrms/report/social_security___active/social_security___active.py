@@ -31,7 +31,7 @@ def get_data(filters):
 			INNER JOIN `tabSalary Slip` tss ON tss.employee = te.name 
 			INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
 			INNER JOIN `tabCompany` tc ON te.company = tc.name
-			WHERE tss.docstatus = 1 AND tss.payment_days >= 16
+			WHERE {conditions} AND tss.docstatus = 1 AND tss.payment_days >= 16
 			GROUP BY tss.name;
 
         """)
