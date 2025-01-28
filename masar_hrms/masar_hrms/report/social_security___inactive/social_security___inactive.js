@@ -11,16 +11,32 @@ frappe.query_reports["Social Security - Inactive"] = {
 			"width": 100,
 		},
 		{
+			"fieldname": "year",
+			"label": __("Year"),
+			"fieldtype": "Data",
+			"width": 80,
+			// "default":  frappe.datetime.year_start()
+		 },
+		{
+			"fieldname": "month",
+			"label": __("Months"),
+			"fieldtype": "Data",
+			"width": 80,
+			// "default":  frappe.datetime.year_start()
+		 },
+		{
 			"fieldname": "from",
 			"label": __("From Date"),
 			"fieldtype": "Date",
 			"width": 80,
+			"default":  frappe.datetime.month_start()
 		 },
 		 {
 			"fieldname": "to",
 			"label": __("To Date"),
 			"fieldtype": "Date",
 			"width": 80,
+			"default":  frappe.datetime.month_end()
 		},
 
 	]

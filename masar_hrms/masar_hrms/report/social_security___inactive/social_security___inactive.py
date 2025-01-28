@@ -13,7 +13,10 @@ def get_data(filters):
     _from , to = filters.get('from'), filters.get('to')
     if filters.get('employee'):
         conditions += f" AND te.employee = '{filters.get('employee')}'"
-    
+    if filters.get('year'):
+        conditions += f" AND YEAR(tss.posting_date) = '{filters.get('year')}'"
+    if filters.get('month'):
+        conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
     if _from and to:
         conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
     sql = frappe.db.sql(f"""
@@ -21,27 +24,13 @@ def get_data(filters):
 				te.name AS `Employee Number`,
 				te.employee_name AS `Employee Name`,
 				te.social_security_number AS `Social Security Number`,
-				YEAR(
-					CASE 
+				CASE 
 						WHEN te.status = 'Left' THEN te.relieving_date
 						ELSE tss.posting_date
-					END
-				) AS `Date Of Inactive Year`,
-				MONTH(
-					CASE 
-						WHEN te.status = 'Left' THEN te.relieving_date
-						ELSE tss.posting_date
-					END
-				) AS `Date Of Inactive Month`,
-				DAY(
-					CASE 
-						WHEN te.status = 'Left' THEN te.relieving_date
-						ELSE tss.posting_date
-					END
-				) AS `Date Of Inactive Day`,
+					END AS `Date Of Inactive`,
 				CASE
 					WHEN te.status = 'Left' THEN "Resigned"
-					ELSE "Inactive"
+					ELSE "Vacation"
 				END AS `Reason For Inactive`
 			FROM tabEmployee te
 			INNER JOIN `tabSalary Slip` tss ON tss.employee = te.name 
@@ -58,8 +47,6 @@ def get_columns():
 		"Employee: Link/Employee:200",
 		"Employee Name: Data:200",
 		"Social Security No: Data:200",
-		"Date Of Inactive Year: Data:200",
-		"Date Of Inactive Month: Data:200",
-		"Date Of Inactive Day: Data:200",
+		"Date Of Inactive: Date:200",
 		"Reason: Data:200",
 	]

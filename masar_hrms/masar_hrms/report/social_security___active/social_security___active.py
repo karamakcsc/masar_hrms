@@ -13,25 +13,41 @@ def get_data(filters):
     _from , to = filters.get('from'), filters.get('to')
     if filters.get('employee'):
         conditions += f" AND te.employee = '{filters.get('employee')}'"
-    
+    if filters.get('year'):
+        conditions += f" AND YEAR(tss.posting_date) = '{filters.get('year')}'"
+    if filters.get('month'):
+        conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
     if _from and to:
         conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
     sql = frappe.db.sql(f"""
-            SELECT 
+            SELECT
 				te.name AS `Employee Number`,
 				te.employee_name AS `Employee Name`,
 				CASE
 					WHEN te.nationality <> 'Jordan' THEN te.personal_no
 					ELSE te.national_no
 				END AS `National No`,
+				te.custom_id_card_no AS `ID Card No`,
+				te.date_of_birth AS `Date Of Birth`,
 				te.social_security_number AS `Social Security Number`,
 				te.social_security_salary AS `Social Security Salary`,
+				tss.total_working_days AS `Working Days`,
+				tss.payment_days AS `Payment Days`,
 				tc.custom_establishment_number AS `Establishment No`
 			FROM tabEmployee te
 			INNER JOIN `tabSalary Slip` tss ON tss.employee = te.name 
 			INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
 			INNER JOIN `tabCompany` tc ON te.company = tc.name
-			WHERE {conditions} AND tss.docstatus = 1 AND tss.payment_days >= 16
+			WHERE
+				{conditions}
+				AND	tss.docstatus = 1 
+				AND tss.payment_days >= 16 
+				AND tss.posting_date = (
+					SELECT MIN(tss2.posting_date)
+					FROM `tabSalary Slip` tss2
+					WHERE YEAR(tss2.posting_date) = YEAR(tss.posting_date)
+					)
+				AND tsd.salary_component = 'Social Security'
 			GROUP BY tss.name;
 
         """)
@@ -42,8 +58,12 @@ def get_columns():
     return[
 		"Employee: Link/Employee:200",
 		"Employee Name: Data:200",
-		"National No: Data:200",
+		"National No/Personal No: Data:200",
+		"ID Card No: Data:200",
+		"Date of Birth: Date:200",
 		"Social Security No: Data:200",
 		"Social Security Salary: Data:200",
+		"Working Days: Data:200",
+		"Payment Days: Data:200",
 		"Establishment No: Data:200",
 	]

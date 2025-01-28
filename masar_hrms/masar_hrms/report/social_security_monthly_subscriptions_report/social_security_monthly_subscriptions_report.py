@@ -13,7 +13,10 @@ def get_data(filters):
     _from , to = filters.get('from'), filters.get('to')
     if filters.get('employee'):
         conditions += f" AND te.employee = '{filters.get('employee')}'"
-    
+    if filters.get('year'):
+        conditions += f" AND YEAR(tss.posting_date) = '{filters.get('year')}'"
+    if filters.get('month'):
+        conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
     if _from and to:
         conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
     sql = frappe.db.sql(f"""
@@ -26,11 +29,11 @@ def get_data(filters):
 					ELSE te.national_no
 				END AS `National No`,
 				te.social_security_number AS `Social Security No`,
-				DAY(te.date_of_birth) AS `Date Of Birth Day`,
-				MONTH(te.date_of_birth) AS `Date Of Birth Month`,
-				YEAR(te.date_of_birth) AS `Date Of Birth Year`,
+				te.date_of_birth AS `Date Of Birth`,
 				te.social_security_salary AS `Social Security Salary`,
 				te.custom_id_card_no AS `ID Card No`,
+				tss.total_working_days AS `Working Days`,
+				tss.payment_days AS `Payment Days`,
 				te.custom_is_hazard AS `Is Hazard`
 			FROM 
 				tabEmployee te
@@ -47,12 +50,12 @@ def get_columns():
 		"Employee: Link/Employee:200",
 		"Employee Name: Data:200",
 		"Nationality: Data:200",
-		"National No: Data:200",
+		"National No/Personal No: Data:200",
 		"Social Security No: Data:200",
-		"Date Of Birth Day: Data:200",
-		"Date Of Birth Month: Data:200",
-		"Date Of Birth Year: Data:200",
+		"Date Of Birth: Data:200",
 		"Social Security Salary: Data:200",
 		"ID Card No: Data:200",
+		"Working Days: Data:200",
+		"Payment Days: Data:200",
 		"Is Hazard: Check:200",
 	]
