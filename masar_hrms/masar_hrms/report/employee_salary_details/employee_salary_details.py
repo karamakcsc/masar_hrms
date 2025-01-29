@@ -98,7 +98,7 @@ def get_data(filters):
 			tss.docstatus = 1 AND tss_sub.name = tss.name AND tssa.docstatus = 1
 			And (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
 		GROUP BY
-			tss.name, tss.net_pay, tssa.base
+			tss.name, tss.net_pay
 			;
 		""")
 

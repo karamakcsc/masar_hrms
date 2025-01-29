@@ -42,12 +42,26 @@ def get_data(filters):
 				{conditions}
 				AND	tss.docstatus = 1 
 				AND tss.payment_days >= 16 
-				AND tss.posting_date = (
-					SELECT MIN(tss2.posting_date)
-					FROM `tabSalary Slip` tss2
-					WHERE YEAR(tss2.posting_date) = YEAR(tss.posting_date)
-					)
+				-- AND tss.posting_date = (
+				--	SELECT MIN(tss2.posting_date)
+				--	FROM `tabSalary Slip` tss2
+				--	WHERE YEAR(tss2.posting_date) = YEAR(tss.posting_date)
+				--	)
+				AND te.status = 'Active'
 				AND tsd.salary_component = 'Social Security'
+				AND (
+				(
+					MONTH(te.date_of_joining) = MONTH(tss.posting_date)
+					AND YEAR(te.date_of_joining) = YEAR(tss.posting_date)
+					AND DAY(tss.posting_date) - DAY(te.date_of_joining) >= 15
+				)
+				OR
+				(
+					MONTH(te.date_of_joining) = MONTH(DATE_SUB(tss.posting_date, INTERVAL 1 MONTH))
+					AND YEAR(te.date_of_joining) = YEAR(DATE_SUB(tss.posting_date, INTERVAL 1 MONTH))
+					AND DAY(tss.posting_date) - DAY(te.date_of_joining) < 15
+				)
+			)
 			GROUP BY tss.name;
 
         """)

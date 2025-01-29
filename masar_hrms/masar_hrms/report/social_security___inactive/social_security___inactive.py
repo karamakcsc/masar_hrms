@@ -30,12 +30,21 @@ def get_data(filters):
 					END AS `Date Of Inactive`,
 				CASE
 					WHEN te.status = 'Left' THEN "Resigned"
-					ELSE "Vacation"
-				END AS `Reason For Inactive`
+					ELSE "Leave Without Pay"
+				END AS `Reason For Inactive`,
+				tss.total_working_days AS `Working Days`,
+				tss.payment_days AS `Payment Days`
 			FROM tabEmployee te
 			INNER JOIN `tabSalary Slip` tss ON tss.employee = te.name 
 			INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-			WHERE {conditions} AND tss.docstatus = 1 AND tss.payment_days < 16
+			WHERE 
+   				{conditions} 
+   				AND tss.docstatus = 1 
+       			AND tss.payment_days < 16 
+          		AND (
+                (te.status = 'Left' AND te.relieving_date IS NOT NULL)
+                OR (MONTH(te.date_of_joining) <> MONTH(tss.posting_date))
+				)
 			GROUP BY tss.name;
 
         """)
@@ -48,5 +57,7 @@ def get_columns():
 		"Employee Name: Data:200",
 		"Social Security No: Data:200",
 		"Date Of Inactive: Date:200",
-		"Reason: Data:200",
+		"Reason For Inactive: Data:200",
+		"Working Days: Data:200",
+		"Payment Days: Data:200",
 	]
