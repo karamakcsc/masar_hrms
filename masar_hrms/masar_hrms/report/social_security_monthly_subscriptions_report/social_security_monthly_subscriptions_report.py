@@ -30,15 +30,22 @@ def get_data(filters):
 				END AS `National No`,
 				te.social_security_number AS `Social Security No`,
 				te.date_of_birth AS `Date Of Birth`,
+				te.date_of_joining AS `Date Of Joining`,
 				te.social_security_salary AS `Social Security Salary`,
 				te.custom_id_card_no AS `ID Card No`,
 				tss.total_working_days AS `Working Days`,
 				tss.payment_days AS `Payment Days`,
-				te.custom_is_hazard AS `Is Hazard`
+				te.designation AS `Designation`,
+				CASE
+					WHEN te.custom_is_hazard = 1 THEN td.hazard_code
+					ELSE ""
+				END AS `Hazard Code`
 			FROM 
 				tabEmployee te
 			INNER JOIN
 				`tabSalary Slip` tss ON te.name = tss.employee
+			INNER JOIN
+				`tabDesignation` td ON te.designation = td.name
 			WHERE {conditions} AND te.status = 'Active' AND tss.docstatus = 1 AND tss.payment_days >= 16
 			GROUP BY tss.name
         """)
@@ -53,9 +60,11 @@ def get_columns():
 		"National No/Personal No: Data:200",
 		"Social Security No: Data:200",
 		"Date Of Birth: Data:200",
+		"Date Of Joining: Data:200",
 		"Social Security Salary: Data:200",
 		"ID Card No: Data:200",
 		"Working Days: Data:200",
 		"Payment Days: Data:200",
-		"Is Hazard: Check:200",
+		"Designation: Data:200",
+		"Hazard Code: Data:200",
 	]
