@@ -30,7 +30,7 @@ def get_data(filters):
 								tss.employee AS `Employee No.`,
 								tss.employee_name AS `Employee Name`,
 								tss.branch AS `Branch`,
-								te.work_type AS `Work Type`,
+								tss.work_type AS `Work Type`,
 								tss.company AS `Company`,
 								tss.department AS `Department`,
 								tss.designation AS `Designation`,
