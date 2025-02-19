@@ -19,7 +19,7 @@ def get_data(filters):
 	if(filters.get('company')):conditions += f" AND tss.company='{filters.get('company')}' "
 	if(filters.get('emp_name')):conditions += f" AND tss.employee LIKE '%{filters.get('emp_name')}' "
 	if(filters.get('des')):conditions += f" AND tss.designation LIKE '%{filters.get('des')}' "
-	if(filters.get('work_type')):conditions += f" AND te.work_type='{filters.get('work_type')}' "
+	if(filters.get('work_type')):conditions += f" AND tss.work_type='{filters.get('work_type')}' "
 	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
 	if(filters.get('is_hazard')):conditions += f" AND te.custom_is_hazard = '{filters.get('is_hazard')}'"
