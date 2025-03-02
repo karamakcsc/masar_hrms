@@ -1,0 +1,58 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"ExwUOjjI1_\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Employee Self service</span>\",\"col\":12}},{\"id\":\"byffYlfhKl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Leave Application\",\"col\":3}},{\"id\":\"WaC-JGlU1p\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Appraisal\",\"col\":3}},{\"id\":\"3hEmiMGERx\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Performance Feedback\",\"col\":3}}]",
+ "creation": "2025-03-02 11:56:40.018488",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "share-people",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Employee Self service",
+ "links": [],
+ "modified": "2025-03-02 12:21:46.435137",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Self service",
+ "number_cards": [],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [
+  {
+   "role": "Employee Self Service"
+  }
+ ],
+ "sequence_id": 19.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Employee Performance Feedback",
+   "link_to": "Employee Performance Feedback",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Appraisal",
+   "link_to": "Appraisal",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Leave Application",
+   "link_to": "Leave Application",
+   "stats_filter": "[]",
+   "type": "DocType"
+  }
+ ],
+ "title": "Employee Self service"
+}
