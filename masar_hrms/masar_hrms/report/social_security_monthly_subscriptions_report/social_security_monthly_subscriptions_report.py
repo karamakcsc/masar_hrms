@@ -10,15 +10,15 @@ def execute(filters=None):
 
 def get_data(filters):
     conditions = " 1=1 "
-    _from , to = filters.get('from'), filters.get('to')
+    # _from , to = filters.get('from'), filters.get('to')
     if filters.get('employee'):
         conditions += f" AND te.employee = '{filters.get('employee')}'"
     if filters.get('year'):
         conditions += f" AND YEAR(tss.posting_date) = '{filters.get('year')}'"
-    if filters.get('month'):
-        conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
-    if _from and to:
-        conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
+    # if filters.get('month'):
+        # conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
+    # if _from and to:
+    #     conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
     sql = frappe.db.sql(f"""
             SELECT
 				te.name AS `Employee`, 
@@ -46,7 +46,12 @@ def get_data(filters):
 				`tabSalary Slip` tss ON te.name = tss.employee
 			INNER JOIN
 				`tabDesignation` td ON te.designation = td.name
-			WHERE {conditions} AND te.status = 'Active' AND tss.docstatus = 1 AND tss.payment_days >= 16
+			WHERE 
+   				{conditions} 
+   				AND te.status = 'Active' 
+       			AND tss.docstatus = 1 
+          		AND tss.payment_days >= 16 
+            	AND MONTH(tss.posting_date) = '1'
 			GROUP BY tss.name
         """)
     
