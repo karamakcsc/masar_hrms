@@ -114,6 +114,7 @@ doc_events = {
 doctype_js = {
    "Employee" : "custom/employee/employee.js",
    "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js",
+   "Goal" : "custom/goal/goal.js"
  }
 
 # Scheduled Tasks
@@ -267,7 +268,20 @@ fixtures = [
         "Salary Slip-custom_work_type"
             ]
         ]
-    ]}
+    ]},
+    {
+        "doctype": "Property Setter",
+        "filters": [
+            [
+                "name",
+                "in",
+                [
+                    "Leave Application-half_day-permlevel",
+                    "Shift Request-status-permlevel"
+                ]
+            ]
+        ]
+    }
 ]
 
 
