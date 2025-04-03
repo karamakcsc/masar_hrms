@@ -12,6 +12,7 @@ def get_data(filters):
 	_from, to = filters.get('from'), filters.get('to') #date range
 	#Conditions
 	conditions = " 1=1 "
+	if(filters.get('department')):conditions += f" AND tss.department LIKE '%{filters.get('department')}' "
 	if(filters.get('emp_name')):conditions += f" AND tss.employee LIKE '%{filters.get('emp_name')}' "
 	if(_from and to):conditions += f" AND (tss.start_date BETWEEN '{_from}' AND '{to}')"
 	
@@ -22,6 +23,7 @@ def get_data(filters):
 			SELECT 
 				tss.employee AS `e_id`,
 				tss.employee_name AS `e_name`,
+				tss.department AS `e_dep`,
 				SUM(tss.gross_pay) AS `gross_pay`,
 				SUM(tss.payment_days) AS `payment_days`,
 				SUM(tss.net_pay) AS `net_pay`,
@@ -35,6 +37,7 @@ def get_data(filters):
 			SELECT 
 				ba.e_id AS `Employee ID`,
 				ba.e_name AS `Employee Name`,
+				ba.e_dep AS `Depatrment`,
 				SUM(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Basic Salary`,
 				SUM(CASE WHEN tsd.parentfield = 'earnings' AND tsd.salary_component NOT IN ('Basic') THEN tsd.amount END) AS `Total Allowances`,
 				SUM(CASE WHEN tsd.salary_component = 'Overtime Allowance' THEN tsd.amount END) AS `Total Overtime`,
@@ -65,6 +68,7 @@ def get_columns():
 	return [
 	   	"Employee ID:Link/Employee:200",
 	   	"Employee Name: Data:200",
+		"Department:Lin/Department:200"
 	   	"Basic Salary: Currency:150",
 		"Total Allowances: Currency:150",
 		"Total Overtime: Currency:150",

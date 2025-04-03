@@ -27,5 +27,13 @@ frappe.query_reports["Employee Salary Details Yearly"] = {
 			"width": 100,
 			"reqd": 0,
 		},
+		{
+			"fieldname": "department",
+			"label": __("Department"),
+			"fieldtype": "Link",
+			"options": "Department",
+			"width": 100,
+			"reqd": 0,
+		},
 	]
 };
