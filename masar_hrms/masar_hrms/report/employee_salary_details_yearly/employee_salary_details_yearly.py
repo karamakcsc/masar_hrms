@@ -68,7 +68,7 @@ def get_columns():
 	return [
 	   	"Employee ID:Link/Employee:200",
 	   	"Employee Name: Data:200",
-		"Department:Lin/Department:200"
+		"Department:Link/Department:200",
 	   	"Basic Salary: Currency:150",
 		"Total Allowances: Currency:150",
 		"Total Overtime: Currency:150",
