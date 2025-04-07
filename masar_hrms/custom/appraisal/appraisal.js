@@ -13,4 +13,5 @@ function setReadOnly(frm) {
         frm.set_df_property('self_ratings', 'read_only', 1);
     }
     frm.fields_dict["self_ratings"].grid.update_docfield_property("per_weightage", "read_only", 1);
+    frm.fields_dict["appraisal_kra"].grid.update_docfield_property("per_weightage", "read_only", 1);
 }

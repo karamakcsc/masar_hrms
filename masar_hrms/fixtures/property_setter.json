@@ -39,12 +39,12 @@
   "doctype_or_field": "DocField",
   "field_name": "appraisal_kra",
   "is_system_generated": 0,
-  "modified": "2025-04-07 10:28:04.093688",
+  "modified": "2025-04-07 11:04:24.486540",
   "module": null,
   "name": "Appraisal-appraisal_kra-permlevel",
   "property": "permlevel",
   "property_type": "Int",
   "row_name": null,
-  "value": "1"
+  "value": "0"
  }
 ]
