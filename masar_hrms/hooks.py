@@ -114,7 +114,8 @@ doc_events = {
 doctype_js = {
    "Employee" : "custom/employee/employee.js",
    "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js",
-   "Goal" : "custom/goal/goal.js"
+   "Goal" : "custom/goal/goal.js",
+   "Appraisal" : "custom/appraisal/appraisal.js"
  }
 
 # Scheduled Tasks
@@ -277,7 +278,8 @@ fixtures = [
                 "in",
                 [
                     "Leave Application-half_day-permlevel",
-                    "Shift Request-status-permlevel"
+                    "Shift Request-status-permlevel",
+                    "Appraisal-appraisal_kra-permlevel"
                 ]
             ]
         ]
