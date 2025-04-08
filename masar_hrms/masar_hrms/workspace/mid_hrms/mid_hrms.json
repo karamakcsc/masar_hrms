@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">MID HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":5}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":3}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":5}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"XRVyPWOQzU\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">MID HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":4}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":4}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":5}},{\"id\":\"RM3jcFX1Sh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"AR 3 Print\",\"col\":3}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"XRVyPWOQzU\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
  "creation": "2024-02-05 10:16:49.042033",
  "custom_blocks": [],
  "docstatus": 0,
@@ -375,7 +375,7 @@
    "type": "Link"
   }
  ],
- "modified": "2025-03-24 15:56:21.290770",
+ "modified": "2025-04-08 15:08:11.057378",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "MID HRMS",
@@ -397,6 +397,14 @@
  ],
  "sequence_id": 41.0,
  "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "AR 3 Print",
+   "link_to": "AR 3 Print",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
   {
    "color": "Grey",
    "doc_view": "List",
