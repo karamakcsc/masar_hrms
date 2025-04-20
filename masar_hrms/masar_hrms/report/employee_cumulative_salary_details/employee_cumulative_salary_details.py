@@ -41,7 +41,7 @@ def get_data(filters):
 								tss.department AS `Department`,
 								tss.designation AS `Designation`,
 								te.date_of_joining AS `Date of Joining`,
-								tssa.base AS 'Basic Salary',
+								MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Basic Salary`,
 								tss.gross_pay AS `Reserved Salary`,
 								tss.leave_without_pay AS `Leave Without Pay`,
 								tss.payment_days AS `Payment Days`,

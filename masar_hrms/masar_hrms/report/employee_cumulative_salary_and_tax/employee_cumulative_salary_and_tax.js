@@ -8,12 +8,17 @@ frappe.query_reports["Employee Cumulative Salary And Tax"] = {
 			"label": __("From Date"),
 			"fieldtype": "Date",
 			"width": 80,
+			"reqd": 1,
+			"default":  frappe.datetime.year_start()
+
 		 },
 		 {
 			"fieldname": "to",
 			"label": __("To Date"),
 			"fieldtype": "Date",
 			"width": 80,
+			"reqd": 1,
+			"default":  frappe.datetime.year_end()
 		},
 	  	{
 			"fieldname": "employee",

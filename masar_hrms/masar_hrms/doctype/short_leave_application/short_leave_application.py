@@ -1,267 +1,171 @@
-# Copyright (c) 2023, KCSC and contributors
-# For license information, please see license.txt
+# # Copyright (c) 2023, KCSC and contributors
+# # For license information, please see license.txt
 
-# import frappe
-# from frappe.model.document import Document
-#
-# class ShortLeaveApplication(Document):
-# 	pass
-
-#
-
-from __future__ import unicode_literals
-import frappe, erpnext, json,datetime
-import time
-from datetime import date, datetime, time, timedelta
-from frappe import _, scrub, ValidationError
-from frappe.utils import cint, get_datetime, get_time, getdate
+import frappe
+from frappe import _
+from datetime import datetime, timedelta
+from frappe.query_builder.functions import  Sum
 from frappe.model.document import Document
-from hrms.hr.doctype.leave_ledger_entry.leave_ledger_entry import create_leave_ledger_entry
-from erpnext.setup.doctype.employee.employee import get_holiday_list_for_employee
-from hrms.hr.doctype.shift_assignment.shift_assignment import get_employee_shift
-from frappe.utils import flt, comma_or, nowdate, getdate
-from hrms.hr.utils import (
-	get_holiday_dates_for_employee,
-	share_doc_with_approver,
-)
-
-from typing import Dict
-
-from frappe.utils import (
-	cint,
-	get_fullname,
-)
-
-from erpnext.buying.doctype.supplier_scorecard.supplier_scorecard import daterange
-
-from hrms.hr.doctype.leave_application.leave_application import get_leave_balance_on
-
-class InvalidShortLeaveApplication(ValidationError):
-	pass
 
 class ShortLeaveApplication(Document):
-	def __init__(self, *args, **kwargs):
-		super(ShortLeaveApplication, self).__init__(*args, **kwargs)
-
-	def validate(self):
-		pass
-	
-
-	def on_update(self):
-
-		if self.status == "Open" and self.docstatus < 1:
-			# notify leave approver about creation
-			if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-				self.notify_leave_approver()
-
-		share_doc_with_approver(self, self.leave_approver)
-
-	def on_submit(self):
-		from_time = get_time(self.from_time)
-		posting_date = datetime.combine(self.posting_date, from_time)  # No need to call .date()
-
-		result = get_employee_shift(self.employee, posting_date)  # Define and assign a value to `result`
-
-		working_hours = 0
-		if result:
-			if result.start_datetime.minute > result.end_datetime.minute:
-				working_hours = datetime.time(
-					result.end_datetime.hour - result.start_datetime.hour - 1,
-					60 - result.start_datetime.minute + result.end_datetime.minute
-				)
-			else:
-				working_hours = datetime.time(
-					result.end_datetime.hour - result.start_datetime.hour,
-					result.end_datetime.minute - result.start_datetime.minute
-				)
-		elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
-			working_hours = frappe.db.get_single_value("HR Settings", "standard_working_hours")
-		else:
-			frappe.throw("You have to assign a shift for the employee or assign standard working hours in HR Settings")
-
-		# if self.total_leave_hours/3600.0>self.leave_balance*working_hours*3600:
-		# 	frappe.throw(
-		# 		_("Leave hours is greater than remaining allowed hours")
-		# 	)
-
-		if self.status in ["Open", "Cancelled"]:
-			frappe.throw(
-				_("Only Short Leave Applications with status 'Approved' and 'Rejected' can be submitted")
-			)
-		
-		if self.leave_type:	
-			leave_type = frappe.get_doc("Leave Type", self.leave_type)
-
-			if leave_type.is_lwp == 0:
-				if self.leave_balance * working_hours < self.total_leave_hours:
-					frappe.throw(_("Insufficient leave balance. Requested leaves exceed available balance."))
-
-				# notify leave applier about approval
-				if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-					self.notify_employee()
-
-				self.create_leave_ledger_entry(str(working_hours))
-			else:
-				if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-					self.notify_employee()
-					
-				self.AddAdditionalSalary()	
-
-	def on_cancel(self):
-		# self.create_leave_ledger_entry(submit=False)
-		# notify leave applier about cancellation
-		if frappe.db.get_single_value("HR Settings", "send_leave_notification"):
-			self.notify_employee()
-		pass
-
-	def on_update(self):
-		self.reload()
-		pass
-
-	def create_leave_ledger_entry(self,working_hours, submit=True):
-		raise_exception = False if frappe.flags.in_patch else True
-		args = dict(
-			leaves=((self.total_leave_hours)/flt(working_hours)) * -1,
-			from_date=self.posting_date,
-			to_date=self.posting_date,
-			is_lwp=0,
-			holiday_list=get_holiday_list_for_employee(self.employee, raise_exception=raise_exception)
-			or "",
-		)
-		create_leave_ledger_entry(self, args, submit)
-
-	def AddAdditionalSalary(self, submit=True):
-		employee = self.employee
-		salary_component = self.salary_component
-		payroll_date = self.posting_date.strftime("%Y-%m-%d")		
-		working_hours = calculate_working_hours(employee,payroll_date)
-		hour_rate = hour_rate = flt(self.basic_salary) / 240
-		deduct_amount = self.total_leave_hours * hour_rate
-		entry = {
-			"employee": employee,
-			"salary_component": salary_component,
-			"company": self.company,
-			"currency": frappe.get_doc("Company", self.company).default_currency,
-			"amount": flt(deduct_amount),
-			"payroll_date": payroll_date,
-
-		}
-		(frappe.new_doc("Additional Salary")
-			.update(entry)
-			.insert(ignore_permissions=True, ignore_mandatory=True)).run_method('submit')
-		frappe.db.commit()
-
-
-
-	def notify_leave_approver(self):
-		if self.leave_approver:
-			parent_doc = frappe.get_doc("Short Leave Application", self.name)
-			args = parent_doc.as_dict()
-
-			template = frappe.db.get_single_value("HR Settings", "leave_approval_notification_template")
-			if not template:
-				frappe.msgprint(
-					_("Please set default template for Leave Approval Notification in HR Settings.")
-				)
-				return
-			email_template = frappe.get_doc("Email Template", template)
-			message = frappe.render_template(email_template.response, args)
-
-			self.notify(
-				{
-					# for post in messages
-					"message": message,
-					"message_to": self.leave_approver,
-					# for email
-					"subject": email_template.subject,
+	@frappe.whitelist()
+	def get_start_end_shift(self):
+		if self.shift_assignment:
+			if self.shift_start or self.end_shift:
+				shift_time_sql = frappe.db.sql("""
+								SELECT 
+									start_time , end_time
+								FROM `tabShift Type` tst 
+								INNER JOIN `tabShift Assignment` tsa ON tsa.shift_type = tst.name
+				WHERE tsa.name = %s""" , (self.shift_assignment) , as_dict=True)
+				if self.shift_start: 
+					from_time = shift_time_sql[0]['start_time']
+					to_time = None
+				if self.end_shift:
+					to_time = shift_time_sql[0]['end_time']
+					from_time = shift_time_sql[0]['start_time'] 
+				return {
+				'from_time' : from_time,
+				'to_time' : to_time
 				}
+	@frappe.whitelist()
+	def calculate_durations(self):
+		leave_duration = int(self.leave_duration) if self.leave_duration else 0
+		duration_delta = timedelta(seconds=leave_duration)
+		time_format = "%H:%M:%S"
+		if self.shift_start:
+			from_time = datetime.strptime(self.from_time, time_format)
+			to_time = (from_time + duration_delta).time()
+			return {
+            'from_time' : self.from_time,
+            'to_time' : to_time 
+            }
+		elif self.end_shift:
+			to_time = datetime.strptime(self.to_time, time_format)
+			from_time = (to_time  - duration_delta).time()
+			self.from_time = from_time.strftime(time_format) 
+			return {
+            'from_time' : self.from_time,
+            'to_time' : self.to_time 
+            }
+		elif self.in_shift:
+			from_time = datetime.strptime(self.from_time, time_format)
+			to_time = (from_time + duration_delta).time()
+			return {
+            'from_time' : self.from_time,
+            'to_time' : to_time 
+            }
+	def validate(self):
+		self.shift_validate()    
+	def shift_validate(self):
+		if (self.salary_deduction + self.balance_deduction + self.none_deduction )!= 1:
+					frappe.throw("""At least one of the following must be selected:
+                         <br>
+                         <ul>
+                            <li><b> Salary Deduction </b></li> 
+                            <li><b> Balance Deduction </b></li>
+                            <li><b> None Deduction </b></li> 
+                        </ul>""" , title=_("Missing Deduction Type"))
+					return 
+		if (self.shift_start +self.end_shift +self.in_shift) != 1:
+				frappe.throw("""At least one of the following must be selected:
+                         <br>
+                         <ul>
+                            <li><b> Shift Start</b></li> 
+                            <li><b> End Shift</b></li>
+                            <li><b> In Shift </b></li> 
+                        </ul>""" , title=_("Missing Leave Shift Type"))
+				return 
+		hr_setting = frappe.get_doc('HR Settings')
+		leave_approver_mandatory_in_leave_application = hr_setting.leave_approver_mandatory_in_leave_application
+		if leave_approver_mandatory_in_leave_application and self.leave_approver is None : 
+				frappe.throw(
+                        """No leave approver has been assigned for this Employee : {employee}.<br> 
+                        Please assign a Leave Approver Before Proceeding.""".format(employee=self.employee),
+                        title=_("Leave Approver Required")
+                    )
+				return
+		if self.leave_duration and self.leave_duration <= 0 :
+			frappe.throw("Leave Duration cannot be zero. Please enter a valid leave duration." , title=_("Missing Leave Duration"))
+	def on_submit(self):
+		self.status_validation()
+		self.calculate_leave_application()
+	def status_validation(self):
+		if self.status not in ['Approved' , 'Rejected']:
+			frappe.throw('''Only Leave Applications with status 'Approved' and 'Rejected' can be submitted''')
+	def get_standard_working_hours_in_seconds(self):
+		hr_settings_doc = frappe.get_doc('HR Settings')
+		standard_working_hours = float(hr_settings_doc.standard_working_hours)
+		if standard_working_hours not in [0 , None]:
+			hours = int(standard_working_hours)
+			minutes = int((standard_working_hours - hours) * 60)
+			swh_in_seconds = hours * 3600 + minutes * 60
+			return swh_in_seconds
+		return 0
+	def calculate_leave_application(self):
+		swh_in_seconds = self.get_standard_working_hours_in_seconds()
+		if not swh_in_seconds:
+			frappe.throw("""Standard Working Hours have not been defined in the HR Settings. <br>
+							Please enter the required working hours to proceed.""" , title=_("Standard Working Hours")
 			)
-
-	def notify_employee(self):
-		employee = frappe.get_doc("Employee", self.employee)
-		if not employee.user_id:
-			return
-
-		parent_doc = frappe.get_doc("Short Leave Application", self.name)
-		args = parent_doc.as_dict()
-
-		template = frappe.db.get_single_value("HR Settings", "leave_status_notification_template")
-		if not template:
-			frappe.msgprint(_("Please set default template for Leave Status Notification in HR Settings."))
-			return
-		email_template = frappe.get_doc("Email Template", template)
-		message = frappe.render_template(email_template.response, args)
-
-		self.notify(
-			{
-				# for post in messages
-				"message": message,
-				"message_to": employee.user_id,
-				# for email
-				"subject": email_template.subject,
-				"notify": "employee",
+		total_leaves = self.get_leaves_totals()
+		sla_in_seconds = total_leaves['sla_in_seconds']
+		leave_in_seconds = total_leaves['leave_in_seconds']
+		if float(self.leave_duration) <= 0 :
+			frappe.throw(
+				"Leave duration cannot be zero. Please enter a valid leave duration." , 
+				title=_("Missing Leave Duration")
+			)
+		if (sla_in_seconds - leave_in_seconds ) >= swh_in_seconds:
+			self.create_leave_application()
+	def convert_leaves_day_to_second(self , leave_days):
+		seconds_in_day = self.get_standard_working_hours_in_seconds()
+		return leave_days * seconds_in_day
+    
+	def get_leaves_totals(self):
+		sla = frappe.qb.DocType(self.doctype)
+		la = frappe.qb.DocType('Leave Application')
+		sql = (frappe.qb.from_(sla)
+			.left_join(la)
+			.on(sla.name == la.custom_esla_ref)
+			.select(
+				(Sum(sla.leave_duration)).as_('sla_amount'),
+				(Sum(la.total_leave_days)).as_('leave_days')
+			)
+			.where(sla.docstatus == 1)
+			.where(sla.status == 'Approved')
+			.where(sla.balance_deduction == 1)
+			.where(sla.leave_type == self.leave_type)
+			.where(sla.employee == self.employee)
+		).run(as_dict = True)
+		if sql and sql[0]:
+			return {
+				'sla_in_seconds': sql[0]['sla_amount'] if sql[0]['sla_amount'] else 0 ,
+				'leave_in_seconds': self.convert_leaves_day_to_second(sql[0]['leave_days'] if sql[0]['leave_days'] else 0 )  
 			}
-		)
-
-
-	def notify(self, args):
-		args = frappe._dict(args)
-		# args -> message, message_to, subject
-		if cint(self.follow_via_email):
-			contact = args.message_to
-			if not isinstance(contact, list):
-				if not args.notify == "employee":
-					contact = frappe.get_doc("User", contact).email or contact
-
-			sender = dict()
-			sender["email"] = frappe.get_doc("User", frappe.session.user).email
-			sender["full_name"] = get_fullname(sender["email"])
-
-			try:
-				frappe.sendmail(
-					recipients=contact,
-					sender=sender["email"],
-					subject=args.subject,
-					message=args.message,
-				)
-				frappe.msgprint(_("Email sent to {0}").format(contact))
-			except frappe.OutgoingEmailError:
-				pass
-@frappe.whitelist()
-def calculate_to_time(from_time,total_leave_hours):
- 
-    # convert the from_time and total_leave_hours to datetime objects
-	from_time_obj = datetime.strptime(from_time, '%H:%M:%S')
-	total_leave_hours_obj = timedelta(hours=float(total_leave_hours)/3600)
-	#frappe.msgprint(str(total_leave_hours_obj))
-    # add the total_leave_hours to the from_time
-	to_time_obj = from_time_obj + total_leave_hours_obj
-	to_time = to_time_obj.strftime('%H:%M:%S')
-	#frappe.msgprint(str(to_time))
-	# set the to_time field
-	return to_time
-
-@frappe.whitelist()
-def calculate_working_hours(employee, posting_date):
-    posting_date = datetime.strptime(posting_date, "%Y-%m-%d")
-	
-    result = get_employee_shift(employee, posting_date)
-    working_hours = 0
-
-    if result:
-        if result.start_datetime.minute > result.end_datetime.minute:
-            working_hours = datetime.time(
-                result.end_datetime.hour - result.start_datetime.hour - 1,
-                60 - result.start_datetime.minute + result.end_datetime.minute
+		else:
+			return {
+				'sla_in_seconds': 0 ,
+				'leave_in_seconds': 0     
+			}
+	def create_leave_application(self):
+            new_leave_app_doc = frappe.new_doc('Leave Application')
+            new_leave_app_doc.employee = self.employee
+            new_leave_app_doc.employee_name = self.employee_name
+            new_leave_app_doc.leave_type = self.leave_type
+            new_leave_app_doc.company = self.company
+            new_leave_app_doc.department = self.department
+            new_leave_app_doc.from_date = self.leave_date
+            new_leave_app_doc.to_date = self.leave_date
+            new_leave_app_doc.total_leave_days = 1 
+            new_leave_app_doc.leave_approver = self.leave_approver if self.leave_approver else None
+            new_leave_app_doc.posting_date = self.leave_date
+            new_leave_app_doc.status ="Approved"
+            new_leave_app_doc.insert(ignore_permissions=True)
+            new_leave_app_doc.submit()
+            frappe.db.set_value(new_leave_app_doc.doctype , new_leave_app_doc.name ,'custom_esla_ref',self.name )
+            frappe.msgprint(
+                "The Leave Application has been Successfully Created and Submitted.",
+                alert=True,
+                indicator='green'
             )
-        else:
-            working_hours = datetime.time(
-                result.end_datetime.hour - result.start_datetime.hour,
-                result.end_datetime.minute - result.start_datetime.minute
-            )
-    elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
-        working_hours = frappe.db.get_single_value("HR Settings", "standard_working_hours")
-    else:
-        working_hours = 0
-
-    return working_hours

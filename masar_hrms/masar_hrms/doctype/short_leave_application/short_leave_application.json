@@ -2,167 +2,101 @@
  "actions": [],
  "allow_rename": 1,
  "autoname": "naming_series:",
- "creation": "2023-01-22 10:44:18.752885",
+ "creation": "2024-12-19 16:19:14.560034",
  "doctype": "DocType",
- "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "naming_series",
+  "employee_details_section",
   "employee",
   "employee_name",
-  "salary_component",
-  "salary_structure_assignment",
-  "column_break_4",
-  "leave_type",
   "department",
-  "total_leave_hours",
-  "working_hours",
+  "leave_approver",
+  "column_break_japz",
+  "posting_date",
+  "company",
+  "salary_slip",
+  "shift_assignment",
   "leave_balance",
-  "leave_balance_hr",
-  "basic_salary",
-  "section_break_8",
+  "leave_balance_hh",
+  "leave_time_section",
+  "salary_deduction",
+  "balance_deduction",
+  "none_deduction",
+  "leave_type",
+  "leave_date",
+  "shift_start",
+  "end_shift",
+  "in_shift",
+  "salary_component",
+  "column_break_ekfe",
   "from_time",
   "leave_duration",
   "to_time",
-  "column_break_12",
-  "description",
-  "section_break_14",
-  "leave_approver",
-  "leave_approver_name",
-  "column_break_17",
   "status",
-  "attendance_shortage_processing_reference",
-  "salary_slip",
-  "section_break_20",
-  "posting_date",
-  "follow_via_email",
-  "color",
-  "column_break_24",
-  "company",
-  "letter_head",
-  "amended_from"
+  "reason",
+  "section_break_vcwl",
+  "amended_from",
+  "naming_series",
+  "column_break_fxxa",
+  "to_calaculate",
+  "calculated",
+  "application_duration",
+  "connections_tab"
  ],
  "fields": [
   {
-   "fieldname": "naming_series",
-   "fieldtype": "Select",
-   "in_list_view": 1,
-   "label": "Series",
+   "fieldname": "section_break_vcwl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
    "no_copy": 1,
-   "options": "HR-SAP-.YYYY.-",
+   "options": "Short Leave Application",
    "print_hide": 1,
-   "reqd": 1
+   "read_only": 1,
+   "search_index": 1
   },
   {
    "fieldname": "employee",
    "fieldtype": "Link",
-   "in_global_search": 1,
-   "in_standard_filter": 1,
+   "in_list_view": 1,
    "label": "Employee",
    "options": "Employee",
    "reqd": 1
   },
   {
-   "fieldname": "employee_name",
-   "fieldtype": "Data",
-   "in_global_search": 1,
-   "label": "Employee Name",
-   "read_only": 1
+   "depends_on": "salary_deduction",
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Salary Component",
+   "mandatory_depends_on": "salary_deduction",
+   "options": "Salary Component"
   },
   {
-   "fieldname": "column_break_4",
-   "fieldtype": "Column Break"
-  },
-  {
+   "depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 ",
    "fieldname": "leave_type",
    "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "in_standard_filter": 1,
    "label": "Leave Type",
-   "options": "Leave Type",
-   "reqd": 1
+   "mandatory_depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 ",
+   "options": "Leave Type"
   },
   {
-   "fieldname": "department",
-   "fieldtype": "Link",
-   "label": "Department",
-   "options": "Department",
-   "read_only": 1
-  },
-  {
-   "fieldname": "leave_balance",
-   "fieldtype": "Float",
-   "label": "Leave Balance - Days",
-   "no_copy": 1,
-   "precision": "3",
-   "read_only": 1
-  },
-  {
-   "fieldname": "section_break_8",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "from_time",
-   "fieldtype": "Time",
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
    "in_list_view": 1,
-   "label": "From Time",
-   "reqd": 1
-  },
-  {
-   "fieldname": "total_leave_hours",
-   "fieldtype": "Float",
-   "hide_days": 1,
-   "hide_seconds": 1,
-   "in_list_view": 1,
-   "label": "Total Leave Hours",
-   "no_copy": 1,
+   "label": "Posting Date",
    "read_only": 1,
    "reqd": 1
   },
   {
-   "fieldname": "to_time",
-   "fieldtype": "Time",
-   "in_list_view": 1,
-   "label": "To Time",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_12",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "description",
-   "fieldtype": "Small Text",
-   "label": "Reason"
-  },
-  {
-   "fieldname": "section_break_14",
-   "fieldtype": "Section Break"
-  },
-  {
-   "fieldname": "leave_approver",
+   "fieldname": "company",
    "fieldtype": "Link",
-   "label": "Leave Approver",
-   "options": "User"
-  },
-  {
-   "fieldname": "leave_approver_name",
-   "fieldtype": "Data",
-   "label": "Leave Approver Name",
-   "read_only": 1
-  },
-  {
-   "fieldname": "column_break_17",
-   "fieldtype": "Column Break"
-  },
-  {
-   "default": "Open",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "in_standard_filter": 1,
-   "label": "Status",
-   "no_copy": 1,
-   "options": "Open\nApproved\nRejected\nCanceled",
+   "label": "Company",
+   "options": "Company",
    "reqd": 1
   },
   {
@@ -170,128 +104,215 @@
    "fieldtype": "Link",
    "label": "Salary Slip",
    "options": "Salary Slip",
-   "print_hide": 1
+   "read_only": 1
   },
   {
-   "fieldname": "section_break_20",
-   "fieldtype": "Section Break"
+   "depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 ",
+   "fieldname": "from_time",
+   "fieldtype": "Time",
+   "label": "From Time",
+   "read_only_depends_on": "eval: doc.shift_start ==1 || doc.end_shift ==1 "
+  },
+  {
+   "depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 ",
+   "fieldname": "leave_duration",
+   "fieldtype": "Duration",
+   "label": "Leave Duration",
+   "mandatory_depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 "
+  },
+  {
+   "depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 ",
+   "fieldname": "to_time",
+   "fieldtype": "Time",
+   "label": "To Time",
+   "read_only_depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 "
+  },
+  {
+   "fieldname": "reason",
+   "fieldtype": "Small Text",
+   "label": "Reason"
+  },
+  {
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Status",
+   "options": "Open\nApproved\nRejected\nCanceled",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_japz",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "employee",
+   "fieldname": "leave_time_section",
+   "fieldtype": "Section Break",
+   "label": "Leave Details"
+  },
+  {
+   "fieldname": "column_break_ekfe",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Series",
+   "options": "SLA-.MM.-.DD.-."
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_details_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Details"
+  },
+  {
+   "fetch_from": "employee.leave_approver",
+   "fieldname": "leave_approver",
+   "fieldtype": "Link",
+   "label": "Leave Approver",
+   "options": "User",
+   "read_only": 1
   },
   {
    "default": "Today",
-   "fieldname": "posting_date",
+   "depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 ",
+   "fieldname": "leave_date",
    "fieldtype": "Date",
-   "label": "Posting Date",
-   "no_copy": 1,
-   "reqd": 1
+   "label": "Leave Date",
+   "mandatory_depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 "
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: (doc.balance_deduction == 0 && doc.none_deduction == 0 )",
+   "description": "Deduct From Employee Salary.",
+   "fieldname": "salary_deduction",
+   "fieldtype": "Check",
+   "label": "Salary Deduction"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval: (doc.salary_deduction == 0 && doc.none_deduction == 0 )",
+   "description": "Deduct from Employee Balance",
+   "fieldname": "balance_deduction",
+   "fieldtype": "Check",
+   "label": "Balance Deduction",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "depends_on": "eval: (doc.balance_deduction == 0 && doc.salary_deduction == 0 )",
+   "description": "Not Deducted From Salary Either From Leave Balance.",
+   "fieldname": "none_deduction",
+   "fieldtype": "Check",
+   "label": "None Deduction"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:((doc.end_shift==0 && doc.in_shift == 0 ) && (doc.leave_type != null)) && doc.shift_assignment != null",
+   "description": "Start Work after the Shift Start",
+   "fieldname": "shift_start",
+   "fieldtype": "Check",
+   "label": "Shift Start"
+  },
+  {
+   "default": "0",
+   "depends_on": "eval:((doc.shift_start==0 && doc.in_shift == 0 ) && (doc.leave_type != null)) && doc.shift_assignment != null",
+   "description": "Leave before the Shift End",
+   "fieldname": "end_shift",
+   "fieldtype": "Check",
+   "label": "End Shift"
+  },
+  {
+   "default": "1",
+   "depends_on": "eval:(doc.end_shift==0 && doc.shift_start == 0 ) && (doc.leave_type != null)",
+   "description": "Leave During Shift",
+   "fieldname": "in_shift",
+   "fieldtype": "Check",
+   "label": "In Shift"
+  },
+  {
+   "depends_on": "employee",
+   "fieldname": "shift_assignment",
+   "fieldtype": "Link",
+   "label": "Shift Assignment",
+   "options": "Shift Assignment"
+  },
+  {
+   "fieldname": "column_break_fxxa",
+   "fieldtype": "Column Break",
+   "hidden": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "application_duration",
+   "fieldtype": "Duration",
+   "hidden": 1,
+   "label": "Application Duration",
+   "read_only": 1
   },
   {
    "allow_on_submit": 1,
    "default": "0",
-   "fieldname": "follow_via_email",
+   "fieldname": "to_calaculate",
    "fieldtype": "Check",
-   "label": "Follow via Email",
-   "print_hide": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "color",
-   "fieldtype": "Color",
-   "label": "Color",
-   "print_hide": 1
-  },
-  {
-   "fieldname": "column_break_24",
-   "fieldtype": "Column Break"
-  },
-  {
-   "fetch_from": "employee.company",
-   "fieldname": "company",
-   "fieldtype": "Link",
-   "label": "Company",
-   "options": "Company",
-   "read_only": 1,
-   "remember_last_selected_value": 1,
-   "reqd": 1
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "letter_head",
-   "fieldtype": "Link",
-   "ignore_user_permissions": 1,
-   "label": "Letter Head",
-   "options": "Letter Head",
-   "print_hide": 1
-  },
-  {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Short Leave Application",
-   "print_hide": 1,
+   "hidden": 1,
+   "label": "To Calaculate",
    "read_only": 1
   },
   {
-   "fieldname": "amended_from",
-   "fieldtype": "Link",
-   "label": "Amended From",
-   "no_copy": 1,
-   "options": "Short Leave Application",
-   "print_hide": 1,
+   "allow_on_submit": 1,
+   "default": "0",
+   "fieldname": "calculated",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Calculated",
    "read_only": 1
   },
   {
-   "fieldname": "leave_duration",
-   "fieldtype": "Duration",
-   "hide_days": 1,
-   "hide_seconds": 1,
-   "label": "Leave Duration"
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   },
   {
-   "fieldname": "leave_balance_hr",
+   "fieldname": "leave_balance",
+   "fieldtype": "Float",
+   "label": "Leave Balance - Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "leave_balance_hh",
    "fieldtype": "Float",
    "label": "Leave Balance - Hours",
-   "precision": "3",
    "read_only": 1
-  },
-  {
-   "fieldname": "working_hours",
-   "fieldtype": "Float",
-   "label": "Working Hours",
-   "precision": "3",
-   "read_only": 1
-  },
-  {
-   "fieldname": "salary_component",
-   "fieldtype": "Link",
-   "label": "Salary Component",
-   "options": "Salary Component"
-  },
-  {
-   "fieldname": "salary_structure_assignment",
-   "fieldtype": "Link",
-   "label": "Salary Structure Assignment",
-   "options": "Salary Structure Assignment",
-   "reqd": 1
-  },
-  {
-   "fetch_from": "salary_structure_assignment.base",
-   "fieldname": "basic_salary",
-   "fieldtype": "Read Only",
-   "label": "Basic Salary"
-  },
-  {
-   "allow_on_submit": 1,
-   "fieldname": "attendance_shortage_processing_reference",
-   "fieldtype": "Link",
-   "label": "Attendance Shortage Processing Reference",
-   "options": "Attendance Shortage Processing"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2024-02-08 08:56:35.254049",
+ "links": [
+  {
+   "group": "Leave Application",
+   "link_doctype": "Leave Application",
+   "link_fieldname": "custom_esla_ref"
+  }
+ ],
+ "modified": "2025-04-20 10:36:53.170892",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",
@@ -308,12 +329,11 @@
    "report": 1,
    "role": "System Manager",
    "share": 1,
+   "submit": 1,
    "write": 1
   }
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": [],
- "track_changes": 1,
- "track_seen": 1
+ "states": []
 }

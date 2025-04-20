@@ -266,7 +266,11 @@ fixtures = [
         "Company-custom_basic_salary_component",
         "Employee-custom_id_card_no",
         "Company-custom_establishment_number", 
-        "Salary Slip-custom_work_type"
+        "Salary Slip-custom_work_type",
+        "Employee-custom_latest_education",
+        "Employee-custom_major",
+        "Employee-custom_is_engineer",
+        "Leave Application-custom_esla_ref"
             ]
         ]
     ]},

@@ -19,7 +19,7 @@ def get_data(filters):
                 te.social_security_number AS `Social Security Number` , 
                 te.social_security_date AS `Social Security Date` , 
                 te.social_security_amount AS `Social Security Amount` ,
-                tssa.base AS `Basic Salary`,
+                MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Basic Salary`,
                 COALESCE(SUM(CASE WHEN tsd.parentfield = 'earnings' AND tsd.salary_component != 'Basic' THEN tsd.amount ELSE 0 END), 0) AS `Other Earnings`,
                 tss.posting_date AS `Posting Date`
             FROM

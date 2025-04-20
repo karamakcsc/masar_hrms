@@ -29,14 +29,14 @@ def get_data(filters):
 							SUM(CASE WHEN tsd.salary_component = 'Award' THEN tsd.amount END) AS `Management Awards`,
 							SUM(CASE WHEN tsd.salary_component = 'End Service Awards' THEN tsd.amount END) AS `EOS Salary`,
 							SUM(CASE WHEN tsd.salary_component NOT IN ('Basic', 'Other Allowance', 'Award', 'End Service Awards') AND tsd.parentfield = 'earnings' THEN tsd.amount END) AS `Other Earnings`,
-							MAX(tss.year_to_date) AS `Total Net Pay`,
 							SUM(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) AS `Social Security`,
+							SUM(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`,
 							SUM(CASE WHEN tsd.salary_component != 'Social Security' AND tsd.parentfield = 'deductions' THEN tsd.amount END) AS `Other Deductions`,
+							MAX(tss.year_to_date) AS `Total Net Pay`,
 							TIMESTAMPDIFF(MONTH, te.date_of_joining, MAX(tss.posting_date)) AS `Working Months`,
 							CASE WHEN te.basic_salary < 750 AND te.marital_status = 'Single' THEN 'Exempt Single' ELSE '' END AS `Personal Exemption`,
 							CASE WHEN te.basic_salary < 1500 AND te.marital_status = 'Married' THEN 'Exempt Married' ELSE '' END AS `Family Exemption`,
-							CASE WHEN te.basic_salary < 750 AND te.marital_status NOT IN ('Single', 'Married') THEN 'Exempt Other' ELSE '' END AS `Other Exemption`,
-							SUM(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`
+							CASE WHEN te.basic_salary < 750 AND te.marital_status NOT IN ('Single', 'Married') THEN 'Exempt Other' ELSE '' END AS `Other Exemption`
 						FROM 
       						tabEmployee te
 						LEFT JOIN 
@@ -68,12 +68,12 @@ def get_columns():
 		"Management Awards: Currency:200",
 		"EOS Salary: Currency:200",
 		"Other Earnings: Currency:200",
-		"Total Net Pay: Currency:200",
 		"Social Security: Currency:200",
+		"Income Tax: Currency:200",
 		"Other Deductions: Currency:200",
+  		"Total Net Pay: Currency:200",
 		"Working Months: Float:200",
 		"Personal Exemption: Data:200",
 		"Family Exemption: Data:200",
 		"Other Exemption: Data:200",
-		"Income Tax: Currency:200"
 	]

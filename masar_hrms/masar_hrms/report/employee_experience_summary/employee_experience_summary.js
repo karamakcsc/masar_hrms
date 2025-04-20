@@ -1,7 +1,7 @@
-// Copyright (c) 2024, KCSC and contributors
+// Copyright (c) 2025, KCSC and contributors
 // For license information, please see license.txt
 
-frappe.query_reports["Employee Experience Report"] = {
+frappe.query_reports["Employee Experience Summary"] = {
 	"filters": [
 		{
 			"fieldname": "employee",
@@ -39,5 +39,6 @@ frappe.query_reports["Employee Experience Report"] = {
 			"fieldtype": "Date",
 			"width": 100,
 		},
+
 	]
 };

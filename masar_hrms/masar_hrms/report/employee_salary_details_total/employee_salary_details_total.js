@@ -4,6 +4,15 @@
 frappe.query_reports["Employee Salary Details Total"] = {
 	"filters": [
 		{
+			"fieldname": "company",
+			"label": __("Company"),
+			"fieldtype": "Link",
+			"options": "Company",
+			"width": 100,
+			"reqd": 1,
+			"default": frappe.defaults.get_default("company"),
+		},
+		{
 			"fieldname": "from",
 			"label": __("From Date"),
 			"fieldtype": "Date",
@@ -40,14 +49,6 @@ frappe.query_reports["Employee Salary Details Total"] = {
 			"label": __("Work Type"),
 			"fieldtype": "Select",
 			"options": ["\n","Daily","Monthly"],
-			"width": 100,
-			"reqd": 0,
-		},
-		{
-			"fieldname": "company",
-			"label": __("Company"),
-			"fieldtype": "Link",
-			"options": "Company",
 			"width": 100,
 			"reqd": 0,
 		},
