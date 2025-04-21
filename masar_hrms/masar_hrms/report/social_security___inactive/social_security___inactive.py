@@ -53,10 +53,10 @@ def get_data(filters):
 			WHERE 
    				{conditions} 
    				AND tss.docstatus = 1 
-       			AND tss.payment_days < 16 
+				AND MONTH(te.date_of_joining) <> MONTH(tss.posting_date)
           		AND (
                 (te.status = 'Left' AND te.relieving_date IS NOT NULL)
-                OR (MONTH(te.date_of_joining) <> MONTH(tss.posting_date))
+                OR  (tss.payment_days < 16)
 				)
 			GROUP BY tss.name;
 
