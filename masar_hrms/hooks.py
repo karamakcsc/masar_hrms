@@ -270,7 +270,9 @@ fixtures = [
         "Employee-custom_latest_education",
         "Employee-custom_major",
         "Employee-custom_is_engineer",
-        "Leave Application-custom_esla_ref"
+        "Leave Application-custom_esla_ref",
+        "custom_is_privilege_applicable",
+        "Employee-custom_privilege_details"
             ]
         ]
     ]},
@@ -283,7 +285,8 @@ fixtures = [
                 [
                     "Leave Application-half_day-permlevel",
                     "Shift Request-status-permlevel",
-                    "Appraisal-appraisal_kra-permlevel"
+                    "Appraisal-appraisal_kra-permlevel",
+                    "Employee External Work History-total_experience-read_only"
                 ]
             ]
         ]

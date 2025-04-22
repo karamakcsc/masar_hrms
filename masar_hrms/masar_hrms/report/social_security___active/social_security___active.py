@@ -49,12 +49,6 @@ def get_data(filters):
 				{conditions}
 				AND	tss.docstatus = 1 
 				AND tss.payment_days >= 16 
-				-- AND tss.posting_date = (
-				--	SELECT MIN(tss2.posting_date)
-				--	FROM `tabSalary Slip` tss2
-				--	WHERE YEAR(tss2.posting_date) = YEAR(tss.posting_date)
-				--	)
-				AND te.status = 'Active'
 				AND tsd.salary_component = 'Social Security'
 				AND (
 				(

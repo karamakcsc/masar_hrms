@@ -26,11 +26,23 @@ def get_data(filters):
        						te.employee_name AS `Employee Name`,
        						te.department AS `Current Department`,
 							te.designation AS `Current Designation`,
+							MAX(CASE
+								WHEN test.salary_component = 'Basic' AND test.is_active = 1 
+								THEN test.esc_amount
+							END) AS `Current Salary`,
 							te.date_of_joining AS `Date Of Joining`, 
-							TIMESTAMPDIFF(MONTH, te.date_of_joining, CURDATE()) AS `Internal Total Experience (Months)`,
-       						SUM(IFNULL(teewh.total_experience, 0)) AS `External Total Experience (Months)`
+							CONCAT(
+								TIMESTAMPDIFF(YEAR, te.date_of_joining, CURDATE()), ' years and ',
+								TIMESTAMPDIFF(MONTH, te.date_of_joining, CURDATE()) % 12, ' months'
+							) AS `Internal Total Experience`,
+       						CONCAT(
+								FLOOR(SUM(IFNULL(teewh.total_experience, 0)) / 12), ' years and ',
+								MOD(SUM(IFNULL(teewh.total_experience, 0)), 12), ' months'
+							) AS `External Total Experience`
 						FROM 
       						tabEmployee te
+						INNER JOIN 
+      						`tabEmployee Salary Table` test ON test.parent = te.name
 						LEFT JOIN 
       						`tabEmployee Internal Work History` teiwh ON teiwh.parent = te.name 
 						LEFT JOIN 
@@ -52,7 +64,8 @@ def get_columns():
 		"Employee Name: Data:200",
 		"Current Department: Link/Department:200",
 		"Current Designation: Data:200",
+		"Current Salary: Currency:200",
 		"Date Of Joining: Date:150",
-		"Internal Total Experience (Months): Data:250",
-		"External Total Experience (Months): Data:250"
+		"Internal Total Experience: Data:250",
+		"External Total Experience: Data:250"
 	]

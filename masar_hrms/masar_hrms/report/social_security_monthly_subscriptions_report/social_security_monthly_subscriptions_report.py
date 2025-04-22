@@ -48,7 +48,6 @@ def get_data(filters):
 				`tabDesignation` td ON te.designation = td.name
 			WHERE 
    				{conditions} 
-   				AND te.status = 'Active' 
        			AND tss.docstatus = 1 
           		AND tss.payment_days >= 16 
             	AND MONTH(tss.posting_date) = '1'

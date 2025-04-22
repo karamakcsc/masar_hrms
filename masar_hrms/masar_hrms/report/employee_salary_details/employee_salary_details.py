@@ -65,6 +65,10 @@ def get_data(filters):
 			tss.gross_pay AS `Reserved Salary`,
 			tss.leave_without_pay AS `Leave Without Pay`,
 			tss.payment_days AS `Payment Days`,
+			MAX(CASE
+				WHEN test.salary_component = 'Basic' AND test.is_active = 1 
+    			THEN test.esc_amount
+			END) AS `Deserved Salary`,
 			{basic_sql}
 			{earning_comps}
 			tss.gross_pay AS `Total Earnings`,
@@ -90,6 +94,7 @@ def get_data(filters):
 		INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
 		INNER JOIN `tabEmployee` te ON te.name = tss.employee
 		INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
+		INNER JOIN `tabEmployee Salary Table` test ON test.parent = te.name
 		WHERE
 			tss.docstatus = 1 AND tss_sub.name = tss.name AND tssa.docstatus = 1
 			And (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
@@ -115,6 +120,7 @@ def get_columns():
 		"Reserved Salary: Currency:150",
 		"Leave Without Pay: Data:150",
 		"Payment Days: Data:150",
+		"Deserved Salary: Data:150",
 	]
 	components = frappe.get_all("Salary Component", filters={"disabled": 0}, fields=["name", "type"])
 
@@ -125,12 +131,12 @@ def get_columns():
 	earnings_set = set()
 	for comp in earnings:
 		if comp == "Basic":
-			columns.append(f"{comp}:Data:200")
+			columns.append(f"{comp}:Data:150")
 			earnings_set.add(comp)
    
 	for comp in earnings:
 		if comp not in earnings_set:
-			columns.append(f"{comp}:Data:200")
+			columns.append(f"{comp}:Data:150")
 	
 	columns += [
 		"Total Earnings: Currency:150",
@@ -140,7 +146,7 @@ def get_columns():
 	deductions_set = set()
 	for comp in deductions:
 		if comp == "Social Security":
-			columns.append(f"{comp}:Data:200")
+			columns.append(f"{comp}:Data:150")
 			deductions_set.add(comp)
   
 	columns += [
@@ -149,7 +155,7 @@ def get_columns():
  
 	for comp in deductions:
 		if comp not in deductions_set:
-			columns.append(f"{comp}:Data:200")
+			columns.append(f"{comp}:Data:150")
 	
 	columns += [
 		"Total Deductions: Currency:150",

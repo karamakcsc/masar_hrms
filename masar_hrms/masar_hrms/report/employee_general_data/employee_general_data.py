@@ -24,15 +24,30 @@ def get_data(filters):
 				te.department, 
 				te.designation, 
 				te.status, 
-				te.custom_years_at_the_company, 
 				te.grade,
-				te.basic_salary,
+				MAX(CASE
+					WHEN test.salary_component = 'Basic' AND test.is_active = 1 
+					THEN test.esc_amount
+				END) AS `Basic Salary`,
 				te.social_security_salary,
+				te.date_of_joining,
+				CONCAT(
+					TIMESTAMPDIFF(YEAR, te.date_of_joining, CURDATE()), ' years and ',
+					TIMESTAMPDIFF(MONTH, te.date_of_joining, CURDATE()) % 12, ' months'
+				) AS `Internal Total Experience`,
+				CONCAT(
+					FLOOR(SUM(IFNULL(teewh.total_experience, 0)) / 12), ' years and ',
+					MOD(SUM(IFNULL(teewh.total_experience, 0)), 12), ' months'
+				) AS `External Total Experience`,
 				te.custom_latest_education,
 				te.custom_major,
 				te.custom_is_engineer
 			FROM tabEmployee te 
+			INNER JOIN `tabEmployee Salary Table` test ON test.parent = te.name
+			LEFT JOIN `tabEmployee External Work History` teewh ON teewh.parent = te.name
 			WHERE {conditions}
+			GROUP BY te.name
+			ORDER BY te.name ASC
         """)
     
     return sql
@@ -46,10 +61,12 @@ def get_columns():
 		"Department: Data:200",
 		"Designation: Data:200",
 		"Status: Data:200",
-		"Years At The Company: Data:200",
 		"Grade: Data:200",
 		"Basic Salary: Currency:200",
 		"Social Security Salary: Currency:200",
+		"Date Of Joining: Date:200",
+		"Internal Total Experience: Data:200",
+		"External Total Experience: Data:200",
 		"Latest Education: Data:200",
 		"Major: Data:200",
 		"Is Engineer: Check:100"
