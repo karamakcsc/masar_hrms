@@ -20,6 +20,11 @@ def get_data(filters):
 	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
 	if(filters.get('is_hazard')):conditions += f" AND te.custom_is_hazard = '{filters.get('is_hazard')}'"
+	is_trial = filters.get('is_trial')
+	if is_trial:
+		conditions += f" AND tss.docstatus = 0 "
+	else:
+		conditions += f" AND tss.docstatus = 1 "
  
 	components = frappe.get_all("Salary Component", filters={"disabled": 0}, fields=["name", "type"])
 	earnings = sorted([c.name for c in components if c.type == "Earning"])
@@ -29,7 +34,7 @@ def get_data(filters):
 	basic_sql = ""
 	for comp in earnings:
 		if comp == "Basic":
-			basic_sql = f"MAX(CASE WHEN tsd.salary_component = '{comp}' THEN tsd.amount END) AS `{comp}`,\n"
+			basic_sql = f"MAX(CASE WHEN tsd.salary_component = '{comp}' THEN tsd.amount END) AS `{'Deserved Salary'}`,\n"
 			earnings_set.add(comp)
    
 	earning_comps = ""
@@ -68,7 +73,7 @@ def get_data(filters):
 			MAX(CASE
 				WHEN test.salary_component = 'Basic' AND test.is_active = 1 
     			THEN test.esc_amount
-			END) AS `Deserved Salary`,
+			END) AS `Basic Salary`,
 			{basic_sql}
 			{earning_comps}
 			tss.gross_pay AS `Total Earnings`,
@@ -91,13 +96,12 @@ def get_data(filters):
 		FROM
 			`tabSalary Slip` tss
 		INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-		INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
 		INNER JOIN `tabEmployee` te ON te.name = tss.employee
 		INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
 		INNER JOIN `tabEmployee Salary Table` test ON test.parent = te.name
 		WHERE
-			tss.docstatus = 1 AND tss_sub.name = tss.name AND tssa.docstatus = 1
-			And (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
+			tss_sub.name = tss.name
+			AND (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
 		GROUP BY
 			tss.name, tss.net_pay
 			;
@@ -120,7 +124,7 @@ def get_columns():
 		"Reserved Salary: Currency:150",
 		"Leave Without Pay: Data:150",
 		"Payment Days: Data:150",
-		"Deserved Salary: Data:150",
+		"Basic Salary: Data:150",
 	]
 	components = frappe.get_all("Salary Component", filters={"disabled": 0}, fields=["name", "type"])
 
@@ -131,7 +135,7 @@ def get_columns():
 	earnings_set = set()
 	for comp in earnings:
 		if comp == "Basic":
-			columns.append(f"{comp}:Data:150")
+			columns.append(f"{'Deserved Salary'}:Data:150")
 			earnings_set.add(comp)
    
 	for comp in earnings:

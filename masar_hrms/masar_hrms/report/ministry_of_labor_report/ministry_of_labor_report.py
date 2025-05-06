@@ -19,6 +19,20 @@ def get_data(filters):
         
         
     sql = frappe.db.sql(f"""
+                        WITH emp_salary AS (
+							SELECT
+								te.name AS employee,
+								MAX(CASE
+									WHEN tsd.salary_component = 'Income Tax'
+									THEN tsd.amount
+								END) AS `income_tax`
+							FROM `tabEmployee` te
+							LEFT JOIN 
+								`tabSalary Slip` tss ON tss.employee = te.name 
+							LEFT JOIN 
+								`tabSalary Detail` tsd ON tsd.parent = tss.name 
+							GROUP BY tss.name
+						)
                         SELECT DISTINCT
 							te.name AS `Employee No.`, 
        						te.full_name_ar AS `Employee Name`,
@@ -35,9 +49,15 @@ def get_data(filters):
 							SUM(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) AS `Social Security`,
 							SUM(CASE WHEN tsd.salary_component != 'Social Security' AND tsd.parentfield = 'deductions' THEN tsd.amount END) AS `Other Deductions`,
 							TIMESTAMPDIFF(MONTH, te.date_of_joining, MAX(tss.posting_date)) AS `Working Months`,
-							CASE WHEN te.basic_salary < 750 AND te.marital_status = 'Single' THEN 'Exempt Single' ELSE '' END AS `Personal Exemption`,
-							CASE WHEN te.basic_salary < 1500 AND te.marital_status = 'Married' THEN 'Exempt Married' ELSE '' END AS `Family Exemption`,
-							CASE WHEN te.basic_salary < 750 AND te.marital_status NOT IN ('Single', 'Married') THEN 'Exempt Other' ELSE '' END AS `Other Exemption`,
+							(CASE 
+								WHEN (es.income_tax = 0 AND te.marital_status = 'Single') 
+								THEN 'Exempt Single'
+								WHEN (es.income_tax = 0 AND te.marital_status = 'Married') 
+								THEN 'Exempt Married'
+								WHEN (es.income_tax = 0 AND te.marital_status NOT IN ('Single', 'Married'))
+								THEN 'Exempt Other'
+								ELSE 'Not Exempt'
+							END) AS `Exemption`,
 							SUM(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`
 						FROM 
       						tabEmployee te
@@ -45,6 +65,8 @@ def get_data(filters):
       						`tabSalary Slip` tss ON tss.employee = te.name 
 						LEFT JOIN 
       						`tabSalary Detail` tsd ON tsd.parent = tss.name 
+						LEFT JOIN
+							emp_salary es ON es.employee = te.name
 						WHERE 
       						te.status = 'Active' {conditions}
 						GROUP BY 
@@ -76,8 +98,8 @@ def get_columns():
 		"Social Security: Currency:200",
 		"Other Deductions: Currency:200",
 		"Working Months: Float:200",
-		"Personal Exemption: Data:200",
-		"Family Exemption: Data:200",
-		"Other Exemption: Data:200",
+		"Exemption: Data:200",
+		# "Family Exemption: Data:200",
+		# "Other Exemption: Data:200",
 		"Income Tax: Currency:200"
 	]

@@ -62,8 +62,20 @@ def get_data(filters):
                 tss.company,
                 SUM(tss.gross_pay) AS total_gross_pay,
                 SUM(tss.total_deduction) AS total_deductions,
-                SUM(tss.net_pay) AS total_net_pay
+                SUM(tss.net_pay) AS total_net_pay,
+                tss.employee AS emp,
+                SUM(
+                    CASE 
+                        WHEN tss.payment_days < 16 THEN 0
+                        ELSE 
+                            CASE 
+                                WHEN te.custom_is_hazard = 1 THEN IFNULL(te.social_security_salary, 0) * 0.15250 
+                                ELSE IFNULL(te.social_security_salary, 0) * 0.14250 
+                            END
+                    END
+                ) AS `ss_company`
             FROM `tabSalary Slip` tss
+            INNER JOIN `tabEmployee` te ON te.name = tss.employee
             WHERE tss.docstatus = 1 
             AND (tss.start_date BETWEEN '{_from}' AND '{to}') {conditions}
             GROUP BY DATE_FORMAT(tss.start_date, '%Y-%m'), tss.work_type, tss.company
@@ -77,6 +89,7 @@ def get_data(filters):
             {earning_comps}
             ba.total_gross_pay AS `Total Earnings`,
             {ss_sql}
+            ba.ss_company AS `Social Security Company Share`,
             {deduction_comps}
             ba.total_deductions AS `Total Deductions`,
             ba.total_net_pay AS `Net Pay`
@@ -123,7 +136,9 @@ def get_columns():
         if comp == "Social Security":
             columns.append(f"{comp}:Currency:150")
             deductions_set.add(comp)
-
+    columns += [
+        "Social Security Company Share: Currency:175",
+    ]
     for comp in deductions:
         if comp not in deductions_set:
             columns.append(f"{comp}:Currency:150")

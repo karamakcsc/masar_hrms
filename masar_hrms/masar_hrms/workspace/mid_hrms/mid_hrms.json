@@ -129,8 +129,8 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Other Reports",
-   "link_count": 14,
+   "label": "Reports",
+   "link_count": 8,
    "link_type": "DocType",
    "onboard": 0,
    "type": "Card Break"
@@ -138,12 +138,91 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "Employee Bank Details",
+   "label": "Employee Salary Components",
    "link_count": 0,
-   "link_to": "Employee Bank Details",
+   "link_to": "Employee Salary Components",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Bank Transfer Report",
+   "link_count": 0,
+   "link_to": "Bank Transfer Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Salary Details",
+   "link_count": 0,
+   "link_to": "Employee Salary Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Social Security Salary",
+   "link_count": 0,
+   "link_to": "Employee Social Security Salary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security Monthly Subscriptions Report",
+   "link_count": 0,
+   "link_to": "Social Security Monthly Subscriptions Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Inactive",
+   "link_count": 0,
+   "link_to": "Social Security - Inactive",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Active",
+   "link_count": 0,
+   "link_to": "Social Security - Active",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Internal Work History",
+   "link_count": 0,
+   "link_to": "Employee Internal Work History",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Other Reports",
+   "link_count": 10,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
   },
   {
    "hidden": 0,
@@ -151,16 +230,6 @@
    "label": "Employee Joining Report",
    "link_count": 0,
    "link_to": "Employee Joining Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Qualification",
-   "link_count": 0,
-   "link_to": "Employee Qualification",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -208,29 +277,9 @@
   {
    "hidden": 0,
    "is_query_report": 1,
-   "label": "Employee Experience Report",
-   "link_count": 0,
-   "link_to": "Employee Experience Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
    "label": "Ministry of Labor Report",
    "link_count": 0,
    "link_to": "Ministry of Labor Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Cumulative Salary And Tax",
-   "link_count": 0,
-   "link_to": "Employee Cumulative Salary And Tax",
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
@@ -274,148 +323,9 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Reports",
-   "link_count": 13,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Components",
-   "link_count": 0,
-   "link_to": "Employee Salary Components",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Bank Transfer Report",
-   "link_count": 0,
-   "link_to": "Bank Transfer Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Cumulative Salary Details",
-   "link_count": 0,
-   "link_to": "Employee Cumulative Salary Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Component Details",
-   "link_count": 0,
-   "link_to": "Employee Salary Component Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Details",
-   "link_count": 0,
-   "link_to": "Employee Salary Details",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Details - Trial",
-   "link_count": 0,
-   "link_to": "Employee Salary Details - Trial",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Salary Tracking",
-   "link_count": 0,
-   "link_to": "Employee Salary Tracking",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Social Security Salary",
-   "link_count": 0,
-   "link_to": "Employee Social Security Salary",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Final TAX Payroll",
-   "link_count": 0,
-   "link_to": "Final TAX Payroll",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Social Security Monthly Subscriptions Report",
-   "link_count": 0,
-   "link_to": "Social Security Monthly Subscriptions Report",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Social Security - Inactive",
-   "link_count": 0,
-   "link_to": "Social Security - Inactive",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Social Security - Active",
-   "link_count": 0,
-   "link_to": "Social Security - Active",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 1,
-   "label": "Employee Internal Work History",
-   "link_count": 0,
-   "link_to": "Employee Internal Work History",
-   "link_type": "Report",
-   "onboard": 0,
-   "type": "Link"
   }
  ],
- "modified": "2025-04-22 13:52:02.211397",
+ "modified": "2025-04-23 16:11:14.647350",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "MID HRMS",

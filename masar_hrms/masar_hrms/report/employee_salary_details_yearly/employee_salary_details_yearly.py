@@ -28,7 +28,17 @@ def get_data(filters):
 				SUM(tss.payment_days) AS `payment_days`,
 				SUM(tss.net_pay) AS `net_pay`,
 				te.nationality AS `nationality`,
-				te.marital_status AS `martial_status`
+				te.marital_status AS `martial_status`,
+				SUM(
+					CASE 
+						WHEN tss.payment_days < 16 THEN 0
+						ELSE 
+							CASE 
+								WHEN te.custom_is_hazard = 1 THEN IFNULL(te.social_security_salary, 0) * 0.15250 
+								ELSE IFNULL(te.social_security_salary, 0) * 0.14250 
+							END
+					END
+				) AS `ss_company`
 			FROM `tabSalary Slip` tss
 			INNER JOIN tabEmployee te ON te.name = tss.employee
 			WHERE {conditions} AND tss.docstatus = 1 
@@ -44,6 +54,7 @@ def get_data(filters):
 				SUM(CASE WHEN tsd.parentfield = 'earnings' AND tsd.salary_component NOT IN ('Basic', 'Overtime Allowance') THEN tsd.amount END) AS `Other Earnings`,
 				ba.gross_pay AS `Total Earnings`,
 				SUM(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END) AS `Social Security`,
+				ba.ss_company AS `Social Security Company Share`,
 				SUM(CASE WHEN tsd.salary_component = 'Income Tax' THEN tsd.amount END) AS `Income Tax`,
 				SUM(CASE WHEN tsd.salary_component = 'Loan' THEN tsd.amount END) AS `Loan`,
 				SUM(CASE WHEN tsd.parentfield = 'deductions' AND tsd.salary_component NOT IN ('Social Security', 'Income Tax', 'Loan') THEN tsd.amount END) AS `Other Deductions`,
@@ -75,6 +86,7 @@ def get_columns():
 		"Other Earnings: Currency:150",
 		"Total Earnings: Currency:150",
 		"Social Security: Currency:150",
+		"Social Security Company Share: Currency:175",
 		"Income Tax: Currency:150",
 		"Loan: Currency:150",
 		"Other Deduction: Currency:150",

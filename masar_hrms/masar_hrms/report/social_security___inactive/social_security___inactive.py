@@ -10,6 +10,10 @@ def execute(filters=None):
 
 
 def get_data(filters):
+	month = None
+	year = None
+	start_date = None
+	end_date = None
 	if filters.get("month"):
 		month = int(filters.get("month"))
 	if filters.get("year"):
@@ -44,9 +48,9 @@ def get_data(filters):
 					te.date_of_joining AS `Date Of Joining`,
 					te.social_security_number AS `Social Security Number`,
 					CASE 
-							WHEN te.status = 'Left' THEN te.relieving_date
-							ELSE tss.posting_date
-						END AS `Date Of Inactive`,
+						WHEN te.status = 'Left' THEN te.relieving_date
+						ELSE tss.posting_date
+					END AS `Date Of Inactive`,
 					CASE
 						WHEN te.status = 'Left' THEN "Resigned"
 						ELSE "Leave Without Pay"

@@ -32,7 +32,7 @@ def get_data(filters):
 	basic_sql = ""
 	for comp in earnings:
 		if comp == "Basic":
-			basic_sql = f"MAX(CASE WHEN tsd.salary_component = '{comp}' THEN tsd.amount END) AS `{comp}`,\n"
+			basic_sql = f"MAX(CASE WHEN tsd.salary_component = '{comp}' THEN tsd.amount END) AS `{'Deserved Salary'}`,\n"
 			earnings_set.add(comp)
    
 	earning_comps = ""
@@ -69,7 +69,7 @@ def get_data(filters):
 								MAX(CASE
 									WHEN test.salary_component = 'Basic' AND test.is_active = 1 
 									THEN test.esc_amount
-								END) AS `Deserved Salary`,
+								END) AS `Basic Salary`,
 								{basic_sql}
 								{earning_comps}
 								tss.gross_pay AS `Total Earnings`,
@@ -121,7 +121,7 @@ def get_columns():
 		"Reserved Salary: Currency:150",
 		"Leave Without Pay: Data:150",
 		"Payment Days: Data:150",
-		"Deserved Salary: Data:150",
+		"Basic Salary: Data:150",
 	]
 	components = frappe.get_all("Salary Component", filters={"disabled": 0}, fields=["name", "type"])
 
@@ -132,7 +132,7 @@ def get_columns():
 	earnings_set = set()
 	for comp in earnings:
 		if comp == "Basic":
-			columns.append(f"{comp}:Data:200")
+			columns.append(f"{'Deserved Salary'}:Data:200")
 			earnings_set.add(comp)
    
 	for comp in earnings:

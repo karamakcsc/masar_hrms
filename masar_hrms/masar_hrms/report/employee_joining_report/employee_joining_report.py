@@ -20,7 +20,16 @@ def get_data(filters):
         conditions += f" AND te.designation = '{filters.get('designation')}'"
         
     sql = frappe.db.sql(f"""
-                        SELECT te.employee, te.employee_name, te.department, te.designation, te.date_of_joining 
+                        SELECT 
+                            te.employee, 
+                            te.employee_name, 
+                            te.department, 
+                            te.designation, 
+                            te.date_of_joining,
+                            CONCAT(
+								TIMESTAMPDIFF(YEAR, te.date_of_joining, CURDATE()), ' years and ',
+								TIMESTAMPDIFF(MONTH, te.date_of_joining, CURDATE()) % 12, ' months'
+							) AS `Years at Company`
 						FROM tabEmployee te 
 						WHERE te.status = 'Active' {conditions}
                         ORDER BY te.employee ASC;
@@ -35,4 +44,5 @@ def get_columns():
         "Department: Link/Department:200",
         "Designation: Link/Designation:200",
 		"Date of Joining: Date:200",
+        "Years at Company: Data:200",
 	]

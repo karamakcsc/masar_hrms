@@ -24,20 +24,29 @@ def get_data(filters):
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
 
 	#SQL Query
-	data = frappe.db.sql(f"""SELECT tb.swift_number AS `SWIFT Number`, te.name AS `Employee Number`, te.full_name_ar AS `Employee Name`, te.department AS `Department`,
-									MONTH(tss.posting_date) AS `Month`, IF(te.national_no IS NULL, te.personal_no, IF(te.national_no = '', '', te.national_no)) AS `National Number`, 
-									te.iban AS `IBAN`, te.bank AS `Bank Name`, te.bank_branch AS `Bank Branch`,
-									 te.bank_ac_no AS `Account Number`, tss.gross_pay AS `Transfer Amount`
+	data = frappe.db.sql(f"""SELECT 
+                      			tb.swift_number AS `SWIFT Number`, 
+                         		te.name AS `Employee Number`, 
+                           		te.full_name_ar AS `Employee Name`, 
+                             	te.department AS `Department`,
+								MONTH(tss.posting_date) AS `Month`, 
+        						IF(te.national_no IS NULL, te.personal_no, IF(te.national_no = '', '', te.national_no)) AS `National Number`, 
+								te.iban AS `IBAN`, 
+        						te.bank AS `Bank Name`, 
+              					te.bank_branch AS `Bank Branch`,
+								te.bank_ac_no AS `Account Number`, 
+        						tss.gross_pay AS `Transfer Amount`
 							FROM `tabSalary Slip` tss
 							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-							INNER JOIN `tabSalary Structure Assignment` tssa ON tssa.employee = tss.employee
 							INNER JOIN `tabEmployee` te ON te.name = tss.employee
 							INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
 							INNER JOIN `tabBank` tb on te.bank = tb.name 
-							WHERE tss.docstatus = 1 AND tssa.docstatus = 1 AND tss_sub.name = tss.name
-										And (tss.posting_date BETWEEN '{_from}' AND '{to}')
-										{conditions} GROUP BY te.name, te.full_name_ar, tss.posting_date, 
-										tss.gross_pay, te.iban, te.bank, te.bank_branch, te.bank_ac_no, tb.name ,tb.swift_number ;""")
+							WHERE 
+       							tss.docstatus = 1 
+              					AND tss_sub.name = tss.name
+								AND (tss.posting_date BETWEEN '{_from}' AND '{to}')
+								{conditions} 
+          					GROUP BY te.name;""")
 
 	return data
 

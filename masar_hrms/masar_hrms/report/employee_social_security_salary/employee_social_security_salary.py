@@ -19,7 +19,11 @@ def get_data(filters):
                 te.social_security_number AS `Social Security Number` , 
                 te.social_security_date AS `Social Security Date` , 
                 te.social_security_amount AS `Social Security Amount` ,
-                MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Basic Salary`,
+                MAX(CASE
+					WHEN test.salary_component = 'Basic' AND test.is_active = 1 
+					THEN test.esc_amount
+				END) AS `Basic Salary`,
+                MAX(CASE WHEN tsd.salary_component = 'Basic' THEN tsd.amount END) AS `Deserved Salary`,
                 COALESCE(SUM(CASE WHEN tsd.parentfield = 'earnings' AND tsd.salary_component != 'Basic' THEN tsd.amount ELSE 0 END), 0) AS `Other Earnings`,
                 tss.posting_date AS `Posting Date`
             FROM
@@ -29,6 +33,7 @@ def get_data(filters):
                 INNER JOIN `tabEmployee` te ON te.name = tss.employee
                 INNER JOIN `tabSalary Structure` tss2 ON tss2.name = tssa.salary_structure 
                 INNER JOIN `tabSalary Component` tsc ON tsd.salary_component = tsc.name
+                INNER JOIN `tabEmployee Salary Table` test ON test.parent = te.name
             WHERE
                 tss.docstatus = 1 
 				AND tssa.docstatus = 1 
@@ -48,7 +53,8 @@ def get_columns():
 	   "Social Security Number : data :200", 
 	   "Social Security Date : data :200" ,
 	   "Social Security Amount : data : 200",
-	   "Basic Salary: data:150",
+	   "Basic Salary: Data:150",
+	   "Deserved Salary: data:150",
 	   "Other Earnings: Currency:150",
 	   "Posting Date: data:150",
 

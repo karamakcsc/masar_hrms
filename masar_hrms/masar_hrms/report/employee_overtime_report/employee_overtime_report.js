@@ -24,12 +24,14 @@ frappe.query_reports["Employee Overtime Report"] = {
 			"label": __("From Date"),
 			"fieldtype": "Date",
 			"width": 100,
+			"reqd": 1,
 		 },
 		 {
 			"fieldname": "to",
 			"label": __("To Date"),
 			"fieldtype": "Date",
 			"width": 100,
+			"reqd": 1,
 		},
 	]
 };

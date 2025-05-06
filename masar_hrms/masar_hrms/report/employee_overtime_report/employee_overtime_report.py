@@ -18,8 +18,18 @@ def get_data(filters):
         conditions += f" AND tas.payroll_date BETWEEN '{_from}' AND '{to}'"
         
     sql = frappe.db.sql(f"""
-                        SELECT tas.employee, tas.employee_name, tas.department, tas.amount, tas.payroll_date 
+                        SELECT 
+                            tas.employee, 
+                            tas.employee_name, 
+                            tas.department, 
+                            te.designation,
+                            CASE
+                                WHEN tas.salary_component IN ('Overtime Allowance MID', 'Overtime Allowance') 
+                                THEN tas.amount
+                            END AS `Overtime Amount`, 
+                            tas.payroll_date 
 						FROM `tabAdditional Salary` tas
+                        INNER JOIN tabEmployee te ON tas.employee = te.name
 						WHERE tas.salary_component = 'Overtime Allowance' {conditions}
                         ORDER BY tas.employee ASC;
 					""")
@@ -31,6 +41,7 @@ def get_columns():
 		"Employee: Link/Employee:200",
 		"Employee Name: Data:200",
 		"Department: Link/Department:200",
+        "Designation: Data:200",
 		"Overtime Amount: Float:200",
-		"Date: Date:200"
+		"Payroll Date: Date:200"
 	]

@@ -8,12 +8,16 @@ frappe.query_reports["Ministry of Labor Report"] = {
 			"label": __("From Date"),
 			"fieldtype": "Date",
 			"width": 80,
+			"reqd": 1,
+			"default":  frappe.datetime.year_start()
 		 },
 		 {
 			"fieldname": "to",
 			"label": __("To Date"),
 			"fieldtype": "Date",
 			"width": 80,
+			"reqd": 1,
+			"default":  frappe.datetime.year_end()
 		},
 	  	{
 			"fieldname": "employee",
