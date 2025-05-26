@@ -272,7 +272,8 @@ fixtures = [
         "Employee-custom_is_engineer",
         "Leave Application-custom_esla_ref",
         "custom_is_privilege_applicable",
-        "Employee-custom_privilege_details"
+        "Employee-custom_privilege_details",
+        "Employee-custom_is_bank_commitments"
             ]
         ]
     ]},

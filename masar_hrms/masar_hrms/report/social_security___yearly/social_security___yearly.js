@@ -1,7 +1,7 @@
 // Copyright (c) 2025, KCSC and contributors
 // For license information, please see license.txt
 
-frappe.query_reports["Social Security Monthly Subscriptions Report"] = {
+frappe.query_reports["Social Security - Yearly"] = {
 	"filters": [
 		{
 			"fieldname": "employee",

@@ -19,7 +19,7 @@ frappe.query_reports["Social Security - Active"] = {
 		 },
 		{
 			"fieldname": "month",
-			"label": __("Months"),
+			"label": __("Month"),
 			"fieldtype": "Data",
 			"width": 80,
 			// "default":  frappe.datetime.year_start()

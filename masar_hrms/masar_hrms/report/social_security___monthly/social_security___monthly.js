@@ -1,7 +1,7 @@
 // Copyright (c) 2025, KCSC and contributors
 // For license information, please see license.txt
 
-frappe.query_reports["Social Security - Inactive"] = {
+frappe.query_reports["Social Security - Monthly"] = {
 	"filters": [
 		{
 			"fieldname": "employee",
@@ -15,15 +15,17 @@ frappe.query_reports["Social Security - Inactive"] = {
 			"label": __("Year"),
 			"fieldtype": "Data",
 			"width": 80,
+			// "default": frappe.datetime.get_year(),
 			// "reqd": 1,
-		 },
+		},
 		{
 			"fieldname": "month",
 			"label": __("Month"),
 			"fieldtype": "Data",
 			"width": 80,
+			// "default": 
 			// "reqd": 1,
-		 },
+		},
 		{
 			"fieldname": "from",
 			"label": __("From Date"),
@@ -40,6 +42,5 @@ frappe.query_reports["Social Security - Inactive"] = {
 			// "reqd": 1,
 			// "default":  frappe.datetime.month_end()
 		},
-
 	]
 };

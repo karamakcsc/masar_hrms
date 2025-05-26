@@ -1,0 +1,56 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-05-24 16:35:51.208227",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "schedule_date",
+  "repayment_amount",
+  "accumulated_repayment_amount",
+  "additional_salary_ref"
+ ],
+ "fields": [
+  {
+   "fieldname": "schedule_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Schedule Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "repayment_amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Repayment Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "accumulated_repayment_amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Accumulated Repayment Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "additional_salary_ref",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Additional Salary Reference",
+   "options": "Additional Salary",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-05-26 10:38:06.676793",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Loans Schedule",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

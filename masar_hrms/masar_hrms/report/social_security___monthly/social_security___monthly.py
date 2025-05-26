@@ -24,20 +24,26 @@ def get_data(filters):
                 tss.employee,
                 tss.name,
                 tss.posting_date,
-                tss.payment_days
+                tss.payment_days,
+                tss.total_working_days,
+                CASE WHEN ss_comp.parent IS NULL THEN 0 ELSE 1 END as has_social_security
             FROM `tabSalary Slip` tss
-            INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
+            LEFT JOIN `tabSalary Detail` ss_comp ON tss.name = ss_comp.parent 
+                AND ss_comp.salary_component = 'Social Security'
             WHERE tss.docstatus = 1 
-            AND tss.payment_days >= 16
-            AND tsd.salary_component = 'Social Security'
+            AND {conditions}
         ),
         prev_month_data AS (
             SELECT 
                 cm.employee,
+                cm.name as current_slip,
                 cm.posting_date,
-                CASE WHEN prev.name IS NULL THEN 0 ELSE 1 END as has_prev_slip,
-                COALESCE(prev.payment_days, 0) as prev_payment_days,
-                CASE WHEN prev_ss.parent IS NULL THEN 0 ELSE 1 END as has_prev_ss
+                cm.payment_days,
+                cm.total_working_days,
+                cm.has_social_security,
+                prev.name as prev_slip,
+                prev.payment_days as prev_payment_days,
+                CASE WHEN prev_ss.parent IS NULL THEN 0 ELSE 1 END as prev_has_ss
             FROM current_month cm
             LEFT JOIN `tabSalary Slip` prev ON prev.employee = cm.employee 
                 AND prev.posting_date = LAST_DAY(DATE_SUB(cm.posting_date, INTERVAL 1 MONTH))
@@ -57,8 +63,8 @@ def get_data(filters):
             te.date_of_joining AS `Date Of Joining`,
             te.social_security_number AS `Social Security Number`,
             te.social_security_salary AS `Social Security Salary`,
-            tss.total_working_days AS `Working Days`,
-            tss.payment_days AS `Payment Days`,
+            pmd.total_working_days AS `Working Days`,
+            pmd.payment_days AS `Payment Days`,
             tc.custom_establishment_number AS `Establishment No`,
             te.designation AS `Designation`,
             CASE
@@ -66,22 +72,18 @@ def get_data(filters):
                 ELSE ""
             END AS `Hazard Code`
         FROM tabEmployee te
-        INNER JOIN `tabSalary Slip` tss ON tss.employee = te.name 
-        INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
+        INNER JOIN prev_month_data pmd ON pmd.employee = te.name
         INNER JOIN `tabCompany` tc ON te.company = tc.name
         INNER JOIN `tabDesignation` td ON te.designation = td.name
-        INNER JOIN prev_month_data pmd ON pmd.employee = te.name 
-            AND pmd.posting_date = tss.posting_date
         WHERE
-            {conditions}
-            AND tss.docstatus = 1 
-            AND tss.payment_days >= 16 
-            AND tsd.salary_component = 'Social Security'
-            AND (
-                pmd.has_prev_slip = 0 
-                OR (pmd.prev_payment_days < 16 OR pmd.has_prev_ss = 0)
-            )
-        GROUP BY tss.name;
+            /* Current month: IS eligible (payment days >= 16 AND has social security component) */
+            (pmd.payment_days >= 16 AND pmd.has_social_security = 1)
+            /* Previous month: WAS ALSO eligible (has slip AND payment days >= 16 AND had social security) */
+            AND pmd.prev_slip IS NOT NULL
+            AND pmd.prev_payment_days >= 16
+            AND pmd.prev_has_ss = 1
+        GROUP BY pmd.current_slip
+        ORDER BY te.name;
     """)
     
     return sql

@@ -1,0 +1,219 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-05-22 17:23:07.336079",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "employee",
+  "employee_name",
+  "designation",
+  "column_break_fvwt",
+  "posting_date",
+  "department",
+  "reports_to",
+  "basic_salary",
+  "section_break_xsej",
+  "repayment_method",
+  "column_break_duav",
+  "loan_amount",
+  "section_break_jxzx",
+  "start_date",
+  "repayment_amount_month",
+  "column_break_aaea",
+  "end_date",
+  "total_months",
+  "section_break_gzpk",
+  "loans_schedule",
+  "section_break_sxdj",
+  "amended_from",
+  "column_break_cqpv",
+  "naming_series"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_sxdj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Loans",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "link_filters": "[[\"Employee\",\"status\",\"=\",\"Active\"]]",
+   "options": "Employee"
+  },
+  {
+   "fieldname": "column_break_fvwt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.reports_to",
+   "fieldname": "reports_to",
+   "fieldtype": "Link",
+   "label": "Reports To",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_jxzx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.repayment_method == \"Equal Monthly Installments\";",
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "column_break_aaea",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.repayment_method == \"Equal Monthly Installments\";",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "loan_amount",
+   "fieldtype": "Float",
+   "label": "Loan Amount"
+  },
+  {
+   "fieldname": "repayment_amount_month",
+   "fieldtype": "Float",
+   "label": "Repayment Amount",
+   "read_only_depends_on": "eval: doc.repayment_method != \"Custom Monthly Amount\";"
+  },
+  {
+   "fieldname": "section_break_gzpk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "loans_schedule",
+   "fieldtype": "Table",
+   "label": "Loans Schedule",
+   "options": "Employee Loans Schedule"
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "total_months",
+   "fieldtype": "Data",
+   "label": "Total Months",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_cqpv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "label": "Naming Series",
+   "options": "EMP-LOAN-."
+  },
+  {
+   "depends_on": "eval: doc.employee;",
+   "fieldname": "basic_salary",
+   "fieldtype": "Float",
+   "label": "Basic Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_xsej",
+   "fieldtype": "Section Break"
+  },
+  {
+   "description": "Equal Monthly Installments:Repayment is divided into equal monthly amounts until the selected end date.\n<br>\nCustom Monthly Amount:Employee selects the monthly repayment amount. Duration is calculated accordingly.",
+   "fieldname": "repayment_method",
+   "fieldtype": "Select",
+   "label": "Repayment Method",
+   "options": "\nEqual Monthly Installments\nCustom Monthly Amount"
+  },
+  {
+   "fieldname": "column_break_duav",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "link_doctype": "Additional Salary",
+   "link_fieldname": "ref_docname"
+  }
+ ],
+ "modified": "2025-05-26 12:41:57.907283",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Loans",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
