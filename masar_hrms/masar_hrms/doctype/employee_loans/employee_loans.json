@@ -27,6 +27,8 @@
   "total_months",
   "section_break_gzpk",
   "loans_schedule",
+  "section_break_ycwy",
+  "notes",
   "section_break_sxdj",
   "amended_from",
   "column_break_cqpv",
@@ -158,8 +160,10 @@
   {
    "fieldname": "naming_series",
    "fieldtype": "Select",
+   "hidden": 1,
    "label": "Naming Series",
-   "options": "EMP-LOAN-."
+   "options": "EMP-LOAN-.",
+   "read_only": 1
   },
   {
    "depends_on": "eval: doc.employee;",
@@ -182,6 +186,15 @@
   {
    "fieldname": "column_break_duav",
    "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ycwy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -192,7 +205,7 @@
    "link_fieldname": "ref_docname"
   }
  ],
- "modified": "2025-05-26 12:41:57.907283",
+ "modified": "2025-05-26 14:54:31.366229",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Loans",

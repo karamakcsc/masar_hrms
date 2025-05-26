@@ -89,13 +89,13 @@ class EmployeeLoans(Document):
             min_date = existing_loans[0].min_date
             max_date = existing_loans[0].max_date
         
-        overlapping_dates = []
-        for loan in self.loans_schedule:
-            if min_date <= loan.schedule_date <= max_date:
-                overlapping_dates.append(loan.schedule_date)
-                
-        if overlapping_dates:
-            frappe.throw(f"Employee: {self.employee} already has loan repayments scheduled between {min_date} and {max_date}. Please adjust the loan period to avoid overlapping repayment dates.")
+            overlapping_dates = []
+            for loan in self.loans_schedule:
+                if min_date <= loan.schedule_date <= max_date:
+                    overlapping_dates.append(loan.schedule_date)
+                    
+            if overlapping_dates:
+                frappe.throw(f"Employee: {self.employee} already has loan repayments scheduled between {min_date} and {max_date}. Please adjust the loan period to avoid overlapping repayment dates.")
     
     def create_additional_salary(self):
         if self.loans_schedule:
