@@ -2,9 +2,15 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on('Attendance Shortage', {
-	// refresh: function(frm) {
-
-	// }
+    onload: function(frm) {
+        GetBasicSalary(frm);
+    },
+    refresh: function(frm) {
+        GetBasicSalary(frm);
+    },
+	employee: function(frm) {
+        GetBasicSalary(frm);
+	}
 });
 
 
@@ -37,20 +43,22 @@ cur_frm.fields_dict['salary_component'].get_query = function(doc) {
 
 
 
-frappe.ui.form.on('Attendance Shortage', {
-    onload: function(frm) {
-            frappe.call({
-                method: "masar_hrms.masar_hrms.doctype.attendance_shortage.attendance_shortage.get_salary_structure_assignment",
-                args: {
-                    employee: frm.doc.employee
-                },
-                callback: function(r) {
-                    if (r && r.message) {
-                        frm.set_value('salary_structure_assignment', r.message);
-                    } else {
-                        frappe.msgprint("This Employee Don't Have Salary Structure Assignment.");
-                    }
-                }
-            });
+function GetBasicSalary(frm){
+    if (frm.doc.employee){
+    frappe.call({
+        method:'masar_hrms.masar_hrms.doctype.employee_overtime.employee_overtime.get_basic_salary', 
+        args: 
+        {
+            employee: frm.doc.employee, 
+            company: frm.doc.company
+        }, 
+        callback:function(r){
+            frm.set_value('basic_salary', r.message);
+            frm.refresh_field('basic_salary');
+        }
+    }); 
+    }else { 
+        frm.set_value('basic_salary', null);
+        frm.refresh_field('basic_salary');
     }
-});
+}

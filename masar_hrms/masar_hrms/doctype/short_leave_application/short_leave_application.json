@@ -182,7 +182,6 @@
    "label": "Employee Details"
   },
   {
-   "fetch_from": "employee.leave_approver",
    "fieldname": "leave_approver",
    "fieldtype": "Link",
    "label": "Leave Approver",
@@ -312,7 +311,7 @@
    "link_fieldname": "custom_esla_ref"
   }
  ],
- "modified": "2025-04-20 10:36:53.170892",
+ "modified": "2025-05-28 15:28:25.243146",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",

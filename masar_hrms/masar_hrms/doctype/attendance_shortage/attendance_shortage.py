@@ -53,19 +53,19 @@ class AttendanceShortage(Document):
     def on_submit(self):
         if self.action_type == "Deduct From Salary":
             # from_time = get_time(self.from_time)
-                    attendance_date = datetime.strptime("20-03-2023", "%d-%m-%Y").date()
-                    posting_date = datetime.combine(attendance_date, datetime.min.time())
-                    result=get_employee_shift(self.employee, posting_date)
+                    # attendance_date = datetime.strptime("20-03-2023", "%d-%m-%Y").date()  the commented code is not working. hardcoded date?
+                    # posting_date = datetime.combine(attendance_date, datetime.min.time())
+                    # result=get_employee_shift(self.employee, posting_date)
 
-                    working_hours=0
-                    if result:
-                        if result.start_datetime.minute>result.end_datetime.minute:
-                            working_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour-1,60-result.start_datetime.minute+result.end_datetime.minute)
-                        else:
-                            working_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour,result.end_datetime.minute-result.start_datetime.minute)
-                    elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
-                        working_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
-                    else: frappe.throw("You have to assign a shift for the employee or assign standar working hours in HR Settings")
+                    # working_hours=0
+                    # if result:
+                    #     if result.start_datetime.minute>result.end_datetime.minute:
+                    #         working_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour-1,60-result.start_datetime.minute+result.end_datetime.minute)
+                    #     else:
+                    #         working_hours=datetime.time(result.end_datetime.hour-result.start_datetime.hour,result.end_datetime.minute-result.start_datetime.minute)
+                    # elif frappe.db.get_single_value("HR Settings", "standard_working_hours"):
+                    #     working_hours=frappe.db.get_single_value("HR Settings", "standard_working_hours")
+                    # else: frappe.throw("You have to assign a shift for the employee or assign standar working hours in HR Settings")
 
                     if self.salary_component is None:
                         frappe.throw(_("Please Insert The Salary Componanet For This Employee"))
@@ -81,12 +81,13 @@ class AttendanceShortage(Document):
                     self.AddAdditionalSalary()
 
     def AddAdditionalSalary(self, submit=True):
+        company = self.company
         employee = self.employee
         salary_component = self.salary_component
         payroll_date = self.attendance_date
         working_hours = calculate_working_hours(employee,payroll_date)
 
-        hour_rate = flt(self.basic_salary) / 240
+        hour_rate = get_basic_salary(company , employee) / 240
         deduct_amount = self.difference_hours * hour_rate
         entry = {
             "employee": employee,
@@ -132,21 +133,36 @@ def calculate_working_hours(employee, posting_date):
 
 
 
-@frappe.whitelist()
-def get_salary_structure_assignment(employee=None):
-    result = frappe.get_list(
-        "Salary Structure Assignment",
-        filters={'employee': employee, 'docstatus': 1},
-        fields=['name'],
-        order_by='creation DESC',
-        limit=1
-    )
+# @frappe.whitelist()
+# def get_salary_structure_assignment(employee=None):
+#     result = frappe.get_list(
+#         "Salary Structure Assignment",
+#         filters={'employee': employee, 'docstatus': 1},
+#         fields=['name'],
+#         order_by='creation DESC',
+#         limit=1
+#     )
 
-    if result:
-        return result[0].name
-    else:
-        return 0
-    doc.save() ## WHY ??!!!!
+#     if result:
+#         return result[0].name
+#     else:
+#         return 0
+#     doc.save() ## WHY ??!!!!
+
+@frappe.whitelist()
+def get_basic_salary(company , employee):
+    basic_componmet = frappe.db.get_value('Company', filters={'name' : company} , fieldname=['custom_basic_salary_component'] )
+    if basic_componmet is None: 
+        frappe.throw('Set Basic Salary Component in Company')
+        return 
+    doc = frappe.get_doc('Employee' , employee)
+    for sc in doc.custom_salary_component_table: 
+        if (sc.salary_component == basic_componmet ) and sc.is_active ==1: 
+            return sc.esc_amount if sc.esc_amount else 0  
+    frappe.msgprint('Basic Salary For Employee {emp}'.format(emp=employee) , alert=True , indicator='red')
+    
+    return 0 
+
 
 # @frappe.whitelist()
 # def get_employee_attendance(date_from, date_to):
@@ -284,9 +300,9 @@ def get_salary_structure_assignment(employee=None):
 @frappe.whitelist()
 def get_employee_attendance(date_from, date_to , department =None):
     if department:
-        attendance_list = frappe.get_list("Attendance", filters={"status": "Present","department" :department, "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
+        attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "docstatus": 1, "department" :department, "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
     else:
-        attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
+        attendance_list = frappe.get_list("Attendance", filters={"status": "Present", "docstatus": 1, "attendance_date": ["between", [date_from, date_to]]}, fields=["name", "employee", "attendance_date", "status", "shift", "working_hours", "late_entry", "early_exit", "out_time", "in_time", "company"])
 
 
     for attendance in attendance_list:

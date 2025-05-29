@@ -78,13 +78,15 @@ class ShortLeaveApplication(Document):
 				return 
 		hr_setting = frappe.get_doc('HR Settings')
 		leave_approver_mandatory_in_leave_application = hr_setting.leave_approver_mandatory_in_leave_application
-		if leave_approver_mandatory_in_leave_application and self.leave_approver is None : 
-				frappe.throw(
-                        """No leave approver has been assigned for this Employee : {employee}.<br> 
-                        Please assign a Leave Approver Before Proceeding.""".format(employee=self.employee),
-                        title=_("Leave Approver Required")
-                    )
-				return
+		if leave_approver_mandatory_in_leave_application and self.leave_approver is None :
+			frappe.throw(
+					"""No leave approver has been assigned for this Employee : {employee}.<br> 
+					Please assign a Leave Approver Before Proceeding.""".format(employee=self.employee),
+					title=_("Leave Approver Required")
+				)
+			return
+				
+		
 		if self.leave_duration and self.leave_duration <= 0 :
 			frappe.throw("Leave Duration cannot be zero. Please enter a valid leave duration." , title=_("Missing Leave Duration"))
 	def on_submit(self):
@@ -169,3 +171,16 @@ class ShortLeaveApplication(Document):
                 alert=True,
                 indicator='green'
             )
+
+@frappe.whitelist()            
+def get_leave_approver(employee):
+	leave_approver, department = frappe.db.get_value("Employee", employee, ["leave_approver", "department"])
+
+	if not leave_approver and department:
+		leave_approver = frappe.db.get_value(
+			"Department Approver",
+			{"parent": department, "parentfield": "leave_approvers", "idx": 1},
+			"approver",
+		)
+
+	return leave_approver

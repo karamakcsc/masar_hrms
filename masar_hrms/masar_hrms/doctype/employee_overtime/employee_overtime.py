@@ -31,8 +31,8 @@ class EmployeeOvertime(Document):
         employee = self.employee
         salary_component = self.salary_component
         payroll_date = self.posting_date
-        hour_rate_wd= flt(self.basic_salary) / 240 * self.overtime_rate_working_hour
-        hour_rate_od= flt(self.basic_salary) / 240 * self.overtime_rate_off_day
+        hour_rate_wd= flt(self.basic_salary) / 240 * flt(self.overtime_rate_working_hour)
+        hour_rate_od= flt(self.basic_salary) / 240 * flt(self.overtime_rate_off_day)
         deduct_amount = flt(self.overtime_hours_working_day * hour_rate_wd)	+ flt(self.overtime_hours_off_day * hour_rate_od)
         entry = {
             "employee": employee,
@@ -48,25 +48,12 @@ class EmployeeOvertime(Document):
         frappe.db.commit()
 
 
-@frappe.whitelist()
-def get_salary_structure_assignment(employee=None):
-	result = frappe.get_list(
-		"Salary Structure Assignment",
-		filters={'employee': employee, 'docstatus': 1},
-		fields=['name'],
-		order_by='creation DESC',
-		limit=1
-	)
 
-	if result:
-		return result[0].name
-	else:
-		return 0
 @frappe.whitelist()
 def get_basic_salary(company , employee):
     basic_componmet = frappe.db.get_value('Company', filters={'name' : company} , fieldname=['custom_basic_salary_component'] )
     if basic_componmet is None: 
-        frappe.throw('Set Basic Salary Companent in Company')
+        frappe.throw('Set Basic Salary Component in Company')
         return 
     doc = frappe.get_doc('Employee' , employee)
     for sc in doc.custom_salary_component_table: 
@@ -134,6 +121,7 @@ def get_draft_overtime(date_from, date_to, department=None):
                 ot.overtime_hours, 
                 ot.off_day,
                 te.overtime_ceiling ,
+                te.company,
                 IFNULL(lsh.leave_hours, 0) AS leave_hours,
                 IFNULL(ot.overtime_hours, 0) - IFNULL(lsh.leave_hours, 0) AS not_covered_hours
             FROM overtime ot 
@@ -143,7 +131,6 @@ def get_draft_overtime(date_from, date_to, department=None):
     """, as_dict=True)
 
     for attendance in attendance_list:
-        result = get_salary_structure_assignment(attendance.employee)
         exist_employee = frappe.db.sql(f"""
             SELECT employee, posting_date 
             FROM `tabEmployee Overtime` teo 
@@ -244,7 +231,7 @@ def get_draft_overtime(date_from, date_to, department=None):
                 "overtime_hours_working_day": attendance.get('overtime_hours'),
                 "overtime_hours_off_day": attendance.get('off_day'),
                 "not_covered_hours": attendance.get('not_covered_hours'),
-                "salary_structure_assignment": result,
+                "basic_salary": get_basic_salary(attendance.get('company'), attendance.get('employee')),
                 "posting_date": date_to
             }
             overtime_doc = frappe.new_doc("Employee Overtime").update(entry).insert(ignore_permissions=True, ignore_mandatory=True)

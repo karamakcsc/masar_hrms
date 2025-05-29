@@ -12,7 +12,6 @@
   "posting_date",
   "employee",
   "employee_name",
-  "salary_structure_assignment",
   "column_break_4",
   "company",
   "department",
@@ -71,12 +70,6 @@
    "fieldtype": "Read Only",
    "in_list_view": 1,
    "label": "Employee Name"
-  },
-  {
-   "fieldname": "salary_structure_assignment",
-   "fieldtype": "Link",
-   "label": "Salary Structure Assignment",
-   "options": "Salary Structure Assignment"
   },
   {
    "fieldname": "column_break_4",
@@ -270,7 +263,7 @@
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2025-01-09 09:43:39.904667",
+ "modified": "2025-05-27 11:50:37.441186",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Overtime",

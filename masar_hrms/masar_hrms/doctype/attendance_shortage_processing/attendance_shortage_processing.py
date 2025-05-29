@@ -241,11 +241,12 @@ class AttendanceShortageProcessing(Document):
         # self.AddAdditionalSalary()
   
     def AddAdditionalSalary(self, submit=True):
+        company = self.company
         employee = self.employee
         salary_component = self.salary_component
         payroll_date = self.date_to
         working_hours = calculate_working_hours(employee,payroll_date)
-        hour_rate = flt(self.basic_salary) / 240
+        hour_rate = self.basic_salary / 240
         # deduct_amount = flt(self.shortage_hours * hour_rate * 1)
         ### edit deduct amount from mahmoud 
         differences_leave_duration = self.differences_leave_duration / 3600 
@@ -259,10 +260,13 @@ class AttendanceShortageProcessing(Document):
             "payroll_date": self.date_to,
 
         }
+        # try:
         (frappe.new_doc("Additional Salary")
             .update(entry)
             .insert(ignore_permissions=True, ignore_mandatory=True)).run_method('submit')
         frappe.db.commit()
+        # except Exception as e:
+        #     frappe.throw(str(f"Employee: {employee}"))
 
 
 
@@ -318,13 +322,13 @@ def get_employee_attendance(date_from, date_to , department =None):
             a.employee_name,
             IFNULL(shortage_hours, 0) AS shortage_hours,
             IFNULL(leave_hours, 0) AS leave_hours,
-            IFNULL(shortage_hours, 0) - IFNULL(leave_hours, 0) AS not_covered_hours
+            IFNULL(shortage_hours, 0) - IFNULL(leave_hours, 0) AS not_covered_hours,
+            te.company
         FROM AttSh a
         LEFT JOIN LeaveSh l ON a.employee = l.employee
         INNER JOIN tabEmployee te ON a.employee = te.name {cond}
     """, as_dict=True)
     for attendance in attendance_list:
-        result = get_salary_structure_assignment(attendance.employee)
         ############## mahmoud child table start code
         child_table_data_sql = frappe.db.sql("""
             SELECT name, leave_duration , posting_date
@@ -352,7 +356,7 @@ def get_employee_attendance(date_from, date_to , department =None):
             "shortage_hours": attendance.shortage_hours,
             "leave_hours": attendance.leave_hours,
             "not_covered_hours": attendance.not_covered_hours,
-            "salary_structure_assignment": result ,  
+            "basic_salary": get_basic_salary(attendance.get('company'), attendance.get('employee')),
             ### the lines below from mahoud 
             "short_leave_application": child_entries ,
             "total_leave_duration" : sum(total_leave_duration) , 
@@ -369,17 +373,31 @@ def get_employee_attendance(date_from, date_to , department =None):
             frappe.db.set_value('Short Leave Application' , child_table_data.get('name') , 'attendance_shortage_processing_reference' , new_doc.name)
         ###### end from mahmoud 
 
-@frappe.whitelist()
-def get_salary_structure_assignment(employee=None):
-    result = frappe.get_list(
-        "Salary Structure Assignment",
-        filters={'employee': employee, 'docstatus': 1},
-        fields=['name'],
-        order_by='creation DESC',
-        limit=1
-    )
+# @frappe.whitelist()
+# def get_salary_structure_assignment(employee=None):
+#     result = frappe.get_list(
+#         "Salary Structure Assignment",
+#         filters={'employee': employee, 'docstatus': 1},
+#         fields=['name'],
+#         order_by='creation DESC',
+#         limit=1
+#     )
 
-    if result:
-        return result[0].name
-    else:
-        return 0
+#     if result:
+#         return result[0].name
+#     else:
+#         return 0
+
+@frappe.whitelist()
+def get_basic_salary(company , employee):
+    basic_componmet = frappe.db.get_value('Company', filters={'name' : company} , fieldname=['custom_basic_salary_component'] )
+    if basic_componmet is None: 
+        frappe.throw('Set Basic Salary Component in Company')
+        return 
+    doc = frappe.get_doc('Employee' , employee)
+    for sc in doc.custom_salary_component_table: 
+        if (sc.salary_component == basic_componmet ) and sc.is_active ==1: 
+            return sc.esc_amount if sc.esc_amount else 0  
+    frappe.msgprint('Basic Salary For Employee {emp}'.format(emp=employee) , alert=True , indicator='red')
+    
+    return 0 

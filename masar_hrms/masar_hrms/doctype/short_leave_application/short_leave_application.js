@@ -13,6 +13,7 @@ frappe.ui.form.on("Short Leave Application", {
                 };
             });
         }
+        getLeaveApprover(frm);
     }, 
     shift_start:function(frm){
         GetStartEndShift(frm);
@@ -95,5 +96,22 @@ function get_leave_balance(frm){
                 }
             }
         });
+    }
+}
+
+function getLeaveApprover(frm) {
+    if (frm.doc.employee) {
+        frappe.call({
+            method: "masar_hrms.masar_hrms.doctype.short_leave_application.short_leave_application.get_leave_approver",
+            args: {
+                employee: frm.doc.employee
+            },
+            callback: function (r) {
+                if (r.message) {
+                    frm.set_value('leave_approver', r.message);
+                    frm.refresh_field('leave_approver');
+                }
+            }
+        })
     }
 }

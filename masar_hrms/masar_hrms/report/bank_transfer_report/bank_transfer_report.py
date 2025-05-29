@@ -27,7 +27,8 @@ def get_data(filters):
 	data = frappe.db.sql(f"""SELECT 
                       			tb.swift_number AS `SWIFT Number`, 
                          		te.name AS `Employee Number`, 
-                           		te.full_name_ar AS `Employee Name`, 
+								te.employee_name AS `Employee Name`,
+                           		te.full_name_ar AS `Employee Name AR`, 
                              	te.department AS `Department`,
 								MONTH(tss.posting_date) AS `Month`, 
         						IF(te.national_no IS NULL, te.personal_no, IF(te.national_no = '', '', te.national_no)) AS `National Number`, 
@@ -40,10 +41,11 @@ def get_data(filters):
 							INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
 							INNER JOIN `tabEmployee` te ON te.name = tss.employee
 							INNER JOIN `tabSalary Slip` tss_sub ON tss_sub.name = tss.name
-							INNER JOIN `tabBank` tb on te.bank = tb.name 
+							LEFT JOIN `tabBank` tb on te.bank = tb.name 
 							WHERE 
        							tss.docstatus = 1 
               					AND tss_sub.name = tss.name
+								AND te.salary_mode = 'Bank'
 								AND (tss.posting_date BETWEEN '{_from}' AND '{to}')
 								{conditions} 
           					GROUP BY te.name;""")
@@ -53,8 +55,9 @@ def get_data(filters):
 def get_columns():
 	return [
 		"SWIFT Number: Data:250",
-	   "Employee Number: Link/Employee:200",
-	   "Employee Name: Data:200",
+	   "Employee Number: Link/Employee:150",
+	   "Employee Name: Data:250",
+		"Employee Name AR: Data:200",
 	   "Department: Data:250",
 	   "Month: Data:150",
 	   "National Number:Data:200",

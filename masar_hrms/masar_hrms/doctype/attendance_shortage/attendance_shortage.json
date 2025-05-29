@@ -36,7 +36,6 @@
   "late_entry",
   "early_exit",
   "tab_break_o7bwj",
-  "salary_structure_assignment",
   "salary_component",
   "column_break_ewjc4",
   "basic_salary",
@@ -242,13 +241,6 @@
    "options": "Short Leave Application"
   },
   {
-   "fieldname": "salary_structure_assignment",
-   "fieldtype": "Link",
-   "label": "Salary Structure Assignment",
-   "mandatory_depends_on": "eval:doc.action_type == \"Deduct From Salary\"",
-   "options": "Salary Structure Assignment"
-  },
-  {
    "depends_on": "eval:doc.action_type == \"Deduct From Salary\"",
    "fieldname": "tab_break_o7bwj",
    "fieldtype": "Tab Break",
@@ -334,7 +326,7 @@
  "icon": "fa fa-ok",
  "is_submittable": 1,
  "links": [],
- "modified": "2023-07-30 16:00:13.450802",
+ "modified": "2025-05-28 13:51:57.734129",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Attendance Shortage",

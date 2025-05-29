@@ -24,15 +24,6 @@ cur_frm.fields_dict['salary_component'].get_query = function(doc) {
 	}
 }
 
-cur_frm.fields_dict['salary_structure_assignment'].get_query = function(doc) {
-	return {
-		filters: {
-			"docstatus": 1,
-			"employee": doc.employee
-		}
-	}
-}
-
 
 
 frappe.ui.form.on("Employee Overtime", {
@@ -62,6 +53,7 @@ frappe.ui.form.on("Employee Overtime", {
         amount_off_day(frm);
         calculate_total(frm);
         }
+        GetBasicSalary(frm);
     },
     // setup: function(frm) {
     //     if(frm.doc.docstatus !=1){
