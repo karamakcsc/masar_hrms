@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">MID HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":4}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":4}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":4}},{\"id\":\"RM3jcFX1Sh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"AR 3 Print\",\"col\":4}},{\"id\":\"wWHTGxYSAW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans\",\"col\":4}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"XRVyPWOQzU\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
+ "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">MID HRMS</span>\",\"col\":12}},{\"id\":\"Rv1YFRo6ep\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":4}},{\"id\":\"A4Dvc3bv_s\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Overtime\",\"col\":4}},{\"id\":\"_BS3qy7-VA\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Social Security Salary Entry\",\"col\":4}},{\"id\":\"23llNKasXe\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"FWhJU9eSvl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Social Security Salary\",\"col\":4}},{\"id\":\"RM3jcFX1Sh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"AR 3 Print\",\"col\":4}},{\"id\":\"wWHTGxYSAW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans\",\"col\":4}},{\"id\":\"u--ckTNn6N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans Management\",\"col\":4}},{\"id\":\"lgMi9SUYso\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Attendance Management\",\"col\":4}},{\"id\":\"LYdX3B4J9I\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Attendance Management Bulk\",\"col\":4}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"Gf5h-XeLUN\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data\",\"col\":4}},{\"id\":\"szd8kXJz8k\",\"type\":\"card\",\"data\":{\"card_name\":\"Social Security System\",\"col\":4}},{\"id\":\"PeCToewUea\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime System\",\"col\":4}},{\"id\":\"LKvJ0dQBBs\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"XRVyPWOQzU\",\"type\":\"card\",\"data\":{\"card_name\":\"Other Reports\",\"col\":4}}]",
  "creation": "2024-02-05 10:16:49.042033",
  "custom_blocks": [],
  "docstatus": 0,
@@ -180,75 +180,6 @@
   {
    "hidden": 0,
    "is_query_report": 0,
-   "label": "Master Data",
-   "link_count": 6,
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Card Break"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Attendance Shortage",
-   "link_count": 0,
-   "link_to": "Attendance Shortage",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Attendance Shortage Processing",
-   "link_count": 0,
-   "link_to": "Attendance Shortage Processing",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Short Leave Application",
-   "link_count": 0,
-   "link_to": "Short Leave Application",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Shift Management",
-   "link_count": 0,
-   "link_to": "Employee Shift Management",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Shift Management Entry",
-   "link_count": 0,
-   "link_to": "Employee Shift Management Entry",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
-   "label": "Employee Loans",
-   "link_count": 0,
-   "link_to": "Employee Loans",
-   "link_type": "DocType",
-   "onboard": 0,
-   "type": "Link"
-  },
-  {
-   "hidden": 0,
-   "is_query_report": 0,
    "label": "Reports",
    "link_count": 10,
    "link_type": "DocType",
@@ -354,9 +285,88 @@
    "link_type": "Report",
    "onboard": 0,
    "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Master Data",
+   "link_count": 7,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance Shortage",
+   "link_count": 0,
+   "link_to": "Attendance Shortage",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance Shortage Processing",
+   "link_count": 0,
+   "link_to": "Attendance Shortage Processing",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Short Leave Application",
+   "link_count": 0,
+   "link_to": "Short Leave Application",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Shift Management",
+   "link_count": 0,
+   "link_to": "Employee Shift Management",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Shift Management Entry",
+   "link_count": 0,
+   "link_to": "Employee Shift Management Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Loans",
+   "link_count": 0,
+   "link_to": "Employee Loans",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Loans Management",
+   "link_count": 0,
+   "link_to": "Employee Loans Management",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
   }
  ],
- "modified": "2025-05-26 12:49:33.237174",
+ "modified": "2025-06-18 10:10:16.255225",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "MID HRMS",
@@ -381,6 +391,14 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Employee Loans Management",
+   "link_to": "Employee Loans Management",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "AR 3 Print",
    "link_to": "AR 3 Print",
    "stats_filter": "[]",
@@ -389,8 +407,24 @@
   {
    "color": "Grey",
    "doc_view": "List",
+   "label": "Employee Attendance Management",
+   "link_to": "Employee Attendance Management",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
    "label": "Employee Loans",
    "link_to": "Employee Loans",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Employee Attendance Management Bulk",
+   "link_to": "Employee Attendance Management Bulk",
    "stats_filter": "[]",
    "type": "DocType"
   },

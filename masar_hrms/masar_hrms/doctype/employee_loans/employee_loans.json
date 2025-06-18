@@ -205,7 +205,7 @@
    "link_fieldname": "ref_docname"
   }
  ],
- "modified": "2025-05-26 14:54:31.366229",
+ "modified": "2025-06-17 15:01:30.367847",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Loans",
@@ -213,6 +213,7 @@
  "owner": "Administrator",
  "permissions": [
   {
+   "cancel": 1,
    "create": 1,
    "delete": 1,
    "email": 1,

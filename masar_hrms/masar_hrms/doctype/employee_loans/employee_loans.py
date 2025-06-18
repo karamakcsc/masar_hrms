@@ -95,7 +95,7 @@ class EmployeeLoans(Document):
                     overlapping_dates.append(loan.schedule_date)
                     
             if overlapping_dates:
-                frappe.throw(f"Employee: {self.employee} already has loan repayments scheduled between {min_date} and {max_date}. Please adjust the loan period to avoid overlapping repayment dates.")
+                frappe.throw(f"Employee: {self.employee} already has loan repayments scheduled between {min_date} and {max_date}. Please create it in Employee Loans Management.")
     
     def create_additional_salary(self):
         if self.loans_schedule:
@@ -117,6 +117,7 @@ class EmployeeLoans(Document):
                 additional_salary.insert(ignore_permissions=True)
                 additional_salary.submit()
                 loan.additional_salary_ref = additional_salary.name
+            self.save(ignore_permissions=True)
             frappe.msgprint(f"Additional Salary created for Employee {self.employee}", alert=True, indicator='green')
         
 

@@ -1,15 +1,18 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-05-24 16:35:51.208227",
+ "creation": "2025-06-16 13:02:32.739977",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "schedule_date",
   "repayment_amount",
   "accumulated_repayment_amount",
+  "emp_loans_ref",
   "additional_salary_ref",
-  "management_comments"
+  "column_break_gzvq",
+  "new_date",
+  "el_ref"
  ],
  "fields": [
   {
@@ -34,7 +37,6 @@
    "read_only": 1
   },
   {
-   "allow_on_submit": 1,
    "fieldname": "additional_salary_ref",
    "fieldtype": "Data",
    "in_list_view": 1,
@@ -42,19 +44,36 @@
    "read_only": 1
   },
   {
-   "fieldname": "management_comments",
+   "fieldname": "column_break_gzvq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "new_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "New Date"
+  },
+  {
+   "fieldname": "el_ref",
    "fieldtype": "Data",
-   "label": "Management Comments",
+   "hidden": 1,
+   "label": "EL Ref",
+   "read_only": 1
+  },
+  {
+   "fieldname": "emp_loans_ref",
+   "fieldtype": "Data",
+   "label": "Employee Loans Reference",
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-18 12:37:43.434071",
+ "modified": "2025-06-17 10:56:31.762824",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
- "name": "Employee Loans Schedule",
+ "name": "Employee Loans Management Schedule",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

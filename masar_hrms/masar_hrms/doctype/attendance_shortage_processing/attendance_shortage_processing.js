@@ -26,7 +26,7 @@ cur_frm.fields_dict['salary_component'].get_query = function(doc) {
 
 
 function GetBasicSalary(frm){
-    if (frm.doc.employee){
+    if (frm.doc.employee) {
     frappe.call({
         method:'masar_hrms.masar_hrms.doctype.employee_overtime.employee_overtime.get_basic_salary', 
         args: 
@@ -39,7 +39,7 @@ function GetBasicSalary(frm){
             frm.refresh_field('basic_salary');
         }
     }); 
-    }else { 
+    } else { 
         frm.set_value('basic_salary', null);
         frm.refresh_field('basic_salary');
     }

@@ -245,9 +245,13 @@ class AttendanceShortageProcessing(Document):
         employee = self.employee
         salary_component = self.salary_component
         payroll_date = self.date_to
+        if not payroll_date:
+            frappe.throw("Please set the from date and to date.")
         working_hours = calculate_working_hours(employee,payroll_date)
         hour_rate = self.basic_salary / 240
         # deduct_amount = flt(self.shortage_hours * hour_rate * 1)
+        if not self.differences_leave_duration:
+            frappe.throw("The differences in leave duration is empty")
         ### edit deduct amount from mahmoud 
         differences_leave_duration = self.differences_leave_duration / 3600 
         deduct_amount = flt(differences_leave_duration * hour_rate * 1)

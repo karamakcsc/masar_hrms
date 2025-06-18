@@ -1,0 +1,286 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-06-16 12:52:22.906879",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "employee",
+  "employee_name",
+  "designation",
+  "column_break_fvwt",
+  "posting_date",
+  "department",
+  "reports_to",
+  "basic_salary",
+  "section_break_roub",
+  "management_type",
+  "section_break_xsej",
+  "loan_amount",
+  "overlapping_loan_amount",
+  "column_break_duav",
+  "repayment_method",
+  "final_loan_amount",
+  "section_break_fybl",
+  "start_date",
+  "repayment_amount_month",
+  "column_break_xbzj",
+  "end_date",
+  "total_months",
+  "section_break_gzpk",
+  "loans_schedule",
+  "section_break_imbi",
+  "loans_structure",
+  "section_break_ycwy",
+  "notes",
+  "section_break_sxdj",
+  "amended_from",
+  "column_break_cqpv",
+  "naming_series"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "link_filters": "[[\"Employee\",\"status\",\"=\",\"Active\"]]",
+   "options": "Employee"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_fvwt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.reports_to",
+   "fieldname": "reports_to",
+   "fieldtype": "Link",
+   "label": "Reports To",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.employee;",
+   "fieldname": "basic_salary",
+   "fieldtype": "Float",
+   "label": "Basic Salary",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.management_type != null || doc.management_type != \"\" || doc.management_type != \" \";",
+   "fieldname": "section_break_xsej",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_duav",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "loan_amount",
+   "fieldtype": "Float",
+   "label": "Loan Amount",
+   "read_only": 1,
+   "read_only_depends_on": "eval: doc.management_type == \"Reschedule\";"
+  },
+  {
+   "fieldname": "section_break_gzpk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Reschedule\";",
+   "fieldname": "loans_schedule",
+   "fieldtype": "Table",
+   "label": "Loans Schedule",
+   "options": "Employee Loans Management Schedule"
+  },
+  {
+   "fieldname": "section_break_ycwy",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "notes",
+   "fieldtype": "Text Editor",
+   "label": "Notes"
+  },
+  {
+   "fieldname": "section_break_sxdj",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Loans Management",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "column_break_cqpv",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "EMP-LOAN-MGMT-.",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Loans Management",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "section_break_roub",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "management_type",
+   "fieldtype": "Select",
+   "label": "Management Type",
+   "options": "\nReschedule\nRestructure",
+   "reqd": 1
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Restructure\";",
+   "fieldname": "overlapping_loan_amount",
+   "fieldtype": "Float",
+   "label": "Overlapping Loan Amount",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Restructure\";",
+   "fieldname": "repayment_method",
+   "fieldtype": "Select",
+   "label": "Repayment Method",
+   "mandatory_depends_on": "eval: doc.management_type == \"Restructure\";",
+   "options": "\nEqual Monthly Installments\nCustom Monthly Amount"
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Restructure\";",
+   "fieldname": "final_loan_amount",
+   "fieldtype": "Float",
+   "label": "Final Loan Amount",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Restructure\";",
+   "fieldname": "section_break_fybl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.repayment_method == \"Equal Monthly Installments\";",
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date"
+  },
+  {
+   "fieldname": "repayment_amount_month",
+   "fieldtype": "Float",
+   "label": "Repayment Amount",
+   "read_only_depends_on": "eval: doc.repayment_method != \"Custom Monthly Amount\";"
+  },
+  {
+   "fieldname": "column_break_xbzj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "eval: doc.repayment_method == \"Equal Monthly Installments\";",
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date"
+  },
+  {
+   "fieldname": "total_months",
+   "fieldtype": "Data",
+   "label": "Total Months",
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Restructure\";",
+   "fieldname": "section_break_imbi",
+   "fieldtype": "Section Break"
+  },
+  {
+   "depends_on": "eval: doc.management_type == \"Restructure\";",
+   "fieldname": "loans_structure",
+   "fieldtype": "Table",
+   "label": "Loans Schedule",
+   "options": "Employee Loans Management Structure"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2025-06-18 13:06:30.272480",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Loans Management",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

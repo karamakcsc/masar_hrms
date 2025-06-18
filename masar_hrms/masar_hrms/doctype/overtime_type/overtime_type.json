@@ -10,7 +10,10 @@
   "overtime_type",
   "rate",
   "column_break_2",
-  "salary_component"
+  "salary_component",
+  "working_day",
+  "off_day",
+  "holiday"
  ],
  "fields": [
   {
@@ -33,11 +36,30 @@
    "fieldtype": "Link",
    "label": "Salary Component",
    "options": "Salary Component"
+  },
+  {
+   "default": "0",
+   "fieldname": "working_day",
+   "fieldtype": "Check",
+   "label": "Working Day"
+  },
+  {
+   "default": "0",
+   "fieldname": "off_day",
+   "fieldtype": "Check",
+   "label": "Off Day"
+  },
+  {
+   "default": "0",
+   "fieldname": "holiday",
+   "fieldtype": "Check",
+   "hidden": 1,
+   "label": "Holiday"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-01-22 10:42:24.988744",
+ "modified": "2025-06-04 10:45:48.119346",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Overtime Type",
@@ -58,6 +80,7 @@
  ],
  "sort_field": "modified",
  "sort_order": "DESC",
+ "states": [],
  "track_changes": 1,
  "track_seen": 1
 }

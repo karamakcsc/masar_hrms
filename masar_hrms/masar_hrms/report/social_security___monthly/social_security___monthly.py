@@ -76,9 +76,7 @@ def get_data(filters):
         INNER JOIN `tabCompany` tc ON te.company = tc.name
         INNER JOIN `tabDesignation` td ON te.designation = td.name
         WHERE
-            /* Current month: IS eligible (payment days >= 16 AND has social security component) */
             (pmd.payment_days >= 16 AND pmd.has_social_security = 1)
-            /* Previous month: WAS ALSO eligible (has slip AND payment days >= 16 AND had social security) */
             AND pmd.prev_slip IS NOT NULL
             AND pmd.prev_payment_days >= 16
             AND pmd.prev_has_ss = 1
