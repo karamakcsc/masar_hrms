@@ -11,6 +11,8 @@ class EmployeeLoans(Document):
     def validate(self):
         self.set_loan_months()
         self.set_repayment_amount()
+        self.contract_end_date_validate()
+        self.dbr_validate()
         self.create_loan_schedule()
     def on_submit(self):
         self.validate_loan_schedule()
@@ -32,8 +34,13 @@ class EmployeeLoans(Document):
                 frappe.throw("Loan Start Date cannot be after Loan End Date.")
         
             total_months = (end_date.year - start_date.year) * 12 + end_date.month - start_date.month
+            if self.start_this_month:
+                total_months += 1
             self.total_months = total_months
-        
+        if self.repayment_method == "Custom Monthly Amount":    
+            if not self.start_date:
+                frappe.throw("Please set Loan Start Date.")
+                
     def set_repayment_amount(self):
         if not self.loan_amount:
             frappe.throw("Please set both Loan Amount and Total Months.")
@@ -44,8 +51,49 @@ class EmployeeLoans(Document):
         elif self.repayment_method == "Custom Monthly Amount":
             if not self.repayment_amount_month:
                 frappe.throw("Please set the Repayment Amount per Month.")
+            if self.repayment_amount_month > self.loan_amount:
+                frappe.throw("Repayment Amount per Month cannot be greater than Loan Amount.")
             monthly_amount = self.repayment_amount_month
-            self.total_months = round((self.loan_amount / monthly_amount))
+            if self.start_date and monthly_amount:
+                months = round(self.loan_amount / monthly_amount)
+                self.total_months = months
+                if not self.start_this_month:
+                    months += 1
+                self.end_date = get_last_day(add_months(getdate(self.start_date), months - 1))
+            
+    def dbr_validate(self):
+        dbr_percentage = frappe.db.get_value("Company", self.company, "custom_dbr_percentage")
+        if not dbr_percentage:
+            frappe.throw("Please set the DBR Percentage in Company settings.")
+        if self.employee:
+            emp_doc = frappe.get_doc("Employee", self.employee)
+            earining_salary = 0
+            deduction_salary = 0
+            for comp in emp_doc.custom_salary_component_table:
+                if comp.is_active:
+                    if comp.type:
+                        if comp.type == "Earning":
+                            earining_salary += comp.esc_amount
+                        if comp.type == "Deduction":
+                            deduction_salary += comp.esc_amount
+                    else:
+                        comp_doc = frappe.get_doc("Salary Component", comp.salary_component)
+                        if comp_doc.type == "Earning":
+                            earining_salary += comp.esc_amount
+                        if comp_doc.type == "Deduction":
+                            deduction_salary += comp.esc_amount
+            total_salary = earining_salary - deduction_salary
+            dbr_salary = (total_salary * dbr_percentage) / 100
+            frappe.msgprint(str(dbr_salary))
+            if self.repayment_amount_month > dbr_salary:
+                frappe.throw(f"Loan Repayment Amount {self.repayment_amount_month} exceeds DBR Salary {dbr_salary}. Please adjust the repayment amount or check the DBR settings in Company.")
+                    
+    def contract_end_date_validate(self):
+        if self.contract_end_date:
+            if self.start_date and getdate(self.start_date) > getdate(self.contract_end_date):
+                frappe.throw(f"Loan Start Date {self.start_date} cannot be after Contract End Date {self.contract_end_date}.")
+            if self.end_date and getdate(self.end_date) > getdate(self.contract_end_date):
+                frappe.throw(f"Loan End Date {self.end_date} cannot be after Contract End Date {self.contract_end_date}.")
     
     def create_loan_schedule(self):
         self.loans_schedule = []
@@ -55,9 +103,15 @@ class EmployeeLoans(Document):
 
         base_monthly = round(self.repayment_amount_month, 3)
         accumulated = 0
+        start_date = getdate(self.start_date)
 
+        if self.start_this_month:
+            schedule_base = start_date.replace(day=1)
+        else:
+            schedule_base = add_months(start_date.replace(day=1), 1)
+            
         for i in range(self.total_months):
-            payment_date = get_last_day(add_months(self.start_date, i + 1))
+            payment_date = get_last_day(add_months(schedule_base, i))
 
             if i == self.total_months - 1:
                 repayment = round(self.loan_amount - accumulated, 3)
@@ -69,7 +123,7 @@ class EmployeeLoans(Document):
             self.append("loans_schedule", {
                 "schedule_date": payment_date,
                 "repayment_amount": repayment,
-                "accumulated_repayment_amount": accumulated
+                "accumulated_repayment_amount": round(accumulated)
             })
     
     def validate_loan_schedule(self):

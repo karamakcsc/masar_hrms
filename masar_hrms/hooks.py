@@ -275,7 +275,9 @@ fixtures = [
         "Employee-custom_privilege_details",
         "Employee-custom_is_bank_commitments",
         "Leave Type-custom_salary_deduction_rate",
-        "Leave Type-custom_salary_deduction"
+        "Leave Type-custom_salary_deduction",
+        "Company-custom_dbr_percentage",
+        "Salary Component-custom_is_dbr_applicable"
             ]
         ]
     ]},
