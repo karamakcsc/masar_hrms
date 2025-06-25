@@ -86,7 +86,7 @@ class EmployeeLoans(Document):
             dbr_salary = (total_salary * dbr_percentage) / 100
             if self.repayment_amount_month > dbr_salary:
                 frappe.throw(f"Loan Repayment Amount {self.repayment_amount_month} exceeds DBR Salary {dbr_salary}. Please adjust the repayment amount or check the DBR settings in Company.")
-                    
+      #              
     def contract_end_date_validate(self):
         if self.contract_end_date:
             if self.start_date and getdate(self.start_date) > getdate(self.contract_end_date):
