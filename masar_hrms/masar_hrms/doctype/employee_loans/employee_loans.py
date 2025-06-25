@@ -84,7 +84,6 @@ class EmployeeLoans(Document):
                             deduction_salary += comp.esc_amount
             total_salary = earining_salary - deduction_salary
             dbr_salary = (total_salary * dbr_percentage) / 100
-            frappe.msgprint(str(dbr_salary))
             if self.repayment_amount_month > dbr_salary:
                 frappe.throw(f"Loan Repayment Amount {self.repayment_amount_month} exceeds DBR Salary {dbr_salary}. Please adjust the repayment amount or check the DBR settings in Company.")
                     
