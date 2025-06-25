@@ -100,57 +100,15 @@ class EmployeeLoansManagement(Document):
 				frappe.db.set_value("Employee Loans Schedule", loan.el_ref, "schedule_date", loan.new_date)
 				frappe.msgprint(f"Loan in {loan.emp_loans_ref} and {loan.additional_salary_ref}  rescheduled successfully.", alert=True, indicator='green')
 
-	# def reschedule_loans(self):
-	# 	# self.cancel_original_loan_and_salaries()
-	# 	new_loan = self.create_rescheduled_loan()
-	# 	frappe.msgprint(f"Loan {new_loan.name} created and rescheduled successfully.", alert=True, indicator='green')
-	
-	# def cancel_original_loan_and_salaries(self):
-	# 	if not self.loans_schedule:
-	# 		frappe.throw("No loan schedule found for rescheduling.")
-
-	# 	original_loan_name = self.loans_schedule[0].emp_loans_ref
-
-	# 	for row in self.loans_schedule:
-	# 		if row.additional_salary_ref:
-	# 			ad_sal = frappe.get_doc("Additional Salary", row.additional_salary_ref)
-	# 			if ad_sal.docstatus == 1:
-	# 				ad_sal.cancel()
-
-	# 	if original_loan_name:
-	# 		loan_doc = frappe.get_doc("Employee Loans", original_loan_name)
-	# 		if loan_doc.docstatus == 1:
-	# 			original_loan_rm = loan_doc.repayment_method
-	# 			loan_doc.cancel()
-	# 	return original_loan_rm
-	# def create_rescheduled_loan(self):
-	# 	olrm = self.create_rescheduled_loan()
-	# 	new_loan = frappe.new_doc("Employee Loans")
-	# 	new_loan.employee = self.employee
-	# 	new_loan.employee_name = self.employee_name
-	# 	new_loan.company = self.company
-	# 	new_loan.loan_amount = self.loan_amount
-	# 	new_loan.repayment_method = olrm
-	# 	new_loan.posting_date = frappe.utils.nowdate()
-	# 	new_loan.start_date = min([x.new_date for x in self.loans_schedule if x.new_date])
-	# 	new_loan.total_months = self.total_months
-	# 	# new_loan.rescheduled_from = self.loans_schedule[0].emp_loans_ref if self.loans_schedule else None
-	# 	new_loan.repayment_amount_month = self.repayment_amount_month
-
-	# 	accumulated = 0
-	# 	for row in self.loans_schedule:
-	# 		repayment = row.repayment_amount
-	# 		accumulated += repayment
-	# 		new_loan.append("loans_schedule", {
-	# 			"schedule_date": row.new_date,
-	# 			"repayment_amount": repayment,
-	# 			"accumulated_repayment_amount": accumulated
-	# 		})
-
-	# 	new_loan.insert()
-	# 	new_loan.submit()
-
-	# 	return new_loan
+	def revert_reschedule_loans(self):
+		if not self.loans_schedule:
+			frappe.throw("No loans schedule found to revert.")
+		
+		for loan in self.loans_schedule:
+			if loan.additional_salary_ref and loan.schedule_date and loan.new_date:
+				frappe.db.set_value("Additional Salary", loan.additional_salary_ref, "payroll_date", loan.schedule_date)
+				frappe.db.set_value("Employee Loans Schedule", loan.el_ref, "schedule_date", loan.schedule_date)
+				frappe.msgprint(f"Loan in {loan.emp_loans_ref} and {loan.additional_salary_ref} rescheduled reverted successfully.", alert=True, indicator='green')
 
 	def set_repayment_amount(self):
 		if not self.loan_amount:
