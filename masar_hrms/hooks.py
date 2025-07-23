@@ -280,7 +280,8 @@ fixtures = [
         "Shift Type-custom_early_entry_grace_period" , 
         "Shift Type-custom_column_break_9xw3j" , 
         "Shift Type-custom_enable_late_exit_marking" , 
-        "Shift Type-custom_late_exit_grace_period"
+        "Shift Type-custom_late_exit_grace_period", 
+        "Salary Structure Assignment-custom_scm_ref"
             ]
         ]
     ]},
