@@ -5,5 +5,5 @@
 from frappe.tests.utils import FrappeTestCase
 
 
-class TestEmployeeShiftManagement(FrappeTestCase):
+class TestEmployeeShiftManagementBulk(FrappeTestCase):
 	pass

@@ -1,0 +1,339 @@
+{
+ "actions": [],
+ "autoname": "format:HR-EAP-{MM}-{####}",
+ "creation": "2025-07-21 11:49:36.239833",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_uoln",
+  "employee",
+  "employee_name",
+  "department",
+  "column_break_gyuh",
+  "company",
+  "amended_from",
+  "posting_date",
+  "date_details_section",
+  "from_date",
+  "column_break_kbim",
+  "to_date",
+  "salary_details_section",
+  "basic_salary",
+  "column_break_kalu",
+  "basic_salary_hour_rate",
+  "overtime_tab",
+  "overtime_for_working_day_section",
+  "ot_wd",
+  "ot_wd_rate",
+  "column_break_iwvu",
+  "salary_component_wd",
+  "ot_wd_time",
+  "ot_wd_amount",
+  "overtime_for_off_day_section",
+  "ot_od",
+  "ot_od_rate",
+  "column_break_thqy",
+  "salary_component_od",
+  "ot_od_time",
+  "ot_od_amount",
+  "overtime_totals_section",
+  "working_day_amount",
+  "off_day_amount",
+  "column_break_tsln",
+  "total_amount",
+  "overtime_details_tab",
+  "overtime_details_section",
+  "overtime_table",
+  "tab_2_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_uoln",
+   "fieldtype": "Section Break",
+   "label": "Employee Details"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Employee Attendance Process",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee",
+   "link_filters": "[[\"Employee\",\"is_overtime_applicable\",\"=\",1]]",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_gyuh",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fetch_if_empty": 1,
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fetch_if_empty": 1,
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "reqd": 1
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "date_details_section",
+   "fieldtype": "Section Break",
+   "label": "Date Details"
+  },
+  {
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_kbim",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "to_date",
+   "fieldtype": "Date",
+   "label": "To Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "salary_details_section",
+   "fieldtype": "Section Break",
+   "label": "Salary Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "basic_salary",
+   "fieldtype": "Float",
+   "label": "Basic Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_kalu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "description": "Hourly rate is calculated by dividing the basic salary by 30 days and the standard daily working hours (from HR Settings).",
+   "fieldname": "basic_salary_hour_rate",
+   "fieldtype": "Float",
+   "label": "Basic Salary Hour Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overtime"
+  },
+  {
+   "fieldname": "overtime_for_working_day_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime for Working Day"
+  },
+  {
+   "fieldname": "ot_wd",
+   "fieldtype": "Link",
+   "label": "Overtime Type",
+   "link_filters": "[[\"Overtime Type\",\"working_day\",\"=\",1]]",
+   "options": "Overtime Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_iwvu",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "ot_wd.rate",
+   "fetch_if_empty": 1,
+   "fieldname": "ot_wd_rate",
+   "fieldtype": "Float",
+   "label": "Overtime Rate",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ot_wd.salary_component",
+   "fetch_if_empty": 1,
+   "fieldname": "salary_component_wd",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ot_wd_time",
+   "fieldtype": "Duration",
+   "label": "Overtime Time",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "ot_wd_amount",
+   "fieldtype": "Float",
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_for_off_day_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime for Off Day"
+  },
+  {
+   "fieldname": "ot_od",
+   "fieldtype": "Link",
+   "label": "Overtime Type",
+   "link_filters": "[[\"Overtime Type\",\"off_day\",\"=\",1]]",
+   "options": "Overtime Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_thqy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "ot_od.salary_component",
+   "fetch_if_empty": 1,
+   "fieldname": "salary_component_od",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "ot_od.rate",
+   "fetch_if_empty": 1,
+   "fieldname": "ot_od_rate",
+   "fieldtype": "Float",
+   "label": "Overtime Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ot_od_time",
+   "fieldtype": "Duration",
+   "label": "Overtime Time",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "ot_od_amount",
+   "fieldtype": "Float",
+   "label": "Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_totals_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime Totals"
+  },
+  {
+   "default": "0",
+   "fieldname": "working_day_amount",
+   "fieldtype": "Float",
+   "label": "Working Day Amount",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "off_day_amount",
+   "fieldtype": "Float",
+   "label": "Off Day Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tsln",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overtime_details_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overtime Details"
+  },
+  {
+   "fieldname": "overtime_details_section",
+   "fieldtype": "Section Break",
+   "label": "Overtime Details"
+  },
+  {
+   "fieldname": "overtime_table",
+   "fieldtype": "Table",
+   "options": "EAP Overtime Detail",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "group": "Additional Salary",
+   "link_doctype": "Additional Salary",
+   "link_fieldname": "ref_docname"
+  }
+ ],
+ "modified": "2025-07-21 18:06:52.711002",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Employee Attendance Process",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

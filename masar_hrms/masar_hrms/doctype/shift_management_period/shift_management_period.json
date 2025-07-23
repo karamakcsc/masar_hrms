@@ -1,0 +1,90 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-20 14:55:38.385485",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "shift_date",
+  "shift_day",
+  "column_break_vwyl",
+  "shift_type",
+  "shift_details_section",
+  "start_time",
+  "column_break_xgql",
+  "end_time"
+ ],
+ "fields": [
+  {
+   "fieldname": "shift_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Shift Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_vwyl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "shift_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Shift Type",
+   "options": "Shift Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "shift_details_section",
+   "fieldtype": "Section Break",
+   "label": "Shift Details"
+  },
+  {
+   "fetch_from": "shift_type.start_time",
+   "fetch_if_empty": 1,
+   "fieldname": "start_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Start Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_xgql",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "shift_type.end_time",
+   "fetch_if_empty": 1,
+   "fieldname": "end_time",
+   "fieldtype": "Time",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "End Time",
+   "read_only": 1
+  },
+  {
+   "fieldname": "shift_day",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Shift Day",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-20 15:06:46.241807",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Shift Management Period",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

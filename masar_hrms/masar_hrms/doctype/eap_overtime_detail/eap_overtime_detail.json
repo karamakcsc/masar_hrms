@@ -1,0 +1,128 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-21 12:15:08.705775",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_details_section",
+  "employee",
+  "column_break_tans",
+  "employee_name",
+  "section_break_njrk",
+  "attendance",
+  "attendance_date",
+  "column_break_uzac",
+  "working_day",
+  "off_day",
+  "section_break_oqjz",
+  "time_in",
+  "time_out",
+  "column_break_xnwd",
+  "overtime"
+ ],
+ "fields": [
+  {
+   "fieldname": "employee_details_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Details"
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tans",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_njrk",
+   "fieldtype": "Section Break",
+   "label": "Attendance Details"
+  },
+  {
+   "fieldname": "attendance",
+   "fieldtype": "Link",
+   "label": "Attendance",
+   "options": "Attendance"
+  },
+  {
+   "fieldname": "attendance_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "label": "Attendance Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_uzac",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "off_day",
+   "fieldtype": "Check",
+   "label": "Off Day ",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_oqjz",
+   "fieldtype": "Section Break",
+   "label": "Time Details"
+  },
+  {
+   "fieldname": "time_in",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Time In",
+   "read_only": 1
+  },
+  {
+   "fieldname": "time_out",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "Time Out",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_xnwd",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "overtime",
+   "fieldtype": "Duration",
+   "in_list_view": 1,
+   "label": "Overtime",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "working_day",
+   "fieldtype": "Check",
+   "label": "Working Day",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-21 12:15:41.892572",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "EAP Overtime Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

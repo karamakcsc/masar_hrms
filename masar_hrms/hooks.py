@@ -104,16 +104,12 @@ app_license = "MIT"
 #	}
 # }
 doc_events = {
-#  	# "Salary Slip": {
-# 	# 	"before_insert": "masar_hrms.utilities.hourly_leave_calc.SetHourlyLeaveForEmployee"
-# 	# }
 	"Employee": {
 		"validate": "masar_hrms.custom.employee.employee.validate"
 	}
  }
 doctype_js = {
    "Employee" : "custom/employee/employee.js",
-   "Salary Structure Assignment" : "custom/salary_structure_assignment/salary_structure_assignment.js",
    "Goal" : "custom/goal/goal.js",
    "Appraisal" : "custom/appraisal/appraisal.js"
  }
@@ -277,7 +273,14 @@ fixtures = [
         "Leave Type-custom_salary_deduction_rate",
         "Leave Type-custom_salary_deduction",
         "Company-custom_dbr_percentage",
-        "Salary Component-custom_is_dbr_applicable"
+        "Salary Component-custom_is_dbr_applicable", 
+        ## Add by Mahmoud
+        "Shift Type-custom_early_entry__late_exit_settings_for_overtime", 
+        "Shift Type-custom_enable_early_entry_marking", 
+        "Shift Type-custom_early_entry_grace_period" , 
+        "Shift Type-custom_column_break_9xw3j" , 
+        "Shift Type-custom_enable_late_exit_marking" , 
+        "Shift Type-custom_late_exit_grace_period"
             ]
         ]
     ]},
@@ -297,37 +300,3 @@ fixtures = [
         ]
     }
 ]
-
-
-# override_doctype_class = {
-#     # "Salary Slip" : "masar_hrms.override._salary_slip.SlarySlip",
-#     # "Payroll Entry" :"masar_hrms.override._payroll_entry.PayrollEntry"
-# }
-# from masar_hrms.override import _leave_application
-# from hrms.hr.doctype.leave_application import leave_application
-# leave_application.get_leaves_for_period = _leave_application.get_leaves_for_period
-
-
-
-# from masar_hrms.override import _salary_slip
-# from hrms.payroll.doctype.salary_slip.salary_slip import SalarySlip
-
-# SalarySlip.compute_taxable_earnings_for_year = _salary_slip.compute_taxable_earnings_for_year
-# SalarySlip.calculate_variable_tax = _salary_slip.calculate_variable_tax
-# SalarySlip.calculate_tax_by_tax_slab = _salary_slip.calculate_tax_by_tax_slab
-# SalarySlip.eval_tax_slab_condition = _salary_slip.eval_tax_slab_condition
-
-
-# from masar_hrms.override import _payroll_entry
-# from hrms.payroll.doctype.payroll_entry import payroll_entry
-# from hrms.payroll.doctype.payroll_entry.payroll_entry import PayrollEntry 
-
-# # payroll_entry.get_filter_condition = _payroll_entry.get_filter_condition
-# PayrollEntry.fill_employee_details = _payroll_entry.fill_employee_details
-# # PayrollEntry.make_filters = _payroll_entry.make_filters
-
-# from masar_hrms.override import _shift_assignment
-# from hrms.hr.doctype.shift_assignment import shift_assignment
-# from hrms.hr.doctype.shift_assignment.shift_assignment import ShiftAssignment
-
-# ShiftAssignment.throw_overlap_error = _shift_assignment.throw_overlap_error

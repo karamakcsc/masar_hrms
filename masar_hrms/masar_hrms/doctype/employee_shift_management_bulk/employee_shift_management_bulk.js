@@ -1,7 +1,7 @@
 // Copyright (c) 2025, KCSC and contributors
 // For license information, please see license.txt
 
-frappe.ui.form.on("Employee Shift Management", {
+frappe.ui.form.on("Employee Shift Management Bulk", {
 	refresh:function(frm) {
         ShiftsPeriodButton(frm);
 	},        
@@ -34,9 +34,8 @@ frappe.ui.form.on("Employee Shift Management", {
 	},      
     end_date:function(frm) {
         ShiftsPeriodButton(frm);
-	},      
+	}  
 });
-
 frappe.ui.form.on("Shift Management Period", {
     shift_date: function(frm, cdt, cdn) {
         const row = locals[cdt][cdn]; 
@@ -54,6 +53,17 @@ frappe.ui.form.on("Shift Management Period", {
 });
 
 function ShiftsPeriodButton(frm) {
+    if ( frm.doc.docstatus === 0){
+    frm.add_custom_button(__("Employees"), function () {
+            frappe.call({
+                doc: frm.doc,
+                method: 'insert_employees',
+                callback: function (r) {
+                    frm.refresh_field('employees');
+                }
+            });
+        }, __("Insert"));
+    }
     const required_fields = [
         'saturday_st',
         'sunday_st',

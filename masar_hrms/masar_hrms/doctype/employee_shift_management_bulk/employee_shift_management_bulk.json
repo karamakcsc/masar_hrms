@@ -1,42 +1,47 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:HR-ESM-{employee}-{####}",
- "creation": "2025-07-20 14:46:40.220150",
+ "autoname": "format:HR-ESMB-{#####}",
+ "creation": "2025-07-20 18:09:56.849406",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
-  "details_section",
-  "employee",
-  "employee_name",
-  "department",
-  "column_break_aibm",
+  "section_break_dbyb",
+  "company",
+  "column_break_xnsz",
   "posting_date",
   "amended_from",
-  "status",
-  "bulk_ref",
   "dates_section",
   "start_date",
-  "column_break_uifc",
+  "column_break_aheu",
   "end_date",
-  "section_break_ekgl",
+  "section_break_hlhf",
   "saturday_st",
   "tuesday_st",
   "friday_st",
-  "column_break_vxdc",
+  "column_break_ffyd",
   "sunday_st",
   "wednesday_st",
-  "column_break_ggfl",
+  "column_break_kryp",
   "monday_st",
   "thursday_st",
-  "details_tab",
-  "section_break_2hl9",
+  "shifts_period_tab",
   "shifts_period",
-  "connections_tab"
+  "employees_tab",
+  "filters_section",
+  "department",
+  "branch",
+  "column_break_lfjj",
+  "designation",
+  "work_type",
+  "grade",
+  "section_break_bvaz",
+  "employees",
+  "tab_2_tab"
  ],
  "fields": [
   {
-   "fieldname": "section_break_2hl9",
+   "fieldname": "section_break_dbyb",
    "fieldtype": "Section Break"
   },
   {
@@ -44,23 +49,20 @@
    "fieldtype": "Link",
    "label": "Amended From",
    "no_copy": 1,
-   "options": "Employee Shift Management",
+   "options": "Employee Shift Management Bulk",
    "print_hide": 1,
    "read_only": 1,
    "search_index": 1
   },
   {
-   "fieldname": "employee",
+   "fieldname": "company",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
-   "label": "Employee",
-   "link_filters": "[[\"Employee\",\"status\",\"=\",\"Active\"]]",
-   "options": "Employee",
+   "label": "Company",
+   "options": "Company",
    "reqd": 1
   },
   {
-   "fieldname": "column_break_aibm",
+   "fieldname": "column_break_xnsz",
    "fieldtype": "Column Break"
   },
   {
@@ -71,18 +73,6 @@
    "read_only": 1
   },
   {
-   "fieldname": "details_tab",
-   "fieldtype": "Tab Break",
-   "label": "Shifts Period"
-  },
-  {
-   "fetch_from": "employee.employee_name",
-   "fieldname": "employee_name",
-   "fieldtype": "Data",
-   "label": "Employee Name",
-   "read_only": 1
-  },
-  {
    "fieldname": "dates_section",
    "fieldtype": "Section Break",
    "label": "Dates"
@@ -90,23 +80,26 @@
   {
    "fieldname": "start_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Start Date",
    "reqd": 1
   },
   {
-   "fieldname": "column_break_uifc",
+   "fieldname": "column_break_aheu",
    "fieldtype": "Column Break"
   },
   {
    "fieldname": "end_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "End Date",
    "reqd": 1
   },
   {
-   "fieldname": "section_break_ekgl",
-   "fieldtype": "Section Break",
-   "label": "Shifts"
+   "fieldname": "section_break_hlhf",
+   "fieldtype": "Section Break"
   },
   {
    "fieldname": "saturday_st",
@@ -116,9 +109,8 @@
    "reqd": 1
   },
   {
-   "fieldname": "details_section",
-   "fieldtype": "Section Break",
-   "label": "Details"
+   "fieldname": "column_break_ffyd",
+   "fieldtype": "Column Break"
   },
   {
    "fieldname": "sunday_st",
@@ -135,15 +127,17 @@
    "reqd": 1
   },
   {
+   "fieldname": "tab_2_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
    "fieldname": "tuesday_st",
    "fieldtype": "Link",
    "label": "Tuesday Shift Type",
    "options": "Shift Type",
    "reqd": 1
-  },
-  {
-   "fieldname": "column_break_vxdc",
-   "fieldtype": "Column Break"
   },
   {
    "fieldname": "wednesday_st",
@@ -153,15 +147,8 @@
    "reqd": 1
   },
   {
-   "fieldname": "column_break_ggfl",
+   "fieldname": "column_break_kryp",
    "fieldtype": "Column Break"
-  },
-  {
-   "fieldname": "thursday_st",
-   "fieldtype": "Link",
-   "label": "Thursday Shift Type",
-   "options": "Shift Type",
-   "reqd": 1
   },
   {
    "fieldname": "friday_st",
@@ -171,57 +158,91 @@
    "reqd": 1
   },
   {
+   "fieldname": "thursday_st",
+   "fieldtype": "Link",
+   "label": "Thursday Shift Type",
+   "options": "Shift Type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "shifts_period_tab",
+   "fieldtype": "Tab Break",
+   "label": "Shifts Period"
+  },
+  {
    "fieldname": "shifts_period",
    "fieldtype": "Table",
    "label": "Shifts Period",
    "options": "Shift Management Period"
   },
   {
-   "default": "Draft",
-   "fieldname": "status",
-   "fieldtype": "Select",
-   "label": "Status",
-   "options": "Draft\nQueued\nSubmitted\nCancelled",
-   "read_only": 1
+   "fieldname": "employees_tab",
+   "fieldtype": "Tab Break",
+   "label": "Employees"
   },
   {
-   "fetch_from": "employee.department",
-   "fetch_if_empty": 1,
+   "fieldname": "employees",
+   "fieldtype": "Table",
+   "options": "Employee Details"
+  },
+  {
+   "fieldname": "filters_section",
+   "fieldtype": "Section Break",
+   "label": "Filter Employees"
+  },
+  {
    "fieldname": "department",
    "fieldtype": "Link",
-   "in_list_view": 1,
-   "in_standard_filter": 1,
    "label": "Department",
-   "options": "Department",
-   "read_only": 1
+   "options": "Department"
   },
   {
-   "fieldname": "connections_tab",
-   "fieldtype": "Tab Break",
-   "label": "Connections",
-   "show_dashboard": 1
-  },
-  {
-   "fieldname": "bulk_ref",
+   "fieldname": "branch",
    "fieldtype": "Link",
-   "label": "From Bulk",
-   "options": "Employee Shift Management Bulk",
-   "read_only": 1
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "column_break_lfjj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation"
+  },
+  {
+   "fieldname": "work_type",
+   "fieldtype": "Select",
+   "label": "Work Type",
+   "options": "\nDaily\nMonthly"
+  },
+  {
+   "fieldname": "grade",
+   "fieldtype": "Link",
+   "label": "Grade",
+   "options": "Employee Grade"
+  },
+  {
+   "fieldname": "section_break_bvaz",
+   "fieldtype": "Section Break",
+   "label": "Employee Details"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [
   {
-   "group": "Shift Assignment",
-   "link_doctype": "Shift Assignment",
-   "link_fieldname": "custom_employee_shift_management"
+   "group": "Employee Shift Management",
+   "link_doctype": "Employee Shift Management",
+   "link_fieldname": "bulk_ref"
   }
  ],
- "modified": "2025-07-20 18:22:46.510272",
+ "modified": "2025-07-20 18:43:35.582785",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
- "name": "Employee Shift Management",
+ "name": "Employee Shift Management Bulk",
  "naming_rule": "Expression",
  "owner": "Administrator",
  "permissions": [

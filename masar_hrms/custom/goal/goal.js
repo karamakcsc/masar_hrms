@@ -28,20 +28,3 @@ frappe.ui.form.on('Goal', {
         }
     });
   }
-
-//   function removeSubmit(frm) {
-//     frappe.call({
-//         method: "masar_hrms.custom.goal.goal.get_manager",
-//         args: {
-//             emp: frm.doc.employee
-//         },
-//         callback: function(r) {
-//             if (r.message) {
-//                 var manager_user = r.message;
-//                 // if (frappe.session.user !== manager_user || !frappe.user.has_role('HR User') || !frappe.user.has_role('HR Manager')) {
-//                     $('.primary-action').prop('disabled', true);
-//                 // }
-//             }
-//         }
-//     }) 
-//   }
