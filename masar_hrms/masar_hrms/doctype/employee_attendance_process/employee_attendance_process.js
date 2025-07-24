@@ -44,11 +44,13 @@ function GetStandardDatePeriod(frm) {
             doc: frm.doc,
             method: 'get_standard_date_period',
             callback: function(r) {
+                if (r.message){
                 frm.doc.from_date = r.message.from_date;
                 frm.doc.to_date = r.message.to_date;
                 frm.refresh_field('from_date');
                 frm.refresh_field('to_date');
             }
+        }
         });
     }
 }
@@ -57,18 +59,19 @@ function GetOvertimeTypeAsDefualt(frm){
         doc:frm.doc ,  
         method: 'get_overtime_type_as_defualt', 
         callback: function(r){ 
-            if(!frm.doc.ot_wd) {
-                frm.doc.ot_wd = r.message.wd_type;
+                frm.doc.ot_wd = r.message.ot_wd;
+                frm.doc.salary_component_wd = r.message.salary_component_wd;
+                frm.doc.ot_wd_rate = r.message.ot_wd_rate;
+                frm.doc.ot_od = r.message.ot_od;
+                frm.doc.salary_component_od = r.message.salary_component_od;
+                frm.doc.ot_od_rate = r.message.ot_od_rate;
                 frm.refresh_field('ot_wd');
                 frm.refresh_field('ot_wd_rate');
                 frm.refresh_field('salary_component_wd');
-            }
-            if(!frm.doc.ot_od) {
-                frm.doc.ot_od = r.message.od_type;
                 frm.refresh_field('ot_od');
                 frm.refresh_field('ot_od_rate');
                 frm.refresh_field('salary_component_od');
-            }
         }
     })
 }
+

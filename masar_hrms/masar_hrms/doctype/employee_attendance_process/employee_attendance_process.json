@@ -13,6 +13,7 @@
   "company",
   "amended_from",
   "posting_date",
+  "eapb_ref",
   "date_details_section",
   "from_date",
   "column_break_kbim",
@@ -301,6 +302,13 @@
    "fieldtype": "Table",
    "options": "EAP Overtime Detail",
    "read_only": 1
+  },
+  {
+   "fieldname": "eapb_ref",
+   "fieldtype": "Link",
+   "label": "Employee Attendance Process Bulk",
+   "options": "Employee Attendance Process Bulk",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -312,7 +320,7 @@
    "link_fieldname": "ref_docname"
   }
  ],
- "modified": "2025-07-21 18:06:52.711002",
+ "modified": "2025-07-24 09:20:48.666481",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Attendance Process",

@@ -7,7 +7,7 @@ from frappe.model.document import Document
 from frappe import db , qb , get_doc , throw , _ , bold 
 
 class EmployeeAttendanceProcess(Document):
-	def numder_of_day(self):
+	def number_of_day(self):
 		return 30 
 	def get_basic_salary_component(self): 
 		basic = db.get_value('Company' , self.company , 'custom_basic_salary_component')
@@ -36,7 +36,7 @@ class EmployeeAttendanceProcess(Document):
 			standard_working_hours = 8 ###### if not define defualt is 8 hours
 		hour_rate = float(
 			( basic_salary[0][0] if basic_salary else 0) / 
-			(standard_working_hours * self.numder_of_day() )
+			(standard_working_hours * self.number_of_day() )
 		)
 		return {
 			'basic_salary' : basic_salary[0][0] if basic_salary else 0  , 
@@ -57,7 +57,7 @@ class EmployeeAttendanceProcess(Document):
 		}
 	@frappe.whitelist()
 	def get_overtime_type_as_defualt(self): 
-		ot , wd_type , od_type = qb.DocType('Overtime Type') , None , None 
+		ot = qb.DocType('Overtime Type')
 		working_day_result = qb.from_(ot).select(ot.name , ot.salary_component , ot.rate).where(ot.working_day == 1).run()
 		if len(working_day_result) == 1: 
 			self.ot_wd = working_day_result[0][0]
@@ -68,7 +68,14 @@ class EmployeeAttendanceProcess(Document):
 			self.ot_od = off_day_reuslt[0][0]
 			self.salary_component_od =  off_day_reuslt[0][1]
 			self.ot_od_rate =  off_day_reuslt[0][2]
-		return { 'wd_type' : wd_type , 'od_type' : od_type}
+		return { 
+          'ot_wd' : self.ot_wd , 
+          'salary_component_wd' : self.salary_component_wd , 
+          'ot_wd_rate' : self.ot_wd_rate , 
+          'ot_od' : self.ot_od , 
+          'salary_component_od' : self.salary_component_od , 
+          'ot_od_rate' : self.ot_od_rate
+          }
 	def validate(self): 
 		self.employee_validate()
 		self.date_validate()
