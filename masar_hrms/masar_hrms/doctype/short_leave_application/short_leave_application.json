@@ -14,21 +14,17 @@
   "column_break_japz",
   "posting_date",
   "company",
-  "salary_slip",
-  "shift_assignment",
-  "leave_balance",
-  "leave_balance_hh",
   "leave_time_section",
+  "leave_date",
   "salary_deduction",
   "balance_deduction",
   "none_deduction",
   "leave_type",
-  "leave_date",
-  "shift_start",
-  "end_shift",
-  "in_shift",
   "salary_component",
   "column_break_ekfe",
+  "shift_assignment",
+  "shift_type",
+  "leave_balance",
   "from_time",
   "leave_duration",
   "to_time",
@@ -76,11 +72,11 @@
    "options": "Salary Component"
   },
   {
-   "depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 ",
+   "depends_on": "balance_deduction",
    "fieldname": "leave_type",
    "fieldtype": "Link",
    "label": "Leave Type",
-   "mandatory_depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 ",
+   "mandatory_depends_on": "balance_deduction",
    "options": "Leave Type"
   },
   {
@@ -100,32 +96,24 @@
    "reqd": 1
   },
   {
-   "fieldname": "salary_slip",
-   "fieldtype": "Link",
-   "label": "Salary Slip",
-   "options": "Salary Slip",
-   "read_only": 1
-  },
-  {
-   "depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 ",
    "fieldname": "from_time",
    "fieldtype": "Time",
    "label": "From Time",
-   "read_only_depends_on": "eval: doc.shift_start ==1 || doc.end_shift ==1 "
+   "reqd": 1
   },
   {
-   "depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 ",
    "fieldname": "leave_duration",
    "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
    "label": "Leave Duration",
-   "mandatory_depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 "
+   "reqd": 1
   },
   {
-   "depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 ",
    "fieldname": "to_time",
    "fieldtype": "Time",
    "label": "To Time",
-   "read_only_depends_on": "eval:( doc.shift_start + doc.end_shift + doc.in_shift) == 1 "
+   "read_only": 1
   },
   {
    "fieldname": "reason",
@@ -182,6 +170,7 @@
    "label": "Employee Details"
   },
   {
+   "fetch_from": "employee.leave_approver",
    "fieldname": "leave_approver",
    "fieldtype": "Link",
    "label": "Leave Approver",
@@ -190,11 +179,10 @@
   },
   {
    "default": "Today",
-   "depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 ",
    "fieldname": "leave_date",
    "fieldtype": "Date",
    "label": "Leave Date",
-   "mandatory_depends_on": "eval: (doc.salary_deduction + doc.balance_deduction + doc.none_deduction )==1 "
+   "reqd": 1
   },
   {
    "default": "0",
@@ -205,13 +193,12 @@
    "label": "Salary Deduction"
   },
   {
-   "default": "1",
+   "default": "0",
    "depends_on": "eval: (doc.salary_deduction == 0 && doc.none_deduction == 0 )",
    "description": "Deduct from Employee Balance",
    "fieldname": "balance_deduction",
    "fieldtype": "Check",
-   "label": "Balance Deduction",
-   "read_only": 1
+   "label": "Balance Deduction"
   },
   {
    "default": "0",
@@ -220,30 +207,6 @@
    "fieldname": "none_deduction",
    "fieldtype": "Check",
    "label": "None Deduction"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:((doc.end_shift==0 && doc.in_shift == 0 ) && (doc.leave_type != null)) && doc.shift_assignment != null",
-   "description": "Start Work after the Shift Start",
-   "fieldname": "shift_start",
-   "fieldtype": "Check",
-   "label": "Shift Start"
-  },
-  {
-   "default": "0",
-   "depends_on": "eval:((doc.shift_start==0 && doc.in_shift == 0 ) && (doc.leave_type != null)) && doc.shift_assignment != null",
-   "description": "Leave before the Shift End",
-   "fieldname": "end_shift",
-   "fieldtype": "Check",
-   "label": "End Shift"
-  },
-  {
-   "default": "1",
-   "depends_on": "eval:(doc.end_shift==0 && doc.shift_start == 0 ) && (doc.leave_type != null)",
-   "description": "Leave During Shift",
-   "fieldname": "in_shift",
-   "fieldtype": "Check",
-   "label": "In Shift"
   },
   {
    "depends_on": "employee",
@@ -296,9 +259,10 @@
    "read_only": 1
   },
   {
-   "fieldname": "leave_balance_hh",
-   "fieldtype": "Float",
-   "label": "Leave Balance - Hours",
+   "fieldname": "shift_type",
+   "fieldtype": "Link",
+   "label": "Shift Type",
+   "options": "Shift Type",
    "read_only": 1
   }
  ],
@@ -311,7 +275,7 @@
    "link_fieldname": "custom_esla_ref"
   }
  ],
- "modified": "2025-05-28 15:28:25.243146",
+ "modified": "2025-07-27 12:11:20.105449",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",

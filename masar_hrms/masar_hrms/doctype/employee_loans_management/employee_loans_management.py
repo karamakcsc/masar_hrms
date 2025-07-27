@@ -10,6 +10,7 @@ from masar_hrms.masar_hrms.doctype.employee_loans.employee_loans import Employee
 set_loan_months = EmployeeLoans.set_loan_months
 contract_end_date_validate = EmployeeLoans.contract_end_date_validate
 dbr_validate = EmployeeLoans.dbr_validate
+max_loan_months_validate = EmployeeLoans.max_loan_months_validate
 
 
 class EmployeeLoansManagement(Document):
@@ -19,6 +20,7 @@ class EmployeeLoansManagement(Document):
 			self.validate_new_date()
 		if self.management_type == "Restructure":
 			set_loan_months(self)
+			max_loan_months_validate(self)
 			self.overlapping_loans()
 	def on_submit(self):
 		if self.management_type == "Reschedule":

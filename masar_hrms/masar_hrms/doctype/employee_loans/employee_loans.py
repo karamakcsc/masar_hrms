@@ -11,6 +11,7 @@ class EmployeeLoans(Document):
     def validate(self):
         self.set_loan_months()
         self.set_repayment_amount()
+        self.max_loan_months_validate()
         self.contract_end_date_validate()
         self.dbr_validate()
         self.create_loan_schedule()
@@ -60,7 +61,14 @@ class EmployeeLoans(Document):
                 if not self.start_this_month:
                     months += 1
                 self.end_date = get_last_day(add_months(getdate(self.start_date), months - 1))
-            
+    
+    def max_loan_months_validate(self):
+        max_total_months = frappe.db.get_value("Company", self.company, "custom_max_loan_duration")
+        if not max_total_months:
+            frappe.throw("Please set the Maximum Loan Duration in Company settings.")
+        if self.total_months > max_total_months:
+            frappe.throw(f"Total Months {self.total_months} exceeds Maximum Loan Duration {max_total_months} months. Please adjust the loan duration or check the Company settings.")
+    
     def dbr_validate(self):
         dbr_percentage = frappe.db.get_value("Company", self.company, "custom_dbr_percentage")
         if not dbr_percentage:
