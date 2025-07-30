@@ -133,7 +133,29 @@ class EmployeeLoansManagement(Document):
 				if not self.start_this_month:
 					months += 1
 				self.end_date = get_last_day(add_months(getdate(self.start_date), months - 1))
-				
+	
+	def total_loan_validate(self):
+		over_allowance_percent = frappe.db.get_value("Company", self.company, "custom_over_salary_allowance")
+		if not over_allowance_percent:
+			frappe.throw("Please set the Over Salary Restriction in Company settings.")
+		if self.employee:
+			emp_doc = frappe.get_doc("Employee", self.employee)
+			earining_salary = 0
+			for comp in emp_doc.custom_salary_component_table:
+				if comp.is_active:
+					if comp.type:
+						if comp.type == "Earning" and comp_doc.is_social_security_applicable:
+							earining_salary += comp.esc_amount
+					else:
+						comp_doc = frappe.get_doc("Salary Component", comp.salary_component)
+						if comp_doc.type == "Earning" and comp_doc.is_social_security_applicable:
+							earining_salary += comp.esc_amount
+			total_salary = earining_salary
+			osa_salary = (total_salary * over_allowance_percent) / 100
+			if self.final_loan_amount > osa_salary:
+				frappe.throw(f"Loan amount {self.final_loan_amount} exceeds over salary allowance {osa_salary}. Please adjust the loan amount or check the OSA settings in Company.")
+
+ 
 	def overlapping_loans(self):
 		if not self.loan_amount or not self.start_date:
 			frappe.throw("Please set both Loan Amount and Start Date.")
@@ -176,6 +198,7 @@ class EmployeeLoansManagement(Document):
 		self.set_repayment_amount()
 		contract_end_date_validate(self)
 		dbr_validate(self)
+		self.total_loan_validate()
 		base_monthly = round(self.repayment_amount_month, 3)
 		accumulated = 0
 		start_date = getdate(self.start_date)

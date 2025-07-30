@@ -282,7 +282,8 @@ fixtures = [
         "Shift Type-custom_enable_late_exit_marking" , 
         "Shift Type-custom_late_exit_grace_period", 
         "Salary Structure Assignment-custom_scm_ref",
-        "Company-custom_max_loan_duration"
+        "Company-custom_max_loan_duration",
+        "Company-custom_over_salary_allowance"
             ]
         ]
     ]},

@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-28 11:23:16.678866",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "short_leave_application",
+  "salary_component",
+  "column_break_swah",
+  "shift_type",
+  "section_break_otto",
+  "leave_duration",
+  "column_break_qjnw",
+  "total_amount"
+ ],
+ "fields": [
+  {
+   "fieldname": "short_leave_application",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Short Leave Application",
+   "link_filters": "[[\"Short Leave Application\",\"salary_deduction\",\"=\",1],[\"Short Leave Application\",\"balance_deduction\",\"=\",0],[\"Short Leave Application\",\"none_deduction\",\"=\",0]]",
+   "options": "Short Leave Application"
+  },
+  {
+   "fieldname": "column_break_swah",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "short_leave_application.shift_type",
+   "fieldname": "shift_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Shift Type",
+   "options": "Shift Type",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_otto",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fetch_from": "short_leave_application.leave_duration",
+   "fieldname": "leave_duration",
+   "fieldtype": "Duration",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Leave Duration",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_qjnw",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fetch_from": "short_leave_application.total_amount",
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Total Amount",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "short_leave_application.salary_component",
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "label": "Salary Component",
+   "options": "Salary Component",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2025-07-28 11:42:07.365742",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "EAP Leave Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

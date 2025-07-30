@@ -80,6 +80,7 @@ class EmployeeAttendanceProcess(Document):
 		self.employee_validate()
 		self.date_validate()
 		self.calculate_overtime()
+		self.calculate_leaves()
 	def employee_validate(self): 
 		basic_salary = self.get_salary_details()['basic_salary']
 		if basic_salary in [0 , None]: 
@@ -216,10 +217,10 @@ class EmployeeAttendanceProcess(Document):
 	def on_submit(self): 
 		self.employee_validate()
 		self.date_validate()
-		self.crate_additional_salary()
-  
-  
-	def crate_additional_salary(self): 
+		self.create_additional_salary_for_overtime()
+		self.create_additional_salary_for_leaves()
+
+	def create_additional_salary_for_overtime(self): 
 		if self.salary_component_wd  == self.salary_component_od and self.total_amount != 0  :
 			frappe.new_doc('Additional Salary').update(
 			frappe._dict({
@@ -276,10 +277,58 @@ class EmployeeAttendanceProcess(Document):
 				})
 				).insert().submit()
 			
-
+	def get_salary_leaves(self):
+		return frappe.db.sql(f"""
+                SELECT sla.name , sla.shift_type , sla.leave_duration , sla.total_amount  , sla.salary_component
+				FROM `tabShort Leave Application` sla 
+				WHERE sla.leave_date BETWEEN '{self.from_date}' AND '{self.to_date}'
+				AND sla.docstatus =1 AND sla.status = 'Approved'
+				AND sla.employee = '{self.employee}'          
+                    """, as_dict=True)
 					
-			
-		
+	def calculate_leaves(self):
+		leaves , totals = self.get_salary_leaves() , 0 
+		for l in leaves:
+			self.append('leaves' , {
+				'short_leave_application': l.get('name'),
+				'shift_type': l.get('shift_type'),
+    			'salary_component': l.get('salary_component'),
+				'leave_duration': l.get('leave_duration'),
+				'total_amount': l.get('total_amount')
+			})
+			totals += l.get('total_amount', 0)	
+		self.total_leaves_amount = totals
+  
+  
+	def create_additional_salary_for_leaves(self):
+		if len(self.leaves) > 0:
+			component_totals = {}
+			for l in self.leaves:
+				if l.total_amount != 0:
+					component = l.salary_component
+					component_totals.setdefault(component, 0)
+					component_totals[component] += l.total_amount
+			for component, total_amount in component_totals.items():
+				frappe.new_doc('Additional Salary').update(
+					frappe._dict({
+						'employee': self.employee,
+						'employee_name': self.employee_name,
+						'department': self.department,
+						'company': self.company,
+						'is_recurring': 0,
+						'payroll_date': self.to_date,
+						'salary_component': component,
+						'type': "Deduction",
+						'amount': total_amount,
+						'deduct_full_tax_on_selected_payroll_date': 1,
+						'overwrite_salary_structure_amount': 1,
+						'ref_doctype': self.doctype,
+						'ref_docname': self.name
+					})
+				).insert().submit()
+    
+
+            
 
 
 			

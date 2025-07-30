@@ -45,6 +45,12 @@
   "overtime_details_tab",
   "overtime_details_section",
   "overtime_table",
+  "leaves_tab",
+  "leaves",
+  "section_break_zwmn",
+  "column_break_vouq",
+  "column_break_dcmq",
+  "total_leaves_amount",
   "tab_2_tab"
  ],
  "fields": [
@@ -309,6 +315,36 @@
    "label": "Employee Attendance Process Bulk",
    "options": "Employee Attendance Process Bulk",
    "read_only": 1
+  },
+  {
+   "fieldname": "leaves_tab",
+   "fieldtype": "Tab Break",
+   "label": "Leaves"
+  },
+  {
+   "fieldname": "leaves",
+   "fieldtype": "Table",
+   "label": "Leaves",
+   "options": "EAP Leave Detail",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_zwmn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_vouq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "column_break_dcmq",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_leaves_amount",
+   "fieldtype": "Float",
+   "label": "Total Leaves Amount",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -320,7 +356,7 @@
    "link_fieldname": "ref_docname"
   }
  ],
- "modified": "2025-07-24 09:20:48.666481",
+ "modified": "2025-07-28 11:29:29.527276",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Attendance Process",

@@ -11,6 +11,7 @@ class EmployeeLoans(Document):
     def validate(self):
         self.set_loan_months()
         self.set_repayment_amount()
+        self.total_loan_validate()
         self.max_loan_months_validate()
         self.contract_end_date_validate()
         self.dbr_validate()
@@ -66,8 +67,9 @@ class EmployeeLoans(Document):
         max_total_months = frappe.db.get_value("Company", self.company, "custom_max_loan_duration")
         if not max_total_months:
             frappe.throw("Please set the Maximum Loan Duration in Company settings.")
-        if self.total_months > max_total_months:
-            frappe.throw(f"Total Months {self.total_months} exceeds Maximum Loan Duration {max_total_months} months. Please adjust the loan duration or check the Company settings.")
+        if self.total_months:
+            if self.total_months > max_total_months:
+                frappe.throw(f"Total Months {self.total_months} exceeds Maximum Loan Duration {max_total_months} months. Please adjust the loan duration or check the Company settings.")
     
     def dbr_validate(self):
         dbr_percentage = frappe.db.get_value("Company", self.company, "custom_dbr_percentage")
@@ -94,7 +96,29 @@ class EmployeeLoans(Document):
             dbr_salary = (total_salary * dbr_percentage) / 100
             if self.repayment_amount_month > dbr_salary:
                 frappe.throw(f"Loan Repayment Amount {self.repayment_amount_month} exceeds DBR Salary {dbr_salary}. Please adjust the repayment amount or check the DBR settings in Company.")
-      #              
+    
+    def total_loan_validate(self):
+        over_allowance_percent = frappe.db.get_value("Company", self.company, "custom_over_salary_allowance")
+        if not over_allowance_percent:
+            frappe.throw("Please set the Over Salary Restriction in Company settings.")
+        if self.employee:
+            emp_doc = frappe.get_doc("Employee", self.employee)
+            earining_salary = 0
+            for comp in emp_doc.custom_salary_component_table:
+                if comp.is_active:
+                    if comp.type:
+                        if comp.type == "Earning" and comp_doc.is_social_security_applicable:
+                            earining_salary += comp.esc_amount
+                    else:
+                        comp_doc = frappe.get_doc("Salary Component", comp.salary_component)
+                        if comp_doc.type == "Earning" and comp_doc.is_social_security_applicable:
+                            earining_salary += comp.esc_amount
+            total_salary = earining_salary
+            osa_salary = (total_salary * over_allowance_percent) / 100
+            if self.loan_amount > osa_salary:
+                frappe.throw(f"Loan amount {self.loan_amount} exceeds over salary allowance {osa_salary}. Please adjust the loan amount or check the OSA settings in Company.")
+        
+        
     def contract_end_date_validate(self):
         if self.contract_end_date:
             if self.start_date and getdate(self.start_date) > getdate(self.contract_end_date):

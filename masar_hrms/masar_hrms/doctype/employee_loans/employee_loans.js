@@ -15,7 +15,6 @@ function getBasicSalary(frm) {
             method: "get_basic_salary",
             callback: function(r) {
                 if (r.message) {
-                    console.log("Basic Salary: ", r.message);
                     frm.set_value("basic_salary", r.message);
                     frm.refresh_field("basic_salary");
                 }

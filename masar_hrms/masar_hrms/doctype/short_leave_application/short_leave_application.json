@@ -21,6 +21,9 @@
   "none_deduction",
   "leave_type",
   "salary_component",
+  "leave_salary",
+  "hourly_rate",
+  "total_amount",
   "column_break_ekfe",
   "shift_assignment",
   "shift_type",
@@ -68,6 +71,7 @@
    "fieldtype": "Link",
    "in_list_view": 1,
    "label": "Salary Component",
+   "link_filters": "[[\"Salary Component\",\"type\",\"=\",\"Deduction\"]]",
    "mandatory_depends_on": "salary_deduction",
    "options": "Salary Component"
   },
@@ -213,7 +217,8 @@
    "fieldname": "shift_assignment",
    "fieldtype": "Link",
    "label": "Shift Assignment",
-   "options": "Shift Assignment"
+   "options": "Shift Assignment",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_fxxa",
@@ -253,6 +258,7 @@
    "show_dashboard": 1
   },
   {
+   "depends_on": "balance_deduction",
    "fieldname": "leave_balance",
    "fieldtype": "Float",
    "label": "Leave Balance - Days",
@@ -263,6 +269,27 @@
    "fieldtype": "Link",
    "label": "Shift Type",
    "options": "Shift Type",
+   "read_only": 1
+  },
+  {
+   "depends_on": "salary_deduction",
+   "fieldname": "leave_salary",
+   "fieldtype": "Float",
+   "label": "Leave Salary",
+   "read_only": 1
+  },
+  {
+   "depends_on": "salary_deduction",
+   "fieldname": "hourly_rate",
+   "fieldtype": "Float",
+   "label": "Hourly Rate",
+   "read_only": 1
+  },
+  {
+   "depends_on": "salary_deduction",
+   "fieldname": "total_amount",
+   "fieldtype": "Float",
+   "label": "Total Amount",
    "read_only": 1
   }
  ],
@@ -275,7 +302,7 @@
    "link_fieldname": "custom_esla_ref"
   }
  ],
- "modified": "2025-07-27 12:11:20.105449",
+ "modified": "2025-07-28 10:57:58.290093",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Short Leave Application",
