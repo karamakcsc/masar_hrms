@@ -283,7 +283,14 @@ fixtures = [
         "Shift Type-custom_late_exit_grace_period", 
         "Salary Structure Assignment-custom_scm_ref",
         "Company-custom_max_loan_duration",
-        "Company-custom_over_salary_allowance"
+        "Company-custom_over_salary_allowance",
+        "Employee-custom_section_break_efpn4", 
+        "Employee-custom_work_permit_type", 
+        "Employee-custom_column_break_0htwd" , 
+        "Employee-custom_name_of_entity" , 
+        "Employee-custom_wp_start_date" , 
+        "Employee-custom_wp_end_date" , 
+        "Employee-custom_tax_number"
             ]
         ]
     ]},

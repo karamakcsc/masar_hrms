@@ -1,104 +1,74 @@
 # Copyright (c) 2025, KCSC and contributors
 # For license information, please see license.txt
 
-import frappe
+import frappe , calendar
 
 def execute(filters=None):
     return get_columns(), get_data(filters)
 
 def get_data(filters):
-    conditions = " 1=1 "
-    _from, to = filters.get('from'), filters.get('to')
-    if filters.get('employee'):
-        conditions += f" AND te.employee = '{filters.get('employee')}'"
-    if filters.get('year'):
-        conditions += f" AND YEAR(tss.posting_date) = '{filters.get('year')}'"
-    if filters.get('month'):
-        conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
-    if _from and to:
-        conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
-    
-    sql = frappe.db.sql(f"""
-        WITH current_month AS (
-            SELECT 
-                tss.employee,
-                tss.name,
-                tss.posting_date,
-                tss.payment_days
-            FROM `tabSalary Slip` tss
-            INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-            WHERE tss.docstatus = 1 
-            AND tss.payment_days >= 16
-            AND tsd.salary_component = 'Social Security'
-        ),
-        prev_month_data AS (
-            SELECT 
-                cm.employee,
-                cm.posting_date,
-                CASE WHEN prev.name IS NULL THEN 0 ELSE 1 END as has_prev_slip,
-                COALESCE(prev.payment_days, 0) as prev_payment_days,
-                CASE WHEN prev_ss.parent IS NULL THEN 0 ELSE 1 END as has_prev_ss
-            FROM current_month cm
-            LEFT JOIN `tabSalary Slip` prev ON prev.employee = cm.employee 
-                AND prev.posting_date = LAST_DAY(DATE_SUB(cm.posting_date, INTERVAL 1 MONTH))
-                AND prev.docstatus = 1
-            LEFT JOIN `tabSalary Detail` prev_ss ON prev.name = prev_ss.parent
-                AND prev_ss.salary_component = 'Social Security'
-        )
-        SELECT
-            te.name AS `Employee Number`,
-            te.employee_name AS `Employee Name`,
-            CASE
-                WHEN te.nationality <> 'Jordan' THEN te.personal_no
-                ELSE te.national_no
-            END AS `National No`,
-            te.custom_id_card_no AS `ID Card No`,
-            te.date_of_birth AS `Date Of Birth`,
-            te.date_of_joining AS `Date Of Joining`,
-            te.social_security_number AS `Social Security Number`,
-            te.social_security_salary AS `Social Security Salary`,
-            tss.total_working_days AS `Working Days`,
-            tss.payment_days AS `Payment Days`,
-            tc.custom_establishment_number AS `Establishment No`,
-            te.designation AS `Designation`,
-            CASE
-                WHEN te.custom_is_hazard = 1 THEN td.hazard_code
-                ELSE ""
-            END AS `Hazard Code`
-        FROM tabEmployee te
-        INNER JOIN `tabSalary Slip` tss ON tss.employee = te.name 
-        INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-        INNER JOIN `tabCompany` tc ON te.company = tc.name
-        INNER JOIN `tabDesignation` td ON te.designation = td.name
-        INNER JOIN prev_month_data pmd ON pmd.employee = te.name 
-            AND pmd.posting_date = tss.posting_date
-        WHERE
-            {conditions}
-            AND tss.docstatus = 1 
-            AND tss.payment_days >= 16 
-            AND tsd.salary_component = 'Social Security'
-            AND (
-                pmd.has_prev_slip = 0 
-                OR (pmd.prev_payment_days < 16 OR pmd.has_prev_ss = 0)
+    year = int(filters.get("year"))
+    month_name = filters.get("month")
+    month = list(calendar.month_name).index(month_name)
+    current_month = f"{year}-{month:02d}"
+    if month == 1:
+        prev_month = 12
+        prev_year = year - 1
+    else:
+        prev_month = month - 1
+        prev_year = year
+    emp_filter = ''
+    if filters.get("employee"): 
+        emp_filter = f""" AND e.name = '{filters.get("employee")}' """
+    previous_month = f"{prev_year}-{prev_month:02d}"
+    data = frappe.db.sql(f"""
+        SELECT DISTINCT
+            e.national_no,
+            e.social_security_number,
+            YEAR(e.date_of_birth) AS birth_year,
+            MONTH(e.date_of_birth) AS birth_month,
+            DAY(e.date_of_birth) AS birth_day,
+            ss.employee,
+            e.employee_name,
+            e.social_security_salary,
+            CASE 
+                WHEN e.custom_is_hazard = 1 AND td.hazard_code IS NULL THEN 'ERROR CODE'
+                WHEN e.custom_is_hazard = 1 THEN td.hazard_code
+                ELSE ''
+             END AS hazard_code
+        FROM `tabSalary Slip` ss
+        INNER JOIN `tabSalary Detail` sd 
+            ON ss.name = sd.parent
+            AND sd.salary_component = 'Social Security'
+            AND sd.amount > 0
+        INNER JOIN `tabEmployee` e ON ss.employee = e.name
+        LEFT JOIN `tabDesignation` td ON td.name = e.designation
+        WHERE 
+            ss.docstatus = 1 {emp_filter}
+            AND DATE_FORMAT(ss.posting_date, '%Y-%m') = '{current_month}'
+            AND ss.employee NOT IN (
+                SELECT ss2.employee
+                FROM `tabSalary Slip` ss2
+                INNER JOIN `tabSalary Detail` sd2
+                    ON ss2.name = sd2.parent
+                    AND sd2.salary_component = 'Social Security'
+                    AND sd2.amount > 0
+                WHERE
+                    ss2.docstatus = 1
+                    AND DATE_FORMAT(ss2.posting_date, '%Y-%m') = '{previous_month}'
             )
-        GROUP BY tss.name;
-    """)
-    
-    return sql
+    """, as_dict=True)
+    return data
 
 def get_columns():
-    return[
-        "Employee: Link/Employee:200",
-        "Employee Name: Data:200",
-        "National No/Personal No: Data:200",
-        "ID Card No: Data:200",
-        "Date of Birth: Date:200",
-        "Date Of Joining: Data:200",
-        "Social Security No: Data:200",
-        "Social Security Salary: Data:200",
-        "Working Days: Data:200",
-        "Payment Days: Data:200",
-        "Establishment No: Data:200",
-        "Designation: Data:200",
-        "Hazard Code: Data:200",
+    return [
+        {"label": "National No", "fieldname": "national_no", "fieldtype": "Data", "width": 150},
+        {"label": "Social Security Number", "fieldname": "social_security_number", "fieldtype": "Data", "width": 180},
+        {"label": "Birth Year", "fieldname": "birth_year", "fieldtype": "Int", "width": 150},
+        {"label": "Birth Month", "fieldname": "birth_month", "fieldtype": "Int", "width": 150},
+        {"label": "Birth Day", "fieldname": "birth_day", "fieldtype": "Int", "width": 150},
+        {"label": "Employee", "fieldname": "employee", "fieldtype": "Link", "options": "Employee", "width": 150},
+        {"label": "Employee Name" , "fieldname" : "employee_name" , "fieldtype" : "Data" , "width" : 200},
+        {"label": "Social Security Salary", "fieldname": "social_security_salary", "fieldtype": "Currency", "width": 150},
+        {"label": "Hazard Code", "fieldname": "hazard_code", "fieldtype": "Data", "width": 120},
     ]

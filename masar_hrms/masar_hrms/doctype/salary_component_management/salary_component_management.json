@@ -23,6 +23,7 @@
   "column_break_iwgj",
   "basic_salary_component",
   "basic_salary",
+  "tax_number",
   "overtime",
   "is_overtime_applicable",
   "overtime_ceiling",
@@ -280,6 +281,11 @@
    "fieldtype": "Date",
    "label": "Social Security Date",
    "mandatory_depends_on": "is_ss_applicable"
+  },
+  {
+   "fieldname": "tax_number",
+   "fieldtype": "Data",
+   "label": "Tax Number"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -299,7 +305,7 @@
    "table_fieldname": "history"
   }
  ],
- "modified": "2025-07-23 12:57:16.570667",
+ "modified": "2025-08-05 16:21:54.010430",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Salary Component Management",

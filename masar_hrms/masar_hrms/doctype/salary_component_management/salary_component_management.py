@@ -43,7 +43,8 @@ class SalaryComponentManagement(Document):
 			"overtime_ceiling" : emp_doc.overtime_ceiling , 
 			"basic_salary_component" : basic_salary_component,
 			"basic_salary" : basic_salary , 
-			"components" : components
+			"components" : components , 
+			"tax_number": emp_doc.custom_tax_number
 		})
 		self.calculate_salry_details_section()
 		return 1 
@@ -139,7 +140,9 @@ class SalaryComponentManagement(Document):
 			"social_security_amount" : self.social_security_amount,
 			"is_overtime_applicable" : self.is_overtime_applicable, 
 			"overtime_ceiling" : self.overtime_ceiling , 
-			"custom_salary_component_table" : sc_tab
+			"custom_salary_component_table" : sc_tab , 
+   			"custom_tax_number" : self.tax_number,
+   
 		}).save()
 	def define_html_component(self):
 		style = """
@@ -213,6 +216,7 @@ class SalaryComponentManagement(Document):
                 "edit_ss_salary" : self.edit_ss_salary,
                 "social_security_salary" : self.social_security_salary,
                 "social_security_amount" : self.social_security_amount,
+                "tax_number": self.tax_number,
                 "create_assignment" : self.create_assignment , 
                 "salary_structure" : self.salary_structure, 
                 "ssa_from_date" : self.ssa_from_date, 
