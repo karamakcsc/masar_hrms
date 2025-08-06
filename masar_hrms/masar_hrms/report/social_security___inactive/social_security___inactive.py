@@ -31,30 +31,23 @@ def get_data(filters):
             ss.employee,
             e.employee_name,
             e.social_security_salary,
+            ss.payment_days,
             CASE 
                 WHEN e.custom_is_hazard = 1 AND td.hazard_code IS NULL THEN 'ERROR CODE'
                 WHEN e.custom_is_hazard = 1 THEN td.hazard_code
                 ELSE ''
              END AS hazard_code
         FROM `tabSalary Slip` ss
-        INNER JOIN `tabSalary Detail` sd 
-            ON ss.name = sd.parent
-            AND sd.salary_component = 'Social Security'
-            AND sd.amount > 0
         INNER JOIN `tabEmployee` e ON ss.employee = e.name
         LEFT JOIN `tabDesignation` td ON td.name = e.designation
         WHERE 
-            ss.docstatus = 1 {emp_filter}
+            ss.docstatus = 1  AND ss.payment_days >= 16
             AND DATE_FORMAT(ss.posting_date, '%Y-%m') = '{previous_month}'
             AND ss.employee NOT IN (
                 SELECT ss2.employee
                 FROM `tabSalary Slip` ss2
-                INNER JOIN `tabSalary Detail` sd2
-                    ON ss2.name = sd2.parent
-                    AND sd2.salary_component = 'Social Security'
-                    AND sd2.amount > 0
                 WHERE
-                    ss2.docstatus = 1
+                    ss2.docstatus = 1 AND ss2.payment_days >= 16 {emp_filter}
                     AND DATE_FORMAT(ss2.posting_date, '%Y-%m') = '{current_month}'
             )
     """, as_dict=True)
