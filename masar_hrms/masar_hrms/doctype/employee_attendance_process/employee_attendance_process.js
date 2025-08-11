@@ -32,8 +32,12 @@ function GetSalaryDetailsForEmployee(frm) {
         callback: function(r) {
             frm.doc.basic_salary = r.message.basic_salary;
             frm.doc.basic_salary_hour_rate = r.message.hour_rate;
+            frm.doc.shortage_hour_rate = r.message.shortage_hour_rate;
+            frm.doc.earning_salary = r.message.earning_salary;
             frm.refresh_field('basic_salary');
             frm.refresh_field('basic_salary_hour_rate');
+            frm.refresh_field('shortage_hour_rate');
+            frm.refresh_field('earning_salary');
         }
     });
 }

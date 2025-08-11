@@ -99,7 +99,7 @@ class ShortLeaveApplication(Document):
                     title=_("Deduction Type Required")
                 )
             if self.balance_deduction:
-                self.leave_balance_submittion()
+                self.calculate_leave_application()
             
     def leave_approver_setting_validation(self):
         hr_setting = frappe.get_doc('HR Settings')
@@ -121,17 +121,7 @@ class ShortLeaveApplication(Document):
     def status_validation(self):
         if self.status not in ['Approved' , 'Rejected']:
             frappe.throw('''Only Leave Applications with status 'Approved' and 'Rejected' can be submitted''')        
-    
-    def leave_balance_submittion(self):
-        if self.leave_duration and self.leave_duration > 14400:
-            self.full_day_leave_application()
-        else:
-            self.calculate_leave_application()
 
-    def full_day_leave_application(self):
-        self.create_leave_application()
-        
-        
     def get_standard_working_hours_in_seconds(self):
         hr_settings_doc = frappe.get_doc('HR Settings')
         standard_working_hours = float(hr_settings_doc.standard_working_hours)

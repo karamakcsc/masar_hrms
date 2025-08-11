@@ -20,8 +20,10 @@
   "to_date",
   "salary_details_section",
   "basic_salary",
+  "earning_salary",
   "column_break_kalu",
   "basic_salary_hour_rate",
+  "shortage_hour_rate",
   "overtime_tab",
   "overtime_for_working_day_section",
   "ot_wd",
@@ -45,12 +47,15 @@
   "overtime_details_tab",
   "overtime_details_section",
   "overtime_table",
-  "leaves_tab",
-  "leaves",
+  "shortage_tab",
   "section_break_zwmn",
   "column_break_vouq",
+  "total_shortage",
+  "shortage_salary_component",
   "column_break_dcmq",
-  "total_leaves_amount",
+  "total_shortage_amount",
+  "leaves_tab",
+  "leaves",
   "tab_2_tab"
  ],
  "fields": [
@@ -206,6 +211,8 @@
   {
    "fieldname": "ot_wd_time",
    "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
    "label": "Overtime Time",
    "read_only": 1
   },
@@ -253,6 +260,8 @@
   {
    "fieldname": "ot_od_time",
    "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
    "label": "Overtime Time",
    "read_only": 1
   },
@@ -319,7 +328,7 @@
   {
    "fieldname": "leaves_tab",
    "fieldtype": "Tab Break",
-   "label": "Leaves"
+   "label": "Shortage Details"
   },
   {
    "fieldname": "leaves",
@@ -341,10 +350,48 @@
    "fieldtype": "Column Break"
   },
   {
-   "fieldname": "total_leaves_amount",
+   "default": "0",
+   "description": "Hourly Rate is calculated by dividing the earning salary by 30 days and the standard daily working hours (from HR Settings).",
+   "fieldname": "shortage_hour_rate",
    "fieldtype": "Float",
-   "label": "Total Leaves Amount",
+   "label": "Shortage Hour Rate",
    "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "earning_salary",
+   "fieldtype": "Float",
+   "label": "Earning Salary",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_shortage",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "Total Shortage",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "total_shortage_amount",
+   "fieldtype": "Float",
+   "label": "Total Shortage Amount"
+  },
+  {
+   "fieldname": "shortage_tab",
+   "fieldtype": "Tab Break",
+   "label": "Shortage"
+  },
+  {
+   "default": "Attendance Shortage",
+   "fieldname": "shortage_salary_component",
+   "fieldtype": "Link",
+   "label": "Shortage Salary Component",
+   "link_filters": "[[\"Salary Component\",\"type\",\"=\",\"Deduction\"]]",
+   "mandatory_depends_on": "eval: doc.total_shortage_amount > 0.001",
+   "options": "Salary Component"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -356,7 +403,7 @@
    "link_fieldname": "ref_docname"
   }
  ],
- "modified": "2025-07-28 11:29:29.527276",
+ "modified": "2025-08-11 14:00:47.096195",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Attendance Process",
