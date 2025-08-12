@@ -452,8 +452,8 @@ class EmployeeAttendanceProcess(Document):
 					'short_leave_application': sla_name if sla_name else None,
 					'leave_duration': leave_duration if leave_duration else None
 				})
-				self.total_shortage_amount += amount_this_day
-				self.total_shortage += total_this_day
+				self.total_shortage_amount =flt(self.total_shortage_amount) + flt(amount_this_day)
+				self.total_shortage =flt(self.total_shortage)  + flt(total_this_day)
 
 
 	def get_overlap_seconds(self, start1, end1, start2, end2):
