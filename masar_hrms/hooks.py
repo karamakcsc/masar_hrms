@@ -290,7 +290,8 @@ fixtures = [
         "Employee-custom_name_of_entity" , 
         "Employee-custom_wp_start_date" , 
         "Employee-custom_wp_end_date" , 
-        "Employee-custom_tax_number"
+        "Employee-custom_tax_number" , 
+        "Employee-custom_work_permit_number"
             ]
         ]
     ]},
