@@ -241,7 +241,6 @@ fixtures = [
 		"Employee-bank",
 		"Employee-column_break_alwbp",
 		"Employee-bank_branch",
-		### "Employee-iban",
 		"Salary Structure Assignment-change_basic_amount",
 		"Salary Structure Assignment-change_amount",
 		"Salary Structure Assignment-new_basic",
@@ -250,7 +249,6 @@ fixtures = [
         "Salary Structure Assignment-old_basic",
         "Salary Structure Assignment-change_basic_amount",
         "Salary Structure Assignment-remark",
-		"Employee-basic_salary",
         "Payroll Entry-work_type",
         "Shift Assignment-custom_employee_shift_management", 
         "Employee-custom_column_break_bba4s",
@@ -263,8 +261,6 @@ fixtures = [
         "Employee-custom_id_card_no",
         "Company-custom_establishment_number", 
         "Salary Slip-custom_work_type",
-        "Employee-custom_latest_education",
-        "Employee-custom_major",
         "Employee-custom_is_engineer",
         "Leave Application-custom_esla_ref",
         "custom_is_privilege_applicable",
@@ -291,7 +287,26 @@ fixtures = [
         "Employee-custom_wp_start_date" , 
         "Employee-custom_wp_end_date" , 
         "Employee-custom_tax_number" , 
-        "Employee-custom_work_permit_number"
+        "Employee-custom_work_permit_number",
+        "Employee Education-custom_year_of_graduation",
+        "Employee Education-custom_major_ar",
+        "Employee Education-custom_major",
+        "Employee Education-custom_level_degree",
+        "Employee Education-custom_section_break_b9jvo",
+        "Employee Education-custom_universitycollege_ar",
+        "Employee Education-custom_universitycollege",
+        "Employee Education-custom_column_break_mye6s",
+        "Employee Education-custom_remarks",
+        "Employee Education-custom_section_break_ooccl",
+        "Employee Education-custom_column_break_sfiya",
+        "Employee Education-custom_section_break_elwxw",
+        "Employee Education-custom_training_provider",
+        "Employee Education-custom_training_provider_ar",
+        "Employee Education-custom_certificate_name",
+        "Employee Education-custom_column_break_x2d6g",
+        "Employee Education-custom_issue_date",
+        "Employee Education-custom_total_hours",
+        "Employee Education-custom_is_certificate"
             ]
         ]
     ]},
@@ -305,7 +320,13 @@ fixtures = [
                     "Leave Application-half_day-permlevel",
                     "Shift Request-status-permlevel",
                     "Appraisal-appraisal_kra-permlevel",
-                    "Employee External Work History-total_experience-read_only"
+                    "Employee External Work History-total_experience-read_only",
+                    "Employee Education-school_univ-hidden",
+                    "Employee Education-qualification-hidden",
+                    "Employee Education-level-hidden",
+                    "Employee Education-maj_opt_subj-hidden",
+                    "Employee Education-class_per-hidden",
+                    "Employee Education-year_of_passing-hidden"
                 ]
             ]
         ]

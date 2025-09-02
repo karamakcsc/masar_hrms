@@ -84,6 +84,14 @@ frappe.query_reports["Bank Transfer Report"] = {
 			"options": "Bank Branch",
 			"width": 100,
 			"reqd": 0,
+		}, 
+		{
+			"fieldname":"with_temp",
+			"label":__("With Template"),
+			"fieldtype": "Select",
+			"options":'\nHOUSING BANK FOR TRADE AND FINANCE\nAhli Bank\nCapital Bank',
+			"width": 100,
+			"reqd": 0
 		}
 
 ]
