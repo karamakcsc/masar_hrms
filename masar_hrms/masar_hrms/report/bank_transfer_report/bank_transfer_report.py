@@ -20,6 +20,7 @@ def get_data(filters):
 	if(filters.get('des')):conditions += f" AND tss.designation LIKE '%{filters.get('des')}' "
 	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
+	if(filters.get('work_type')):conditions += f" AND te.work_type = '{filters.get('work_type')}' "
 	if filters.get('with_temp'):
 		if filters.get('with_temp') == 'HOUSING BANK FOR TRADE AND FINANCE':
 			select = """
