@@ -18,6 +18,14 @@ class WorkInjury(Document):
 		self.create_leave()
 	def on_update_after_submit(self):
 		self.create_leave()
+  
+  
+	def deduct_salary(self):
+		if self.total_days and self.total_days > 0 and self.total_days <= 3:
+			self.create_leave()
+		elif self.total_days and self.total_days > 3:
+			self.create_leave()
+			pass
 
 	def validate_days(self):
 		if self.injuries:
@@ -30,15 +38,16 @@ class WorkInjury(Document):
 	
 	@frappe.whitelist()
 	def set_num_of_days_total(self):
-		self.total_days = sum(injury.no_of_days for injury in self.injuries) if self.injuries else 0
+		self.total_days = flt(sum(flt(injury.no_of_days) for injury in self.injuries))
 
 	@frappe.whitelist()
 	def set_cost_total(self):
-			self.total_cost_of_treatment = sum(injury.cost_of_treatment for injury in self.injuries) if self.injuries else 0
-	
+			self.total_cost_of_treatment = flt(sum(flt(injury.cost_of_treatment) for injury in self.injuries))
+
+	@frappe.whitelist()
 	def set_totals(self):
-		self.total_days = sum(injury.no_of_days for injury in self.injuries) if self.injuries else 0
-		self.total_cost_of_treatment = sum(injury.cost_of_treatment for injury in self.injuries) if self.injuries else 0
+		self.total_days = flt(sum(flt(injury.no_of_days) for injury in self.injuries))
+		self.total_cost_of_treatment = flt(sum(flt(injury.cost_of_treatment) for injury in self.injuries))
 
 	def number_of_day(self):
 		return 30 
@@ -55,8 +64,7 @@ class WorkInjury(Document):
    		).run()
 		self.rate_for_leaves = float(
 			flt(earning_salary[0][0] if earning_salary else 0) / flt(self.number_of_day())
-		) if earning_salary else 0
-
+		)
 	@frappe.whitelist()
 	def set_end_date(self):
 		if not self.injury_start_date:
@@ -68,9 +76,10 @@ class WorkInjury(Document):
 		for idx, row in enumerate(self.injuries):
 			if row.no_of_days:
 				row.start_date = start_date
-				row.end_date = add_days(start_date, row.no_of_days) # if start date 01-01-2025 and no of days 1 the end date 02-01-2025
-				start_date = add_days(row.end_date, 1)  # save the start date as end date + 1
-
+				'if start date 01-01-2025 and no of days 1 the end date 01-01-2025'
+				row.end_date = add_days(start_date, row.no_of_days - 1)
+				'save the start date as end date + 1'
+				start_date = add_days(row.end_date, 1)
 	def create_leave(self):
 		if not self.injuries:
 			frappe.throw(_("No injuries found to create leave application."))
@@ -89,7 +98,8 @@ class WorkInjury(Document):
 			new_leave.status = "Approved"
 			new_leave.posting_date = self.posting_date
 			new_leave.leave_approver = get_leave_approver(self.employee)
-			new_leave.save()
+			new_leave.custom_work_injury_ref = self.name
+			new_leave.insert()
 			new_leave.submit()
 			
 			frappe.msgprint(_(f"""Leave Application {bold(new_leave.name)} created for Injury Leave from {start_date} 
@@ -118,6 +128,8 @@ def get_leave_type():
 		.where(lt.custom_is_injury == 1)
 		.select(lt.name)
 	).run(as_dict=True)
+	if not leave_type:
+		frappe.throw(_("No Injury Leave Type found. Please set a Leave Type as Injury."))
 	if leave_type:
 		if len(leave_type) > 1:
 			frappe.throw(_("More than one Injury Leave Type found. Please ensure only one is set as Injury."))

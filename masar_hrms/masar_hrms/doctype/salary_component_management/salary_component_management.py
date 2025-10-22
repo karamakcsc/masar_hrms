@@ -26,12 +26,13 @@ class SalaryComponentManagement(Document):
 		components = list()
 		for r in emp_doc.custom_salary_component_table:
 			if r.salary_component == db.get_value('Company' , self.company , 'custom_basic_salary_component') and r.is_active == 1: 
-				basic_salary_component , basic_salary = r.salary_component , r.esc_amount
+				basic_salary_component , basic_salary , b_from_date = r.salary_component , r.esc_amount , r.date
 			elif r.is_active == 1: 
 				components.append({
 					"salary_component" : r.salary_component, 
 					"amount" : r.esc_amount , 
-					"remarks": r.remarks
+					"remarks": r.remarks , 
+					"from_date" : r.date
 				})
 		self.update({
 			"is_ss_applicable":emp_doc.is_social_security_applicable,
@@ -43,6 +44,7 @@ class SalaryComponentManagement(Document):
 			"overtime_ceiling" : emp_doc.overtime_ceiling , 
 			"basic_salary_component" : basic_salary_component,
 			"basic_salary" : basic_salary , 
+			"b_from_date" : b_from_date,
 			"components" : components , 
 			"tax_number": emp_doc.custom_tax_number
 		})
@@ -62,11 +64,11 @@ class SalaryComponentManagement(Document):
 					ss_salry += c.amount
 			elif c_type == 'Deduction': 
 				total_deduction += c.amount
-		if self.edit_ss_salary == 0: 
-			self.social_security_salary = ss_salry
+		# if self.edit_ss_salary == 0: 
+		# 	self.social_security_salary = ss_salry
 		self.earning_salary = total_earning
 		self.deduction_salary = total_deduction
-		self.social_security_amount = self.social_security_salary * ss_rate /100
+		# self.social_security_amount = self.social_security_salary * ss_rate /100
 
 
 	def check_scm_exists_date(self):
@@ -98,8 +100,8 @@ class SalaryComponentManagement(Document):
 		if not self.basic_salary or self.basic_salary <= 0:
 			throw("Basic salary cannot be zero.", title=_("Validation Error"))
 
-		if self.is_ss_applicable and self.social_security_salary <= 0:
-			throw("Social Security Salary cannot be zero.", title=_("Validation Error"))
+		# if self.is_ss_applicable and self.social_security_salary <= 0:
+		# 	throw("Social Security Salary cannot be zero.", title=_("Validation Error"))
 
 	def validate(self): 
 		self.check_scm_exists_date()
@@ -115,7 +117,7 @@ class SalaryComponentManagement(Document):
 		"salary_component" : self.basic_salary_component , 
 		"is_active" : 1 , 
 		"esc_amount" : self.basic_salary , 
-		"date" : self.from_date , 
+		"date" : self.b_from_date , 
 		"remarks" : "Basic Salary Component"
 		}]
 		for r in self.components: 
@@ -123,7 +125,7 @@ class SalaryComponentManagement(Document):
 			"salary_component" : r.salary_component , 
 			"is_active" : 1 , 
 			"esc_amount" : r.amount , 
-			"date" : self.from_date , 
+			"date" : r.from_date , 
 			"remarks" : r.remarks
 			})
 		return sc_tab
@@ -136,8 +138,8 @@ class SalaryComponentManagement(Document):
 			"social_security_number" : self.social_security_number, 
 			"tax_type" : self.tax_type,
 			"social_security_date" : self.ss_date, 
-			"social_security_salary" : self.social_security_salary, 
-			"social_security_amount" : self.social_security_amount,
+			# "social_security_salary" : self.social_security_salary, 
+			# "social_security_amount" : self.social_security_amount,
 			"is_overtime_applicable" : self.is_overtime_applicable, 
 			"overtime_ceiling" : self.overtime_ceiling , 
 			"custom_salary_component_table" : sc_tab , 
@@ -159,6 +161,7 @@ class SalaryComponentManagement(Document):
 		html+= """                  <th scope="col" class="first-column">Salary Component</th>"""
 		html+= """                  <th scope="col" class="text-right">Amount</th> """
 		html+= """                  <th scope="col" class="text-right">Remarks</th> """
+		html+= """                  <th scope="col" class="text-right">From Date</th> """  
 		html+= """              </tr> """ 
 		html+= """          </thead> """
 		html += "           <tbody>"
@@ -167,6 +170,7 @@ class SalaryComponentManagement(Document):
 			html += f"              <td>{sal.salary_component}</td>"
 			html += f"""            <td class="text-right">{sal.amount}</td>"""
 			html += f"""            <td class="text-right">{sal.remarks}</td>"""
+			html += f"""            <td class="text-right">{sal.from_date}</td>"""
 			html += "           </tr>"
 		html += "           </tbody>"
 		html += """     </table>
@@ -208,14 +212,15 @@ class SalaryComponentManagement(Document):
                 "ss_date" : self.ss_date, 
                 "basic_salary_component": self.basic_salary_component,
                 "basic_salary" : self.basic_salary,
+                "b_from_date" : self.b_from_date, 
                 "is_overtime_applicable" : self.is_overtime_applicable, 
                 "overtime_ceiling" : self.overtime_ceiling, 
                 "editor" : html,
                 "earning_salary" : self.earning_salary, 
                 "deduction_salary" : self.deduction_salary,
-                "edit_ss_salary" : self.edit_ss_salary,
-                "social_security_salary" : self.social_security_salary,
-                "social_security_amount" : self.social_security_amount,
+                # "edit_ss_salary" : self.edit_ss_salary,
+                # "social_security_salary" : self.social_security_salary,
+                # "social_security_amount" : self.social_security_amount,
                 "tax_number": self.tax_number,
                 "create_assignment" : self.create_assignment , 
                 "salary_structure" : self.salary_structure, 
@@ -231,7 +236,7 @@ class SalaryComponentManagement(Document):
 				"salary_component" : c.get('salary_component') , 
 				"is_active" : c.get("is_active") , 
 				"amount" : c.get("esc_amount") , 
-				"from_date" : self.from_date , 
+				"from_date" : c.get("date") , 
 				"remarks" : c.get("remarks") , 
 				"salary_component_management" : self.name
 			})

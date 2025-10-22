@@ -12,19 +12,8 @@ frappe.ui.form.on("Work Injury", {
         })
 	},
     refresh: function(frm) {
-        frm.fields_dict["injuries"].grid.grid_rows.forEach(function(grid_row) {
-            let row = grid_row.doc;
-
-            if (row.is_calc) {
-                grid_row.toggle_editable(false);
-                grid_row.can_delete = false;
-            } else {
-                grid_row.toggle_editable(true);
-                grid_row.can_delete = true;
-            }
-        });
-
-        frm.fields_dict["injuries"].grid.refresh();
+        cannot_delete_table_row(frm);
+        set_totals(frm);
     }
 });
 
@@ -54,18 +43,25 @@ frappe.ui.form.on("Work Injury Detail", {
             }
         })
     },
-    is_calc: function(frm, cdt, cdn) {
-        let row = locals[cdt][cdn];
-        let grid_row = frm.fields_dict["injuries"].grid.get_row(cdn);
-
-        if (row.is_calc) {
-            grid_row.toggle_editable(false);
-            grid_row.can_delete = false;
-        } else {
-            grid_row.toggle_editable(true);
-            grid_row.can_delete = true;
-        }
-
-        frm.fields_dict["injuries"].grid.refresh();
-    }
 });
+
+function cannot_delete_table_row(frm) {
+    frm.doc.injuries.forEach(row => {
+        if (row.is_calc === 1) {
+            frm.set_df_property("injuries", "cannot_delete_rows", true);
+        } else {
+            frm.set_df_property("injuries", "cannot_delete_rows", false);
+        }
+    });
+}
+
+function set_totals(frm) {
+    frappe.call({
+            doc: frm.doc,
+            method: "set_totals",
+            callback: function(r) {
+                frm.refresh_field("total_days");
+                frm.refresh_field("total_cost_of_treatment");
+            }
+        })
+}

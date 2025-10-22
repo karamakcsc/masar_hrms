@@ -19,6 +19,7 @@
   "column_break_iwgj",
   "basic_salary_component",
   "basic_salary",
+  "b_from_date",
   "tax_number",
   "overtime",
   "is_overtime_applicable",
@@ -28,11 +29,8 @@
   "editor",
   "salary_details_section",
   "earning_salary",
-  "edit_ss_salary",
-  "social_security_salary",
   "column_break_pnit",
   "deduction_salary",
-  "social_security_amount",
   "section_break_efkk",
   "create_assignment",
   "salary_structure",
@@ -158,20 +156,6 @@
    "read_only": 1
   },
   {
-   "default": "0",
-   "fieldname": "edit_ss_salary",
-   "fieldtype": "Check",
-   "label": "Edit Social Security Salary"
-  },
-  {
-   "default": "0",
-   "fieldname": "social_security_salary",
-   "fieldtype": "Float",
-   "label": "Social Security Salary",
-   "mandatory_depends_on": "edit_ss_salary",
-   "read_only_depends_on": "eval: doc.edit_ss_salary == 0"
-  },
-  {
    "fieldname": "column_break_pnit",
    "fieldtype": "Column Break"
   },
@@ -180,13 +164,6 @@
    "fieldname": "deduction_salary",
    "fieldtype": "Float",
    "label": "Deduction Salary",
-   "read_only": 1
-  },
-  {
-   "default": "0",
-   "fieldname": "social_security_amount",
-   "fieldtype": "Float",
-   "label": "Social Security Amount",
    "read_only": 1
   },
   {
@@ -262,17 +239,25 @@
    "fieldname": "tax_number",
    "fieldtype": "Data",
    "label": "Tax Number"
+  },
+  {
+   "depends_on": "is_ss_applicable",
+   "fieldname": "b_from_date",
+   "fieldtype": "Date",
+   "label": "Basic Salary From Date",
+   "mandatory_depends_on": "is_ss_applicable"
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-08-05 16:25:08.088851",
+ "modified": "2025-10-22 16:07:36.901322",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "SCM History Detail",
  "owner": "Administrator",
  "permissions": [],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

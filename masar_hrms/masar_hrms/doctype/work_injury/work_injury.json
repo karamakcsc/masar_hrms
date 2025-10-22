@@ -26,7 +26,8 @@
   "section_break_ccln",
   "amended_from",
   "column_break_ibji",
-  "naming_series"
+  "naming_series",
+  "connections_tab"
  ],
  "fields": [
   {
@@ -164,14 +165,27 @@
   {
    "fieldname": "injury_no",
    "fieldtype": "Data",
-   "label": "Injury No."
+   "label": "Injury No.",
+   "reqd": 1
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
- "links": [],
- "modified": "2025-09-08 10:15:58.467292",
+ "links": [
+  {
+   "group": "Leave Application",
+   "link_doctype": "Leave Application",
+   "link_fieldname": "custom_work_injury_ref"
+  }
+ ],
+ "modified": "2025-09-15 15:50:37.323119",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Work Injury",

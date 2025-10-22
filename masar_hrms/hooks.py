@@ -306,7 +306,9 @@ fixtures = [
         "Employee Education-custom_column_break_x2d6g",
         "Employee Education-custom_issue_date",
         "Employee Education-custom_total_hours",
-        "Employee Education-custom_is_certificate"
+        "Employee Education-custom_is_certificate",
+        "Leave Type-custom_is_injury",
+        "Leave Application-custom_work_injury_ref"
             ]
         ]
     ]},
