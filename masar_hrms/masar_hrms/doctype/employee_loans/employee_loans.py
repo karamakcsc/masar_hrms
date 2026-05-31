@@ -106,11 +106,11 @@ class EmployeeLoans(Document):
             earining_salary = 0
             for comp in emp_doc.custom_salary_component_table:
                 if comp.is_active:
+                    comp_doc = frappe.get_doc("Salary Component", comp.salary_component)
                     if comp.type:
                         if comp.type == "Earning" and comp_doc.is_social_security_applicable:
                             earining_salary += comp.esc_amount
                     else:
-                        comp_doc = frappe.get_doc("Salary Component", comp.salary_component)
                         if comp_doc.type == "Earning" and comp_doc.is_social_security_applicable:
                             earining_salary += comp.esc_amount
             total_salary = earining_salary

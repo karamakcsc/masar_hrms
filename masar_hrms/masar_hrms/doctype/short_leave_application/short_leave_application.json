@@ -158,7 +158,7 @@
    "fieldtype": "Select",
    "hidden": 1,
    "label": "Series",
-   "options": "SLA-.MM.-.DD.-."
+   "options": "HR-SAP-.YYYY.-"
   },
   {
    "fetch_from": "employee.department",
