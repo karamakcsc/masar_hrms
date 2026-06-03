@@ -87,10 +87,10 @@ app_license = "MIT"
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	#"ToDo": "custom_app.overrides.CustomToDo"
-
-# }
+override_doctype_class = {
+    "Salary Slip" : "masar_hrms.override._salary_slip.SalarySlip",
+    "Payroll Entry" :"masar_hrms.override._payroll_entry.PayrollEntry"
+}
 
 # Document Events
 # ---------------
@@ -105,7 +105,8 @@ app_license = "MIT"
 # }
 doc_events = {
 	"Employee": {
-		"validate": "masar_hrms.custom.employee.employee.validate"
+		"validate": "masar_hrms.custom.employee.employee.validate",
+		"on_update": "masar_hrms.custom.employee.employee.on_update"
 	}
  }
 doctype_js = {
@@ -117,7 +118,7 @@ doctype_js = {
 # Scheduled Tasks
 # ---------------
 
-scheduler_events = {
+# scheduler_events = {
 	# "cron":{
 	# 	"* * * * *": [
 	# 		"masar_hrms.tasks.cron"
@@ -126,19 +127,19 @@ scheduler_events = {
 	# "all": [
 	# 	"masar_hrms.tasks.all"
 	# ],
-	"daily": [
-		"masar_hrms.tasks.daily"
-	],
+	# "daily": [
+	# 	"masar_hrms.tasks.daily"
+	# ],
 	# "hourly": [
 	# 	"masar_hrms.tasks.hourly"
 	# ],
 	# "weekly": [
 	# 	"masar_hrms.tasks.weekly"
 	# ],
-	"monthly": [
-		"masar_hrms.tasks.monthly"
-	]
-}
+# 	"monthly": [
+# 		"masar_hrms.tasks.monthly"
+# 	]
+# }
 
 # Testing
 # -------
@@ -148,9 +149,9 @@ scheduler_events = {
 # Overriding Methods
 # ------------------------------
 #
-# override_whitelisted_methods = {
-#	"frappe.desk.doctype.event.event.get_events": "masar_hrms.event.get_events"
-# }
+override_whitelisted_methods = {
+	"hrms.payroll.doctype.payroll_entry.payroll_entry.get_start_end_dates": "masar_hrms.override._payroll_entry.get_start_end_dates"
+}
 #
 # each overriding function accepts a `data` argument;
 # generated from the base implementation of the doctype dashboard,
@@ -278,6 +279,7 @@ fixtures = [
                 # Employee
                 "Employee-custom_privilege_details",
                 "Employee-overtime_ceiling",
+                "Employee-custom_off_day_overtime_ceiling",
                 "Employee-social_commity_membership",
                 "Employee-association_membership_number",
                 "Employee-column_break_69",
@@ -367,9 +369,11 @@ fixtures = [
                     # Appraisal
                     "Appraisal-appraisal_kra-permlevel",
                     "Appraisal KRA-per_weightage-permlevel"
-                    
+
                 ]
             ]
         ]
-    }
+    },
+    {"dt": "Number Card", "filters": [["name", "like", "EAP - %"]]},
+    {"dt": "Dashboard Chart", "filters": [["name", "like", "EAP - %"]]},
 ]

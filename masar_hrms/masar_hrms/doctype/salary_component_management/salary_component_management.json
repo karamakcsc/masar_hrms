@@ -287,6 +287,11 @@
    "link_fieldname": "salary_component_management",
    "parent_doctype": "Salary Component History",
    "table_fieldname": "history"
+  },
+  {
+   "group": "Employee Salary Log",
+   "link_doctype": "Employee Salary Log",
+   "link_fieldname": "voucher_no"
   }
  ],
  "modified": "2025-10-22 16:00:13.923986",

@@ -28,15 +28,21 @@
   "overtime_for_working_day_section",
   "ot_wd",
   "ot_wd_rate",
+  "actual_ot_wd_time",
+  "actual_ot_wd_amount",
   "column_break_iwvu",
   "salary_component_wd",
+  "ot_wd_ceiling",
   "ot_wd_time",
   "ot_wd_amount",
   "overtime_for_off_day_section",
   "ot_od",
   "ot_od_rate",
+  "actual_ot_od_time",
+  "actual_ot_od_amount",
   "column_break_thqy",
   "salary_component_od",
+  "ot_od_ceiling",
   "ot_od_time",
   "ot_od_amount",
   "overtime_totals_section",
@@ -50,9 +56,11 @@
   "shortage_tab",
   "section_break_zwmn",
   "column_break_vouq",
-  "total_shortage",
   "shortage_salary_component",
+  "actual_total_shortage",
+  "actual_total_shortage_amount",
   "column_break_dcmq",
+  "total_shortage",
   "total_shortage_amount",
   "leaves_tab",
   "leaves",
@@ -78,11 +86,11 @@
    "fieldname": "employee",
    "fieldtype": "Link",
    "in_list_view": 1,
+   "in_standard_filter": 1,
    "label": "Employee",
    "link_filters": "[[\"Employee\",\"is_overtime_applicable\",\"=\",1]]",
    "options": "Employee",
-   "reqd": 1,
-   "in_standard_filter": 1
+   "reqd": 1
   },
   {
    "fieldname": "column_break_gyuh",
@@ -214,14 +222,29 @@
    "fieldtype": "Duration",
    "hide_days": 1,
    "hide_seconds": 1,
-   "label": "Overtime Time",
+   "label": "Approved Overtime Time",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "ot_wd_amount",
    "fieldtype": "Float",
-   "label": "Amount",
+   "label": "Approved Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_ot_wd_time",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "Actual Overtime Time",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "actual_ot_wd_amount",
+   "fieldtype": "Float",
+   "label": "Actual Amount",
    "read_only": 1
   },
   {
@@ -263,14 +286,29 @@
    "fieldtype": "Duration",
    "hide_days": 1,
    "hide_seconds": 1,
-   "label": "Overtime Time",
+   "label": "Approved Overtime Time",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "ot_od_amount",
    "fieldtype": "Float",
-   "label": "Amount",
+   "label": "Approved Amount",
+   "read_only": 1
+  },
+  {
+   "fieldname": "actual_ot_od_time",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "Actual Overtime Time",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "actual_ot_od_amount",
+   "fieldtype": "Float",
+   "label": "Actual Amount",
    "read_only": 1
   },
   {
@@ -316,8 +354,7 @@
   {
    "fieldname": "overtime_table",
    "fieldtype": "Table",
-   "options": "EAP Overtime Detail",
-   "read_only": 1
+   "options": "EAP Overtime Detail"
   },
   {
    "fieldname": "eapb_ref",
@@ -335,8 +372,7 @@
    "fieldname": "leaves",
    "fieldtype": "Table",
    "label": "Leaves",
-   "options": "EAP Leave Detail",
-   "read_only": 1
+   "options": "EAP Leave Detail"
   },
   {
    "fieldname": "section_break_zwmn",
@@ -367,18 +403,35 @@
   },
   {
    "default": "0",
+   "fieldname": "actual_total_shortage",
+   "fieldtype": "Duration",
+   "hide_days": 1,
+   "hide_seconds": 1,
+   "label": "Actual Total Shortage",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "actual_total_shortage_amount",
+   "fieldtype": "Float",
+   "label": "Actual Shortage Amount",
+   "read_only": 1
+  },
+  {
+   "default": "0",
    "fieldname": "total_shortage",
    "fieldtype": "Duration",
    "hide_days": 1,
    "hide_seconds": 1,
-   "label": "Total Shortage",
+   "label": "Approved Total Shortage",
    "read_only": 1
   },
   {
    "default": "0",
    "fieldname": "total_shortage_amount",
    "fieldtype": "Float",
-   "label": "Total Shortage Amount"
+   "label": "Approved Shortage Amount",
+   "read_only": 1
   },
   {
    "fieldname": "shortage_tab",
@@ -393,6 +446,22 @@
    "link_filters": "[[\"Salary Component\",\"type\",\"=\",\"Deduction\"]]",
    "mandatory_depends_on": "eval: doc.total_shortage_amount > 0.001",
    "options": "Salary Component"
+  },
+  {
+   "default": "0",
+   "description": "Monthly working-day overtime ceiling from Employee.",
+   "fieldname": "ot_wd_ceiling",
+   "fieldtype": "Float",
+   "label": "Ceiling (hours)",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "description": "Monthly off-day overtime ceiling from Employee.",
+   "fieldname": "ot_od_ceiling",
+   "fieldtype": "Float",
+   "label": "Ceiling (hours)",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
@@ -404,11 +473,11 @@
    "link_fieldname": "ref_docname"
   }
  ],
- "modified": "2025-08-11 14:00:47.096195",
+ "modified": "2026-06-03 11:43:01.926259",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Attendance Process",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -425,6 +494,7 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

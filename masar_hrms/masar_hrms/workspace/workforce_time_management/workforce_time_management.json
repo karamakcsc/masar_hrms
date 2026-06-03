@@ -1,0 +1,224 @@
+{
+ "charts": [
+  {
+   "chart_name": "EAP - Monthly OT Cost Trend",
+   "label": "EAP - Monthly OT Cost Trend"
+  },
+  {
+   "chart_name": "EAP - Department OT Distribution",
+   "label": "EAP - Department OT Distribution"
+  },
+  {
+   "chart_name": "EAP - Monthly Shortage Trend",
+   "label": "EAP - Monthly Shortage Trend"
+  },
+  {
+   "chart_name": "EAP - Department Shortage Distribution",
+   "label": "EAP - Department Shortage Distribution"
+  }
+ ],
+ "content": "[{\"id\":\"sm09Wb0Nmx\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Workforce Time Management</span>\",\"col\":12}},{\"id\":\"W7AkjDdbvC\",\"type\":\"chart\",\"data\":{\"chart_name\":\"EAP - Monthly OT Cost Trend\",\"col\":6}},{\"id\":\"J_urML7WC-\",\"type\":\"chart\",\"data\":{\"chart_name\":\"EAP - Department OT Distribution\",\"col\":6}},{\"id\":\"tGx17grOzY\",\"type\":\"chart\",\"data\":{\"chart_name\":\"EAP - Monthly Shortage Trend\",\"col\":6}},{\"id\":\"aHic0mguYL\",\"type\":\"chart\",\"data\":{\"chart_name\":\"EAP - Department Shortage Distribution\",\"col\":6}},{\"id\":\"KSNhRcCXFb\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Approved OT Cost\",\"col\":4}},{\"id\":\"CYC-b86NXR\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Shortage Deductions\",\"col\":4}},{\"id\":\"qtmhCO0Tb4\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Employees With OT\",\"col\":4}},{\"id\":\"nSsm064OYa\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Actual OT Cost\",\"col\":4}},{\"id\":\"wznNEj8DfP\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Processes This Month\",\"col\":4}},{\"id\":\"rrSKUZwTAT\",\"type\":\"card\",\"data\":{\"card_name\":\"Setup\",\"col\":6}},{\"id\":\"AtgiYnrXnk\",\"type\":\"card\",\"data\":{\"card_name\":\"Audit & Operations\",\"col\":6}},{\"id\":\"IrKHAV26QD\",\"type\":\"card\",\"data\":{\"card_name\":\"Overtime Reports\",\"col\":6}},{\"id\":\"3MFe3lNUbB\",\"type\":\"card\",\"data\":{\"card_name\":\"Shortage Reports\",\"col\":6}}]",
+ "creation": "2026-06-03 13:00:26.953297",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "color-monthly-rank",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Workforce Time Management",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Setup",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Overtime Type",
+   "link_count": 0,
+   "link_to": "Overtime Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shift Assignment",
+   "link_count": 0,
+   "link_to": "Shift Assignment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee",
+   "link_count": 0,
+   "link_to": "Employee",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Audit & Operations",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Overtime Approval",
+   "link_count": 0,
+   "link_to": "Overtime Approval",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Attendance Process Bulk",
+   "link_count": 0,
+   "link_to": "Employee Attendance Process Bulk",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Attendance Process",
+   "link_count": 0,
+   "link_to": "Employee Attendance Process",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Overtime Reports",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Overtime Approval Audit",
+   "link_count": 0,
+   "link_to": "Overtime Approval Audit",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Overtime Ceiling Monitoring",
+   "link_count": 0,
+   "link_to": "Overtime Ceiling Monitoring",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Department Overtime Analysis",
+   "link_count": 0,
+   "link_to": "Department Overtime Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Overtime Rejection Analysis",
+   "link_count": 0,
+   "link_to": "Overtime Rejection Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shortage Reports",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Off-Day Overtime Report",
+   "link_count": 0,
+   "link_to": "Off-Day Overtime Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Shortage Adjustment Report",
+   "link_count": 0,
+   "link_to": "Shortage Adjustment Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-06-03 14:20:19.689736",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Workforce Time Management",
+ "number_cards": [
+  {
+   "label": "Approved OT Cost",
+   "number_card_name": "EAP - Approved OT Cost MTD"
+  },
+  {
+   "label": "Shortage Deductions",
+   "number_card_name": "EAP - Shortage Deductions MTD"
+  },
+  {
+   "label": "Employees With OT",
+   "number_card_name": "EAP - Employees With OT MTD"
+  },
+  {
+   "label": "Actual OT Cost",
+   "number_card_name": "EAP - Actual OT Cost MTD"
+  },
+  {
+   "label": "Processes This Month",
+   "number_card_name": "EAP - Processes This Month"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 39.0,
+ "shortcuts": [],
+ "title": "Workforce Time Management"
+}

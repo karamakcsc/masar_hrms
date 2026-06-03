@@ -129,23 +129,28 @@ class SalaryComponentManagement(Document):
 			"remarks" : r.remarks
 			})
 		return sc_tab
-	def effect_employee_date(self): 
+	def effect_employee_date(self):
 		emp_doc = get_doc('Employee' , self.employee)
 		sc_tab = self.get_salary_components()
-		emp_doc.update({
-			"is_social_security_applicable": self.is_ss_applicable,
-       		"custom_is_hazard" : self.is_hazard,
-			"social_security_number" : self.social_security_number, 
-			"tax_type" : self.tax_type,
-			"social_security_date" : self.ss_date, 
-			# "social_security_salary" : self.social_security_salary, 
-			# "social_security_amount" : self.social_security_amount,
-			"is_overtime_applicable" : self.is_overtime_applicable, 
-			"overtime_ceiling" : self.overtime_ceiling , 
-			"custom_salary_component_table" : sc_tab , 
-   			"custom_tax_number" : self.tax_number,
-   
-		}).save()
+		frappe.flags.salary_log_voucher_type = "Salary Component Management"
+		frappe.flags.salary_log_voucher_no = self.name
+		try:
+			emp_doc.update({
+				"is_social_security_applicable": self.is_ss_applicable,
+				"custom_is_hazard" : self.is_hazard,
+				"social_security_number" : self.social_security_number,
+				"tax_type" : self.tax_type,
+				"social_security_date" : self.ss_date,
+				# "social_security_salary" : self.social_security_salary,
+				# "social_security_amount" : self.social_security_amount,
+				"is_overtime_applicable" : self.is_overtime_applicable,
+				"overtime_ceiling" : self.overtime_ceiling ,
+				"custom_salary_component_table" : sc_tab ,
+				"custom_tax_number" : self.tax_number,
+			}).save()
+		finally:
+			frappe.flags.salary_log_voucher_type = None
+			frappe.flags.salary_log_voucher_no = None
 	def define_html_component(self):
 		style = """
                     <style>

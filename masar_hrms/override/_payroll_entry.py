@@ -1,8 +1,3 @@
-import frappe
-from frappe import _
-
-
-
 # Copyright (c) 2017, Frappe Technologies Pvt. Ltd. and contributors
 # For license information, please see license.txt
 
@@ -25,6 +20,7 @@ from frappe.utils import (
 	flt,
 	get_link_to_form,
 	getdate,
+	add_months
 )
 
 import erpnext
@@ -32,6 +28,8 @@ from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
 from erpnext.accounts.utils import get_fiscal_year
+
+from hrms.payroll.doctype.salary_withholding.salary_withholding import link_bank_entry_in_salary_withholdings
 
 
 class PayrollEntry(Document):
@@ -165,6 +163,7 @@ class PayrollEntry(Document):
 			department=self.department,
 			designation=self.designation,
 			grade=self.grade,
+			work_type = self.work_type, ################ Mahmoud Edit / Add Work Type to Filters 
 			currency=self.currency,
 			start_date=self.start_date,
 			end_date=self.end_date,
@@ -176,83 +175,44 @@ class PayrollEntry(Document):
 			filters.update(dict(payroll_frequency=self.payroll_frequency))
 
 		return filters
-	
-	###########################3 Override 
 	@frappe.whitelist()
 	def fill_employee_details(self):
-		cond  = "1=1 "
-		if self.branch:
-			cond += f" AND te.branch = '{self.branch}'"
-		if self.designation:
-			cond += f" AND te.designation = '{self.designation}'"
-		if self.department:
-			cond += f" AND te.department ='{self.department}' "
-		if self.grade:
-			cond += f" AND te.grade ='{self.grade}' "
-		if self.work_type:
-			cond += f" AND te.work_type ='{self.work_type}' "
-
-		results = frappe.db.sql(f"""
-			SELECT 
-				te.employee ,
-				te.employee_name ,
-				te.department ,
-				te.designation,
-				te.work_type
-			FROM 
-				tabEmployee te 
-			WHERE 
-				{cond}
-			""" , as_dict = True)
-		
-		doc = frappe.get_doc("Payroll Entry" , self.name)
-		doc.number_of_employees = len(results)
-
+		filters = self.make_filters()
+		employees = get_employee_list(filters=filters, as_dict=True, ignore_match_conditions=True)
 		self.set("employees", [])
-		attendance = []
-		for result in results:
-	
-			attendance.append({
-				"employee":result.get('employee'), 
-				"employee_name":  result.get('employee_name'), 
-				"department" : result.get('department'), 
-				"designation" : result.get('designation')				
-				})
-		self.set("employees", attendance)
-		self.number_of_employees = len(results)
 
+		if not employees:
+			error_msg = _(
+				"No employees found for the mentioned criteria:<br>Company: {0}<br> Currency: {1}<br>Payroll Payable Account: {2}"
+			).format(
+				frappe.bold(self.company),
+				frappe.bold(self.currency),
+				frappe.bold(self.payroll_payable_account),
+			)
+			if self.branch:
+				error_msg += "<br>" + _("Branch: {0}").format(frappe.bold(self.branch))
+			if self.department:
+				error_msg += "<br>" + _("Department: {0}").format(frappe.bold(self.department))
+			if self.designation:
+				error_msg += "<br>" + _("Designation: {0}").format(frappe.bold(self.designation))
+			if self.start_date:
+				error_msg += "<br>" + _("Start date: {0}").format(frappe.bold(self.start_date))
+			if self.end_date:
+				error_msg += "<br>" + _("End date: {0}").format(frappe.bold(self.end_date))
+			frappe.throw(error_msg, title=_("No employees found"))
 
-	###############################
-	# @frappe.whitelist()
-	# def fill_employee_details(self):
-	# 	filters = self.make_filters()
-	# 	employees = get_employee_list(filters=filters, as_dict=True, ignore_match_conditions=True)
-	# 	self.set("employees", [])
+		self.set("employees", employees)
+		self.number_of_employees = len(self.employees)
+		self.update_employees_with_withheld_salaries()
 
-	# 	if not employees:
-	# 		error_msg = _(
-	# 			"No employees found for the mentioned criteria:<br>Company: {0}<br> Currency: {1}<br>Payroll Payable Account: {2}"
-	# 		).format(
-	# 			frappe.bold(self.company),
-	# 			frappe.bold(self.currency),
-	# 			frappe.bold(self.payroll_payable_account),
-	# 		)
-	# 		if self.branch:
-	# 			error_msg += "<br>" + _("Branch: {0}").format(frappe.bold(self.branch))
-	# 		if self.department:
-	# 			error_msg += "<br>" + _("Department: {0}").format(frappe.bold(self.department))
-	# 		if self.designation:
-	# 			error_msg += "<br>" + _("Designation: {0}").format(frappe.bold(self.designation))
-	# 		if self.start_date:
-	# 			error_msg += "<br>" + _("Start date: {0}").format(frappe.bold(self.start_date))
-	# 		if self.end_date:
-	# 			error_msg += "<br>" + _("End date: {0}").format(frappe.bold(self.end_date))
-	# 		frappe.throw(error_msg, title=_("No employees found"))
+		return self.get_employees_with_unmarked_attendance()
 
-	# 	self.set("employees", employees)
-	# 	self.number_of_employees = len(self.employees)
+	def update_employees_with_withheld_salaries(self):
+		withheld_salaries = get_salary_withholdings(self.start_date, self.end_date, pluck="employee")
 
-	# 	return self.get_employees_with_unmarked_attendance()
+		for employee in self.employees:
+			if employee.employee in withheld_salaries:
+				employee.is_salary_withheld = 1
 
 	@frappe.whitelist()
 	def create_salary_slips(self):
@@ -411,7 +371,7 @@ class PayrollEntry(Document):
 							item, amount_against_cost_center, cost_center, employee_advance
 						)
 					else:
-						key = (item.salary_component, cost_center)
+						key = (item.salary_component, cost_center , item.employee) ######### Mahmoud Edit 
 						component_dict[key] = component_dict.get(key, 0) + amount_against_cost_center
 
 					if employee_wise_accounting_enabled:
@@ -420,7 +380,6 @@ class PayrollEntry(Document):
 						)
 
 			account_details = self.get_account(component_dict=component_dict)
-
 			return account_details
 
 	def should_add_component_to_accrual_jv(self, component_type: str, item: dict) -> bool:
@@ -461,6 +420,8 @@ class PayrollEntry(Document):
 				"cost_center": cost_center,
 				"reference_type": "Employee Advance",
 				"reference_name": employee_advance,
+				"party": "Employee", ####### Mahmoud Edit
+				"party_type" : item.employee ####### Mahmoud Edit
 			}
 		)
 
@@ -511,18 +472,23 @@ class PayrollEntry(Document):
 		if not self.employee_cost_centers.get(employee):
 			SalaryStructureAssignment = frappe.qb.DocType("Salary Structure Assignment")
 			EmployeeCostCenter = frappe.qb.DocType("Employee Cost Center")
-
+			assignment_subquery = (
+				frappe.qb.from_(SalaryStructureAssignment)
+				.select(SalaryStructureAssignment.name)
+				.where(
+					(SalaryStructureAssignment.employee == employee)
+					& (SalaryStructureAssignment.salary_structure == salary_structure)
+					& (SalaryStructureAssignment.docstatus == 1)
+					& (SalaryStructureAssignment.from_date <= self.end_date)
+				)
+				.orderby(SalaryStructureAssignment.from_date, order=frappe.qb.desc)
+				.limit(1)
+			)
 			cost_centers = dict(
 				(
-					frappe.qb.from_(SalaryStructureAssignment)
-					.join(EmployeeCostCenter)
-					.on(SalaryStructureAssignment.name == EmployeeCostCenter.parent)
+					frappe.qb.from_(EmployeeCostCenter)
 					.select(EmployeeCostCenter.cost_center, EmployeeCostCenter.percentage)
-					.where(
-						(SalaryStructureAssignment.employee == employee)
-						& (SalaryStructureAssignment.docstatus == 1)
-						& (SalaryStructureAssignment.salary_structure == salary_structure)
-					)
+					.where(EmployeeCostCenter.parent == assignment_subquery)
 				).run(as_list=True)
 			)
 
@@ -548,9 +514,14 @@ class PayrollEntry(Document):
 	def get_account(self, component_dict=None):
 		account_dict = {}
 		for key, amount in component_dict.items():
-			component, cost_center = key
+			component, cost_center , employee = key ############# Mahmoud Edit / to Add employee as Party 
 			account = self.get_salary_component_account(component)
-			accounting_key = (account, cost_center)
+			acc_doc = frappe.get_doc('Account' , account) ######## Mahmoud Edit
+			company_doc= frappe.get_doc('Company' , self.company)
+			if acc_doc.name == company_doc.default_payroll_payable_account: ######## Mahmoud Edit 
+				accounting_key = (account, cost_center ,component,  employee ) ######## Mahmoud Edit / Add Employee as party for UnExpenses Account 
+			else:
+				accounting_key = (account, cost_center ,component ,  None) ###### Mahmoud Edit / Add None Option for Expenses Account (Expense Account Without Party)
 
 			account_dict[accounting_key] = account_dict.get(accounting_key, 0) + amount
 
@@ -641,11 +612,10 @@ class PayrollEntry(Document):
 		user_remark="",
 		submitted_salary_slips: list | None = None,
 		submit_journal_entry=False,
-	):
+	) -> str:
 		multi_currency = 0
 		if len(currencies) > 1:
 			multi_currency = 1
-
 		journal_entry = frappe.new_doc("Journal Entry")
 		journal_entry.voucher_type = voucher_type
 		journal_entry.user_remark = user_remark
@@ -654,7 +624,17 @@ class PayrollEntry(Document):
 
 		journal_entry.set("accounts", accounts)
 		journal_entry.multi_currency = multi_currency
-
+		accounts = [
+			row for row in accounts
+			if not (
+				float(row.get("debit_in_account_currency", 0)) == 0 and
+				float(row.get("credit_in_account_currency", 0)) == 0
+			)
+		]
+		journal_entry.set("accounts", accounts)
+		############ Mahmoud Add / To Add Company Social Security Part
+		journal_entry = self.add_ss_company_rows(journal_entry)
+		################################################## Mahmoud End Edit 
 		if voucher_type == "Journal Entry":
 			journal_entry.title = payroll_payable_account
 
@@ -665,66 +645,8 @@ class PayrollEntry(Document):
 				journal_entry.submit()
 
 			if submitted_salary_slips:
-				self.update_salary_slip_status(submitted_salary_slips, jv_name=journal_entry.name)
-            ############################################ Create JV Company Override By Mahmoud 
-			ss_company = frappe.db.sql("""  
-							  SELECT 
-							        custom_social_security_liabilities ,   
-							        custom_social_security_expenses , 
-							        cost_center ,
-                                    custom_company_share_rate , 
-                                    custom_employee_share_rate , 
-							        custom_company_share_rate_dangerous
-							  FROM 
-							        `tabCompany` 
-							  WHERE 
-							        name = %s""" , (self.company) , as_dict = True)
-			ss_liabilities = ss_company[0]['custom_social_security_liabilities']
-			ss_expenses = ss_company[0]['custom_social_security_expenses']
-			ss_cost_center = ss_company[0]['cost_center']
-			if self.cost_center:
-				cost_center = self.cost_center
-			else :
-				cost_center = ss_cost_center
-			amount_sql = frappe.db.sql("""
-                                        SELECT SUM(tsd.default_amount) AS `amount`
-                                        FROM `tabSalary Slip` tss
-                                        INNER JOIN `tabSalary Detail` tsd ON tss.name = tsd.parent
-                                        INNER JOIN `tabPayroll Entry` tpe ON tpe.name = tss.payroll_entry
-                                        WHERE tsd.abbr IN ("CSS", "CSSD") AND tpe.name = %s AND tss.docstatus = 1
-                                        """, (self.name) , as_dict = True)
-			ss_amount = float(amount_sql[0]['amount'])
-			if not ss_amount:
-				ss_amount = 0  
-			jv = frappe.new_doc("Journal Entry")
-			jv.posting_date = self.posting_date
-			jv.company =  self.company
-			jv.cheque_no = self.name
-			jv.cost_center = cost_center
-			jv.cheque_date = self.posting_date
-			jv.user_remark = f"Payroll Entry is:{self.name} in the Posting Date :{self.posting_date}"
-			jv.append("accounts", {
-                "account": ss_expenses,
-                "debit_in_account_currency": ss_amount,
-                "reference_type" : "Payroll Entry", 
-				"cost_center": cost_center,
-                "reference_name" : self.name , 
-                "reference_due_date" : self.posting_date,
-                "user_remark": f"reference type is Payroll Entry , Reference Name is {self.name} and Reference Due Date is :{self.posting_date} "
-            })
-			jv.append("accounts", {
-                "account": ss_liabilities,
-                "credit_in_account_currency": ss_amount,
-				"cost_center": cost_center,
-                "reference_type" : "Payroll Entry", 
-                "reference_name" : self.name , 
-                "reference_due_date" : self.posting_date,
-                "user_remark": f"reference type is Payroll Entry , Reference Name is {self.name} and Reference Due Date is :{self.posting_date} "
-            })
-			jv.save(ignore_permissions=True)
-			jv.submit()
-			
-            #########################################################################
+				self.set_journal_entry_in_salary_slips(submitted_salary_slips, jv_name=journal_entry.name)
+
 		except Exception as e:
 			if type(e) in (str, list, tuple):
 				frappe.msgprint(e)
@@ -732,6 +654,119 @@ class PayrollEntry(Document):
 			self.log_error("Journal Entry creation against Salary Slip failed")
 			raise
 
+		return journal_entry
+	############## Mahmoud Add this Function
+	def add_ss_company_rows(
+			self,
+			journal_entry,
+			with_party = False
+		):
+		c = frappe.qb.DocType('Company')
+		comp_data = (
+			frappe.qb.from_(c)
+			.where(c.name == self.company)
+			.select(
+				((c.custom_social_security_expenses).as_('ss_expense')),((c.custom_social_security_liabilities).as_("ss_liability")), 
+				((c.custom_company_share_rate_dangerous).as_("dangerous_rate")), ((c.company_share_rate).as_("normal_rate"))
+			)
+		).run(as_dict = True)[0]
+		if comp_data.ss_expense is None : 
+			frappe.throw(
+				'Set Social Security Expenses Account in Company.'
+			)
+		if comp_data.ss_liability is None: 
+			frappe.throw(
+				'Set Social Security Liabilities Account in Company.'
+			)
+		if comp_data.dangerous_rate is None:
+			frappe.throw(
+				'Set Company Share Rate Dangerous in Company.'
+			)
+		if comp_data.normal_rate is None:
+			frappe.throw(
+				'Set Company Share Rate in Company.'
+			)
+		ss_expense , ss_liability , dangerous_rate , normal_rate  = (
+			comp_data.ss_expense , 
+			comp_data.ss_liability , 
+			float(comp_data.dangerous_rate) , 
+			float(comp_data.normal_rate)
+		)
+		ss  , e , d = frappe.qb.DocType('Salary Slip') ,  frappe.qb.DocType('Employee') ,  frappe.qb.DocType('Department')
+		rows = (
+			frappe.qb.from_(ss).join(e).on(ss.employee == e.name).left_join(d).on(d.name == e.department)
+			.select(
+				(e.name),(e.custom_is_hazard), (e.social_security_salary).as_('ss_salary'),
+				(d.custom_ss_budget_element).as_('ss_be'),(d.custom_ss_cost_center),(d.custom_ss_project))	
+			.where(ss.payroll_entry ==self.name).where(e.is_social_security_applicable == 1 ).where(ss.payment_days > 15)
+		).run(as_dict = True)
+		if with_party == False:
+			rows_lst = list()
+			for r in rows:
+				if r.custom_is_hazard == 0 :
+					rate = normal_rate/100
+				elif r.custom_is_hazard == 1 : 
+					rate = dangerous_rate/100
+				ss_amount = float(r.ss_salary if r.ss_salary else 0 ) * rate 
+				key = r.ss_be
+				if len(rows_lst) == 0 :
+					rows_lst.append({key:ss_amount})
+				else:
+					key_found = False
+					for row_dict in rows_lst:
+						if key in row_dict:
+							row_dict[key] += ss_amount
+							key_found = True
+							break
+					if not key_found:
+						rows_lst.append({key: ss_amount})
+			for row in rows_lst:
+				for row_be, row_amount in row.items(): 
+					row_be , row_amount = row_be, row_amount
+				be = frappe.get_doc('Budget Element' , row_be)
+				project = be.project
+				cost_center = be.cost_center
+				acc_row = {
+					'account' : ss_liability,'credit_in_account_currency' : row_amount, 
+					'credit' : row_amount,'reference_type' : self.doctype,'reference_name' : self.name,
+					'user_remark' : 'Reference for Budget Element {be}'.format(be=row_be),
+     				# 'budget_element' : row_be,
+					'project': project ,
+     				# 'cost_center' : cost_center
+				}
+				journal_entry.append('accounts' , acc_row)
+				dr_acc = {
+					'account' : ss_expense,'debit_in_account_currency' : row_amount, 
+					'debit' : row_amount,'reference_type' : self.doctype,'reference_name' : self.name,
+					'budget_element' : row_be,'project': project , 'cost_center' : cost_center,
+				}
+				journal_entry.append('accounts' , dr_acc)
+		elif with_party:
+			for r in rows:
+				if r.custom_is_hazard == 0:
+					rate = normal_rate/100
+				elif r.custom_is_hazard == 1: 
+					rate = dangerous_rate/100
+				ss_amount =float(r.ss_salary if r.ss_salary else 0 )* rate 
+				acc_row = {
+					'account' : ss_liability,'credit_in_account_currency' : ss_amount, 'credit' : ss_amount,
+					'reference_type' : self.doctype,'reference_name' : self.name,
+					'user_remark' : 'Reference for Budget Element {be} and Employee {emp}'.format(be =  r.ss_be , emp=r.name ),
+					# 'budget_element' : r.ss_be,
+     				'project': r.custom_ss_project , 
+     				# 'cost_center' : r.custom_ss_cost_center,
+					'party_type' : 'Employee','party' : r.name
+				}
+				journal_entry.append('accounts' , acc_row)
+				dr_row = {
+					'account' : ss_expense,'debit_in_account_currency' : ss_amount, 
+					'debit' : ss_amount,'reference_type' : self.doctype,
+					'reference_name' : self.name,'budget_element' : r.ss_be,
+					'project': r.custom_ss_project ,'cost_center' : r.custom_ss_cost_center,
+				}
+				journal_entry.append('accounts' , dr_row)
+		return journal_entry
+	############## Mahmoud End Function 	
 	def get_payable_amount_for_earnings_and_deductions(
 		self,
 		accounts,
@@ -745,6 +780,9 @@ class PayrollEntry(Document):
 	):
 		# Earnings
 		for acc_cc, amount in earnings.items():
+			user_remark = None ########### Mahmoud Edit
+			if acc_cc[3]:########### Mahmoud Edit
+				user_remark= "Salary Component: {sc} For Employee: {emp}".format(sc=acc_cc[2] , emp=acc_cc[3]) ####### Mahmoud Edit / Add User Remarks 
 			payable_amount = self.get_accounting_entries_and_payable_amount(
 				acc_cc[0],
 				acc_cc[1] or self.cost_center,
@@ -756,10 +794,15 @@ class PayrollEntry(Document):
 				precision,
 				entry_type="debit",
 				accounts=accounts,
+				party=acc_cc[3],  ####### Mahmoud Edit / Insert Party for Components 
+				user_remark= user_remark,  ########### Mahmoud Edit
 			)
 
 		# Deductions
 		for acc_cc, amount in deductions.items():
+			user_remark = None ########### Mahmoud Edit
+			if acc_cc[3]:########### Mahmoud Edit
+				user_remark= "Salary Component: {sc} For Employee: {emp}".format(sc=acc_cc[2] , emp=acc_cc[3]) ####### Mahmoud Edit / Add User Remarks 
 			payable_amount = self.get_accounting_entries_and_payable_amount(
 				acc_cc[0],
 				acc_cc[1] or self.cost_center,
@@ -771,6 +814,8 @@ class PayrollEntry(Document):
 				precision,
 				entry_type="credit",
 				accounts=accounts,
+				party=acc_cc[3],  ####### Mahmoud Edit / Insert Party for Components 
+				user_remark= user_remark,  ########### Mahmoud Edit
 			)
 
 		return payable_amount
@@ -815,6 +860,7 @@ class PayrollEntry(Document):
 					entry_type="payable",
 					party=employee,
 					accounts=accounts,
+					user_remark="Payable Amount For Employee: {emp}".format(emp=employee) ######## Mahmoud Edit / Add User Remarks for Payble Amount
 				)
 		else:
 			payable_amount = self.get_accounting_entries_and_payable_amount(
@@ -846,6 +892,7 @@ class PayrollEntry(Document):
 		reference_type=None,
 		reference_name=None,
 		is_advance=None,
+		user_remark=None, ###### Mahmoud Edit to Add User Remark Options
 	):
 		exchange_rate, amt = self.get_amount_and_exchange_rate_for_journal_entry(
 			account, amount, company_currency, currencies
@@ -897,17 +944,30 @@ class PayrollEntry(Document):
 					"is_advance": is_advance,
 				}
 			)
-
-		self.update_accounting_dimensions(
-			row,
-			accounting_dimensions,
-		)
+		############ Mahmoud Add to Fill User Remark with Salary Component
+		if user_remark:
+			row.update(
+				{
+					"user_remark": user_remark,
+				}
+			)
+		########### Mahmoud End Added
+		acc_doc = frappe.get_doc('Account' , account)
+		company_doc = frappe.get_doc('Company' , self.company)
+		if acc_doc.account_type == 'Expense Account':# or acc_doc.name == company_doc.default_payroll_payable_account :
+			self.update_accounting_dimensions(
+				row,
+				accounting_dimensions,
+			)
+		else: 
+			row['cost_center'] = None
 
 		if amt:
 			accounts.append(row)
 
 		return payable_amount
-
+		
+ 
 	def update_accounting_dimensions(self, row, accounting_dimensions):
 		for dimension in accounting_dimensions:
 			row.update({dimension: self.get(dimension)})
@@ -931,7 +991,31 @@ class PayrollEntry(Document):
 		return exchange_rate, amount
 
 	@frappe.whitelist()
-	def make_bank_entry(self):
+	def has_bank_entries(self) -> dict[str, bool]:
+		je = frappe.qb.DocType("Journal Entry")
+		jea = frappe.qb.DocType("Journal Entry Account")
+
+		bank_entries = (
+			frappe.qb.from_(je)
+			.inner_join(jea)
+			.on(je.name == jea.parent)
+			.select(je.name)
+			.where(
+				(je.voucher_type == "Bank Entry")
+				& (jea.reference_name == self.name)
+				& (jea.reference_type == "Payroll Entry")
+			)
+		).run(as_dict=True)
+
+		return {
+			"has_bank_entries": bool(bank_entries),
+			"has_bank_entries_for_withheld_salaries": not any(
+				employee.is_salary_withheld for employee in self.employees
+			),
+		}
+
+	@frappe.whitelist()
+	def make_bank_entry(self, for_withheld_salaries=False):
 		self.check_permission("write")
 		self.employee_based_payroll_payable_entries = {}
 		employee_wise_accounting_enabled = frappe.db.get_single_value(
@@ -939,7 +1023,7 @@ class PayrollEntry(Document):
 		)
 
 		salary_slip_total = 0
-		salary_slips = self.get_salary_slip_details()
+		salary_slips = self.get_salary_slip_details(for_withheld_salaries)
 
 		for salary_detail in salary_slips:
 			if salary_detail.parentfield == "earnings":
@@ -991,14 +1075,21 @@ class PayrollEntry(Document):
 
 					salary_slip_total -= salary_detail.amount
 
+		bank_entry = None
 		if salary_slip_total > 0:
-			self.set_accounting_entries_for_bank_entry(salary_slip_total, "salary")
+			remark = "withheld salaries" if for_withheld_salaries else "salaries"
+			bank_entry = self.set_accounting_entries_for_bank_entry(salary_slip_total, remark)
 
-	def get_salary_slip_details(self):
+			if for_withheld_salaries:
+				link_bank_entry_in_salary_withholdings(salary_slips, bank_entry.name)
+
+		return bank_entry
+
+	def get_salary_slip_details(self, for_withheld_salaries=False):
 		SalarySlip = frappe.qb.DocType("Salary Slip")
 		SalaryDetail = frappe.qb.DocType("Salary Detail")
 
-		return (
+		query = (
 			frappe.qb.from_(SalarySlip)
 			.join(SalaryDetail)
 			.on(SalarySlip.name == SalaryDetail.parent)
@@ -1006,6 +1097,7 @@ class PayrollEntry(Document):
 				SalarySlip.name,
 				SalarySlip.employee,
 				SalarySlip.salary_structure,
+				SalarySlip.salary_withholding_cycle,
 				SalaryDetail.salary_component,
 				SalaryDetail.amount,
 				SalaryDetail.parentfield,
@@ -1016,7 +1108,13 @@ class PayrollEntry(Document):
 				& (SalarySlip.end_date <= self.end_date)
 				& (SalarySlip.payroll_entry == self.name)
 			)
-		).run(as_dict=True)
+		)
+
+		if for_withheld_salaries:
+			query = query.where(SalarySlip.status == "Withheld")
+		else:
+			query = query.where(SalarySlip.status != "Withheld")
+		return query.run(as_dict=True)
 
 	def set_accounting_entries_for_bank_entry(self, je_payment_amount, user_remark):
 		payroll_payable_account = self.payroll_payable_account
@@ -1091,16 +1189,16 @@ class PayrollEntry(Document):
 				)
 			)
 
-		self.make_journal_entry(
+		return self.make_journal_entry(
 			accounts,
 			currencies,
 			voucher_type="Bank Entry",
 			user_remark=_("Payment of {0} from {1} to {2}").format(
-				user_remark, self.start_date, self.end_date
+				_(user_remark), self.start_date, self.end_date
 			),
 		)
 
-	def update_salary_slip_status(self, submitted_salary_slips, jv_name=None):
+	def set_journal_entry_in_salary_slips(self, submitted_salary_slips, jv_name=None):
 		SalarySlip = frappe.qb.DocType("Salary Slip")
 		(
 			frappe.qb.update(SalarySlip)
@@ -1310,7 +1408,7 @@ def set_filter_conditions(query, filters, qb_object):
 	if filters.get("employees"):
 		query = query.where(qb_object.name.notin(filters.get("employees")))
 
-	for fltr_key in ["branch", "department", "designation", "grade"]:
+	for fltr_key in ["branch", "department", "designation", "grade" , "work_type"]: ########## Mahmoud Add work_type Option 
 		if filters.get(fltr_key):
 			query = query.where(qb_object[fltr_key] == filters[fltr_key])
 
@@ -1347,35 +1445,42 @@ def remove_payrolled_employees(emp_list, start_date, end_date):
 	return [emp_list[emp] for emp in emp_list if emp not in employees_with_payroll]
 
 
+from frappe.utils import getdate, add_months
+import frappe
+
 @frappe.whitelist()
 def get_start_end_dates(payroll_frequency, start_date=None, company=None):
-	"""Returns dict of start and end dates for given payroll frequency based on start_date"""
-
-	if payroll_frequency == "Monthly" or payroll_frequency == "Bimonthly" or payroll_frequency == "":
-		fiscal_year = get_fiscal_year(start_date, company=company)[0]
-		month = "%02d" % getdate(start_date).month
-		m = get_month_details(fiscal_year, month)
-		if payroll_frequency == "Bimonthly":
-			if getdate(start_date).day <= 15:
-				start_date = m["month_start_date"]
-				end_date = m["month_mid_end_date"]
-			else:
-				start_date = m["month_mid_start_date"]
-				end_date = m["month_end_date"]
-		else:
-			start_date = m["month_start_date"]
-			end_date = m["month_end_date"]
-
-	if payroll_frequency == "Weekly":
-		end_date = add_days(start_date, 6)
-
-	if payroll_frequency == "Fortnightly":
-		end_date = add_days(start_date, 13)
-
-	if payroll_frequency == "Daily":
-		end_date = start_date
-
-	return frappe._dict({"start_date": start_date, "end_date": end_date})
+    """Returns dict of start and end dates for given payroll frequency based on start_date"""
+    start_date = getdate(start_date)
+    if payroll_frequency in ["Monthly", ""]:
+        previous_month = add_months(start_date, -1)
+        start_date = previous_month.replace(day=25)
+        end_date = start_date.replace(
+            year=start_date.year,
+            month=start_date.month
+        )
+        end_date = start_date
+        end_date = add_months(end_date, 1).replace(day=24)
+    elif payroll_frequency == "Bimonthly":
+        fiscal_year = get_fiscal_year(start_date, company=company)[0]
+        month = "%02d" % start_date.month
+        m = get_month_details(fiscal_year, month)
+        if start_date.day <= 15:
+            start_date = m["month_start_date"]
+            end_date = m["month_mid_end_date"]
+        else:
+            start_date = m["month_mid_start_date"]
+            end_date = m["month_end_date"]
+    elif payroll_frequency == "Weekly":
+        end_date = add_days(start_date, 6)
+    elif payroll_frequency == "Fortnightly":
+        end_date = add_days(start_date, 13)
+    elif payroll_frequency == "Daily":
+        end_date = start_date
+    return frappe._dict({
+        "start_date": start_date,
+        "end_date": end_date
+    })
 
 
 def get_frequency_kwargs(frequency_name):
@@ -1429,34 +1534,6 @@ def get_month_details(year, month):
 		)
 	else:
 		frappe.throw(_("Fiscal Year {0} not found").format(year))
-
-
-def get_payroll_entry_bank_entries(payroll_entry_name):
-	je = frappe.qb.DocType("Journal Entry")
-	jea = frappe.qb.DocType("Journal Entry Account")
-
-	journal_entries = (
-		frappe.qb.from_(je)
-		.from_(jea)
-		.select(je.name)
-		.where(
-			(je.name == jea.parent)
-			& (je.voucher_type == "Bank Entry")
-			& (jea.reference_name == payroll_entry_name)
-			& (jea.reference_type == "Payroll Entry")
-		)
-	).run(as_dict=True)
-
-	return journal_entries
-
-
-@frappe.whitelist()
-def payroll_entry_has_bank_entries(name: str):
-	response = {}
-	bank_entries = get_payroll_entry_bank_entries(name)
-	response["submitted"] = 1 if bank_entries else 0
-
-	return response
 
 
 def log_payroll_failure(process, payroll_entry, error):
@@ -1530,13 +1607,17 @@ def show_payroll_submission_status(submitted, unsubmitted, payroll_entry):
 		frappe.msgprint(
 			_("Salary Slips submitted for period from {0} to {1}").format(
 				payroll_entry.start_date, payroll_entry.end_date
-			)
+			),
+			title=_("Success"),
+			indicator="green",
 		)
 	elif unsubmitted:
 		frappe.msgprint(
 			_("Could not submit some Salary Slips: {}").format(
 				", ".join(get_link_to_form("Salary Slip", entry) for entry in unsubmitted)
-			)
+			),
+			title=_("Failure"),
+			indicator="red",
 		)
 
 
@@ -1677,14 +1758,34 @@ def employee_query(doctype, txt, searchfield, start, page_len, filters):
 	return employee_list
 
 
+def get_salary_withholdings(
+	start_date: str,
+	end_date: str,
+	employee: str | None = None,
+	pluck: str | None = None,
+) -> list[str] | list[dict]:
+	Withholding = frappe.qb.DocType("Salary Withholding")
+	WithholdingCycle = frappe.qb.DocType("Salary Withholding Cycle")
+	withheld_salaries = (
+		frappe.qb.from_(Withholding)
+		.join(WithholdingCycle)
+		.on(WithholdingCycle.parent == Withholding.name)
+		.select(
+			Withholding.employee,
+			Withholding.name.as_("salary_withholding"),
+			WithholdingCycle.name.as_("salary_withholding_cycle"),
+		)
+		.where(
+			(WithholdingCycle.from_date == start_date)
+			& (WithholdingCycle.to_date == end_date)
+			& (WithholdingCycle.docstatus == 1)
+			& (WithholdingCycle.is_salary_released != 1)
+		)
+	)
 
+	if employee:
+		withheld_salaries = withheld_salaries.where(Withholding.employee == employee)
 
-
-
-
-
-
-############################################
-
-
-
+	if pluck:
+		return withheld_salaries.run(pluck=pluck)
+	return withheld_salaries.run(as_dict=True)

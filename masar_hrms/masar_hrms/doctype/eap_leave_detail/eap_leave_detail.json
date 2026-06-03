@@ -21,6 +21,7 @@
   "section_break_ftbm",
   "late_shortage",
   "total_shortage",
+  "approved_shortage",
   "column_break_bdmk",
   "early_shortage",
   "amount"
@@ -36,7 +37,8 @@
    "in_list_view": 1,
    "in_standard_filter": 1,
    "label": "Attendance",
-   "options": "Attendance"
+   "options": "Attendance",
+   "read_only": 1
   },
   {
    "fetch_from": "attendance.attendance_date",
@@ -51,7 +53,8 @@
    "fieldname": "shift_type",
    "fieldtype": "Link",
    "label": "Shift Type",
-   "options": "Shift Type"
+   "options": "Shift Type",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_gaei",
@@ -60,7 +63,8 @@
   {
    "fieldname": "in_time",
    "fieldtype": "Time",
-   "label": "In Time"
+   "label": "In Time",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_fqpe",
@@ -69,7 +73,8 @@
   {
    "fieldname": "out_time",
    "fieldtype": "Time",
-   "label": "Out Time"
+   "label": "Out Time",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -77,7 +82,8 @@
    "fieldtype": "Check",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Late Entry"
+   "label": "Late Entry",
+   "read_only": 1
   },
   {
    "default": "0",
@@ -85,7 +91,8 @@
    "fieldtype": "Check",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Early Exit"
+   "label": "Early Exit",
+   "read_only": 1
   },
   {
    "fieldname": "section_break_ftbm",
@@ -94,7 +101,8 @@
   {
    "fieldname": "late_shortage",
    "fieldtype": "Duration",
-   "label": "Late Shortage"
+   "label": "Late Shortage",
+   "read_only": 1
   },
   {
    "fieldname": "column_break_bdmk",
@@ -103,36 +111,49 @@
   {
    "fieldname": "early_shortage",
    "fieldtype": "Duration",
-   "label": "Early Shortage"
+   "label": "Early Shortage",
+   "read_only": 1
   },
   {
    "fieldname": "total_shortage",
    "fieldtype": "Duration",
    "in_list_view": 1,
    "in_standard_filter": 1,
-   "label": "Total Shortage"
+   "label": "Calculated Shortage",
+   "read_only": 1
+  },
+  {
+   "fieldname": "approved_shortage",
+   "fieldtype": "Duration",
+   "in_list_view": 1,
+   "label": "Approved Shortage",
+   "description": "HR may reduce this value. Cannot exceed Calculated Shortage."
   },
   {
    "fieldname": "short_leave_application",
    "fieldtype": "Link",
    "label": "Short Leave Application",
-   "options": "Short Leave Application"
+   "options": "Short Leave Application",
+   "read_only": 1
   },
   {
    "fieldname": "leave_duration",
    "fieldtype": "Duration",
-   "label": "Leave Duration"
+   "label": "Leave Duration",
+   "read_only": 1
   },
   {
    "fieldname": "amount",
    "fieldtype": "Float",
-   "label": "Shortage Amount"
+   "in_list_view": 1,
+   "label": "Shortage Amount",
+   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-08-11 13:38:26.032240",
+ "modified": "2026-06-03 00:00:00.000000",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "EAP Leave Detail",
