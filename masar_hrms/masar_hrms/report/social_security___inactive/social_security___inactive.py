@@ -4,7 +4,7 @@
 import frappe , calendar
 
 def execute(filters=None):
-    return get_columns(), get_data(filters)
+    return get_columns(filters), get_data(filters)
 
 def get_data(filters):
     year = int(filters.get("year"))
@@ -16,22 +16,27 @@ def get_data(filters):
         prev_year = year - 1
     else:
         prev_month = month - 1
-        prev_year = year
+        
+    prev_year = year
     emp_filter = ''
     if filters.get("employee"): 
         emp_filter = f""" AND e.name = '{filters.get("employee")}' """
     previous_month = f"{prev_year}-{prev_month:02d}"
     data = frappe.db.sql(f"""
         SELECT DISTINCT
+            e.name AS employee,
             e.national_no,
             e.social_security_number,
             YEAR(e.date_of_birth) AS birth_year,
             MONTH(e.date_of_birth) AS birth_month,
             DAY(e.date_of_birth) AS birth_day,
-            ss.employee,
             e.employee_name,
             e.social_security_salary,
             ss.payment_days,
+            DAY(e.relieving_date) AS stop_day,
+            MONTH(e.relieving_date) AS stop_month,
+            YEAR(e.relieving_date) AS stop_year,
+            e.custom_exit_reason AS stop_reason,
             CASE 
                 WHEN e.custom_is_hazard = 1 AND td.hazard_code IS NULL THEN 'ERROR CODE'
                 WHEN e.custom_is_hazard = 1 THEN td.hazard_code
@@ -53,7 +58,16 @@ def get_data(filters):
     """, as_dict=True)
     return data
 
-def get_columns():
+def get_columns(filters):
+    if filters and filters.get("damman_template"):
+        return [
+            {"label": "رقم التأمين", "fieldname": "social_security_number", "fieldtype": "Data", "width": 250},
+            {"label": "سبب الإيقاف", "fieldname": "stop_reason", "fieldtype": "Data", "width": 250},
+            {"label": "تاريخ الايقاف الفعلي(يوم)", "fieldname": "stop_day", "fieldtype": "Int", "width": 200},
+            {"label": "تاريخ الايقاف الفعلي(شهر)", "fieldname": "stop_month", "fieldtype": "Int", "width": 200},
+            {"label": "تاريخ الايقاف الفعلي(سنة)", "fieldname": "stop_year", "fieldtype": "Int", "width": 200},
+        ]
+        
     return [
         {"label": "National No", "fieldname": "national_no", "fieldtype": "Data", "width": 150},
         {"label": "Social Security Number", "fieldname": "social_security_number", "fieldtype": "Data", "width": 180},

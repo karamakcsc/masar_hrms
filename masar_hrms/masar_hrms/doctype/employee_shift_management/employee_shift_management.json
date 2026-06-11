@@ -15,6 +15,8 @@
   "amended_from",
   "status",
   "bulk_ref",
+  "error_reason",
+  "error_log",
   "dates_section",
   "start_date",
   "column_break_uifc",
@@ -180,8 +182,21 @@
    "default": "Draft",
    "fieldname": "status",
    "fieldtype": "Select",
+   "in_list_view": 1,
    "label": "Status",
-   "options": "Draft\nQueued\nSubmitted\nCancelled",
+   "options": "Draft\nQueued\nProcessing\nCompleted\nFailed\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_reason",
+   "fieldtype": "Data",
+   "label": "Error Reason",
+   "read_only": 1
+  },
+  {
+   "fieldname": "error_log",
+   "fieldtype": "Long Text",
+   "label": "Error Log",
    "read_only": 1
   },
   {

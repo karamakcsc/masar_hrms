@@ -4,7 +4,7 @@
 import frappe , calendar
 
 def execute(filters=None):
-    return get_columns(), get_data(filters)
+    return get_columns(filters), get_data(filters)
 
 def get_data(filters):
     year = int(filters.get("year"))
@@ -18,17 +18,20 @@ def get_data(filters):
         prev_month = month - 1
         prev_year = year
     emp_filter = ''
+    
     if filters.get("employee"): 
         emp_filter = f""" AND e.name = '{filters.get("employee")}' """
     previous_month = f"{prev_year}-{prev_month:02d}"
     data = frappe.db.sql(f"""
                SELECT DISTINCT
+                    e.name AS employee,
                     e.national_no,
+                    e.personal_no,
+                    e.custom_id_card_no,
                     e.social_security_number,
                     YEAR(e.date_of_birth) AS birth_year,
                     MONTH(e.date_of_birth) AS birth_month,
                     DAY(e.date_of_birth) AS birth_day,
-                    ss.employee,
                     e.employee_name,
                     e.social_security_salary,
                     ss.payment_days,
@@ -53,7 +56,21 @@ def get_data(filters):
     """, as_dict=True)
     return data
 
-def get_columns():
+def get_columns(filters):
+    if filters and filters.get("damman_template"):
+        return [
+            {"label": "الرقم الوظيفي", "fieldname": "employee", "fieldtype": "Data", "width": 120},
+            {"label": "الرقم الوطني للمؤمن عليه الأردني", "fieldname": "national_no", "fieldtype": "Data", "width": 150},
+            {"label": "رقم تأمين المؤمن عليه", "fieldname": "social_security_number", "fieldtype": "Data", "width": 150},
+            {"label": "الرقم الشخصي", "fieldname": "personal_no", "fieldtype": "Data", "width": 150},
+            {"label": "تاريخ الميلاد اليوم", "fieldname": "birth_day", "fieldtype": "Int", "width": 100},
+            {"label": "تاريخ الميلاد الشهر", "fieldname": "birth_month", "fieldtype": "Int", "width": 100},
+            {"label": "تاريخ الميلاد السنة", "fieldname": "birth_year", "fieldtype": "Int", "width": 100},
+            {"label": "الأجرالشهري", "fieldname": "social_security_salary", "fieldtype": "Currency", "width": 150},
+            {"label": "رمز المهنةالخطرة", "fieldname": "hazard_code", "fieldtype": "Data", "width": 120},
+            {"label": "رقم الهوية للمؤمن عليه الأردني", "fieldname": "custom_id_card_no", "fieldtype": "Data", "width": 150},
+        ]
+        
     return [
         {"label": "National No", "fieldname": "national_no", "fieldtype": "Data", "width": 150},
         {"label": "Social Security Number", "fieldname": "social_security_number", "fieldtype": "Data", "width": 180},
@@ -65,3 +82,4 @@ def get_columns():
         {"label": "Social Security Salary", "fieldname": "social_security_salary", "fieldtype": "Currency", "width": 150},
         {"label": "Hazard Code", "fieldname": "hazard_code", "fieldtype": "Data", "width": 120},
     ]
+

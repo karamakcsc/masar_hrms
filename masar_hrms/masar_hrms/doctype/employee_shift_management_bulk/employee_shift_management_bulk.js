@@ -2,9 +2,27 @@
 // For license information, please see license.txt
 
 frappe.ui.form.on("Employee Shift Management Bulk", {
+    setup(frm) {
+		hrms.setup_employee_filter_group(frm);
+	},
 	refresh:function(frm) {
         ShiftsPeriodButton(frm);
-	},        
+        if (frm.doc.docstatus === 0) {
+            frm.page.set_primary_action(__("Create Employee Shifts"), function() {
+                frm.savesubmit();
+            });
+        }
+        if (frm.doc.docstatus === 1 && !frm.doc.employees_submitted && frm.doc.status === "Completed") {
+            frm.add_custom_button(__("Submit All Employees"), function() {
+                frappe.confirm(
+                    __("Submit all linked Employee Shift Management records?"),
+                    function() {
+                        frm.call("submit_all_employees").then(() => frm.reload_doc());
+                    }
+                );
+            }).addClass('btn-warning');
+        }
+	},
     saturday_st :function(frm) {
         ShiftsPeriodButton(frm);
 	},      
@@ -54,15 +72,16 @@ frappe.ui.form.on("Shift Management Period", {
 
 function ShiftsPeriodButton(frm) {
     if ( frm.doc.docstatus === 0){
-    frm.add_custom_button(__("Employees"), function () {
-            frappe.call({
-                doc: frm.doc,
-                method: 'insert_employees',
-                callback: function (r) {
-                    frm.refresh_field('employees');
-                }
-            });
-        }, __("Insert"));
+    frm.add_custom_button(__("Employees"), () => {
+                frappe.call({
+                    doc: frm.doc,
+                    args: {
+                        advanced_filters: frm.advanced_filters || [],
+                    },
+                    method: "insert_employees",
+                    callback: () => frm.refresh_field("employees")
+                });
+            }, __("Insert"));
     }
     const required_fields = [
         'saturday_st',

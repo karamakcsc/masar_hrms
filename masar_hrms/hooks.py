@@ -373,7 +373,5 @@ fixtures = [
                 ]
             ]
         ]
-    },
-    {"dt": "Number Card", "filters": [["name", "like", "EAP - %"]]},
-    {"dt": "Dashboard Chart", "filters": [["name", "like", "EAP - %"]]},
+    }
 ]

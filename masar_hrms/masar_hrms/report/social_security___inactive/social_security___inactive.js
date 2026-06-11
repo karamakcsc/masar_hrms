@@ -2,7 +2,7 @@
 // For license information, please see license.txt
 
 frappe.query_reports["Social Security - Inactive"] = {
-	"filters": [
+    "filters": [
         {
             "fieldname": "employee",
             "label": __("Employee"),
@@ -24,6 +24,13 @@ frappe.query_reports["Social Security - Inactive"] = {
             "options": "\nJanuary\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
             "width": 100,
             "default": frappe.datetime.str_to_obj(frappe.datetime.get_today()).toLocaleString('default', { month: 'long' })
+        },
+        {
+            "fieldname": "damman_template",
+            "label": __("Damman Template"),
+            "fieldtype": "Check",
+            "default": 0
         }
     ]
 };
+

@@ -22,34 +22,61 @@ class EmployeeAttendanceProcessBulk(Document):
 		return basic
 
 	@frappe.whitelist()
-	def insert_employees(self):
-		e = qb.DocType('Employee')
-		query = (
-			qb.from_(e)
-			.select(e.name, e.employee_name, e.department, e.designation)
-			.where(e.status == 'Active')
-			.where(e.is_overtime_applicable == 1)
+	def insert_employees(self, advanced_filters: list | None = None):
+		if not advanced_filters:
+			advanced_filters = []
+		e = qb.DocType("Employee")
+		q = (
+			qb.from_(e).select(e.name,e.employee_name,e.department,e.designation,).where(e.status == "Active")
 		)
-		if self.department:
-			query = query.where(e.department == self.department)
-		if self.branch:
-			query = query.where(e.branch == self.branch)
-		if self.designation:
-			query = query.where(e.designation == self.designation)
-		if self.work_type:
-			query = query.where(e.work_type == self.work_type)
-		if self.grade:
-			query = query.where(e.grade == self.grade)
-
-		employees = query.run(as_dict=True)
+		for col, val in (
+			("department", self.department),
+			("branch", self.branch),
+			("designation", self.designation),
+			("work_type", self.work_type),
+			("grade", self.grade),
+		):
+			if val:
+				q = q.where(getattr(e, col) == val)
+		for f in advanced_filters:
+			if len(f) < 3:
+				continue
+			fieldname = f[0]
+			operator = f[1]
+			value = f[2]
+			field = getattr(e, fieldname, None)
+			if not field:
+				continue
+			if operator == "=":
+				q = q.where(field == value)
+			elif operator == "!=":
+				q = q.where(field != value)
+			elif operator == "in":
+				q = q.where(field.isin(value))
+			elif operator == "not in":
+				q = q.where(field.notin(value))
+			elif operator == "like":
+				q = q.where(field.like(value))
+			elif operator == ">":
+				q = q.where(field > value)
+			elif operator == "<":
+				q = q.where(field < value)
+			elif operator == ">=":
+				q = q.where(field >= value)
+			elif operator == "<=":
+				q = q.where(field <= value)
+		emps = q.run(as_dict=True)
 		self.set("employees", [])
-		for emp in employees:
-			self.append("employees", {
-				"employee": emp.name,
-				"employee_name": emp.employee_name,
-				"department": emp.department,
-				"designation": emp.designation,
-			})
+		for emp in emps:
+			self.append(
+				"employees",
+				{
+					"employee": emp.name,
+					"employee_name": emp.employee_name,
+					"department": emp.department,
+					"designation": emp.designation,
+				},
+			)
 		return True
 
 	@frappe.whitelist()

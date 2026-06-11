@@ -1,0 +1,119 @@
+{
+ "charts": [
+  {
+   "chart_name": "SS - Hazardous vs Standard",
+   "label": "Hazardous vs Standard"
+  },
+  {
+   "chart_name": "SS - Insurable Salary by Department",
+   "label": "Insurable Salary by Department"
+  },
+  {
+   "chart_name": "SS - Monthly Active Trend",
+   "label": "Monthly Active Trend"
+  }
+ ],
+ "content": "[{\"id\":\"ziGG2NGbh2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Social Security</span>\",\"col\":12}},{\"id\":\"0Dep8Ni-dU\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Insurable Earnings\",\"col\":3}},{\"id\":\"WeYmTgV-M_\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Insured Workforce\",\"col\":3}},{\"id\":\"WWuuO6ptbC\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Inactive Insured\",\"col\":3}},{\"id\":\"XJydEBgbE9\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"New Additions\",\"col\":3}},{\"id\":\"vpYmx7bvaE\",\"type\":\"card\",\"data\":{\"card_name\":\"Master Data & Reports\",\"col\":6}},{\"id\":\"JaLRc3ECSL\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Hazardous vs Standard\",\"col\":6}},{\"id\":\"d2-NOWPQby\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Insurable Salary by Department\",\"col\":12}},{\"id\":\"tLDTU-GYRr\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Monthly Active Trend\",\"col\":12}}]",
+ "creation": "2026-06-07 09:52:11.217543",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "clipboard",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Social Security",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Master Data & Reports",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Social Security Salary (Master Data) ",
+   "link_count": 0,
+   "link_to": "Employee Social Security Salary",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Active",
+   "link_count": 0,
+   "link_to": "Social Security - Active",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Inactive",
+   "link_count": 0,
+   "link_to": "Social Security - Inactive",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Monthly",
+   "link_count": 0,
+   "link_to": "Social Security - Monthly",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Social Security - Yearly",
+   "link_count": 0,
+   "link_to": "Social Security - Yearly",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-06-09 16:22:53.849900",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Social Security",
+ "number_cards": [
+  {
+   "label": "Total Insurable Earnings",
+   "number_card_name": "SS - Total Insurable Earnings"
+  },
+  {
+   "label": "Active Insured Workforce",
+   "number_card_name": "SS - Active Insured Workforce"
+  },
+  {
+   "label": "Inactive Insured",
+   "number_card_name": "SS - Inactive Insured"
+  },
+  {
+   "label": "New Additions",
+   "number_card_name": "SS - New Additions"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 40.0,
+ "shortcuts": [],
+ "title": "Social Security"
+}

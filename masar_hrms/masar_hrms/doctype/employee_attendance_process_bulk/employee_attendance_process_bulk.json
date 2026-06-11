@@ -23,6 +23,8 @@
   "designation",
   "work_type",
   "grade",
+  "advanced_filters_section",
+  "filter_list",
   "employee_details_section",
   "employees",
   "connections_tab"
@@ -141,6 +143,15 @@
    "fieldtype": "Tab Break",
    "label": "Connections",
    "show_dashboard": 1
+  },
+  {
+   "fieldname": "advanced_filters_section",
+   "fieldtype": "Section Break",
+   "label": "Advanced Filters"
+  },
+  {
+   "fieldname": "filter_list",
+   "fieldtype": "HTML"
   }
  ],
  "index_web_pages_for_search": 1,
@@ -152,11 +163,11 @@
    "link_fieldname": "eapb_ref"
   }
  ],
- "modified": "2025-07-24 09:51:48.218495",
+ "modified": "2026-06-07 12:03:50.296129",
  "modified_by": "Administrator",
  "module": "Masar Hrms",
  "name": "Employee Attendance Process Bulk",
- "naming_rule": "Expression",
+ "naming_rule": "Expression (old style)",
  "owner": "Administrator",
  "permissions": [
   {
@@ -173,6 +184,8 @@
    "write": 1
   }
  ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": []

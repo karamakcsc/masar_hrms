@@ -3,72 +3,78 @@
 
 import frappe
 
-
 def execute(filters=None):
-	return get_columns(), get_data(filters)
-
+    return get_columns(filters), get_data(filters)
 
 def get_data(filters):
     conditions = " 1=1 "
-    # _from , to = filters.get('from'), filters.get('to')
     if filters.get('employee'):
-        conditions += f" AND te.employee = '{filters.get('employee')}'"
+        conditions += f" AND te.name = '{filters.get('employee')}'"
     if filters.get('year'):
         conditions += f" AND YEAR(tss.posting_date) = '{filters.get('year')}'"
-    # if filters.get('month'):
-        # conditions += f" AND MONTH(tss.posting_date) = '{filters.get('month')}'"
-    # if _from and to:
-    #     conditions += f" AND tss.posting_date BETWEEN '{_from}' AND '{to}'"
+        
     sql = frappe.db.sql(f"""
             SELECT
-				te.name AS `Employee`, 
-				te.employee_name AS `Employee Name`,
-				te.nationality AS `Nationality`,
-				CASE
-					WHEN te.nationality <> 'Jordan' THEN te.personal_no
-					ELSE te.national_no
-				END AS `National No`,
-				te.social_security_number AS `Social Security No`,
-				te.date_of_birth AS `Date Of Birth`,
-				te.date_of_joining AS `Date Of Joining`,
-				te.social_security_salary AS `Social Security Salary`,
-				te.custom_id_card_no AS `ID Card No`,
-				tss.total_working_days AS `Working Days`,
-				tss.payment_days AS `Payment Days`,
-				te.designation AS `Designation`,
-				CASE
-					WHEN te.custom_is_hazard = 1 THEN td.hazard_code
-					ELSE ""
-				END AS `Hazard Code`
-			FROM 
-				tabEmployee te
-			INNER JOIN
-				`tabSalary Slip` tss ON te.name = tss.employee
-			INNER JOIN
-				`tabDesignation` td ON te.designation = td.name
-			WHERE 
-   				{conditions} 
-       			AND tss.docstatus = 1 
-          		AND tss.payment_days >= 16 
-            	AND MONTH(tss.posting_date) = '1'
-			GROUP BY tss.name
-        """)
+                te.name AS `Employee`, 
+                te.full_name_ar AS `Employee Name`,
+                te.nationality AS `Nationality`,
+                CASE
+                    WHEN te.nationality <> 'Jordan' THEN te.personal_no
+                    ELSE te.national_no
+                END AS `National No`,
+                te.social_security_number AS `Social Security No`,
+                te.personal_no AS `Personal No`,
+                '' AS `Facility Number`,
+                te.date_of_birth AS `Date Of Birth`,
+                te.date_of_joining AS `Date Of Joining`,
+                te.social_security_salary AS `Social Security Salary`,
+                te.custom_id_card_no AS `ID Card No`,
+                tss.total_working_days AS `Working Days`,
+                tss.payment_days AS `Payment Days`,
+                te.designation AS `Designation`,
+                CASE
+                    WHEN te.custom_is_hazard = 1 THEN td.hazard_code
+                    ELSE ""
+                END AS `Hazard Code`
+            FROM 
+                tabEmployee te
+            INNER JOIN
+                `tabSalary Slip` tss ON te.name = tss.employee
+            INNER JOIN
+                `tabDesignation` td ON te.designation = td.name
+            WHERE 
+                   {conditions} 
+                   AND tss.docstatus = 1 
+                   AND tss.payment_days >= 16 
+                   AND MONTH(tss.posting_date) = '1'
+            GROUP BY tss.name
+        """, as_dict=True)
     
     return sql
 
-def get_columns():
+def get_columns(filters):
+    if filters and filters.get("damman_template"):
+        return [
+            {"label": "رقم التأمين", "fieldname": "Social Security No", "fieldtype": "Data", "width": 150},
+            {"label": "الاسم", "fieldname": "Employee Name", "fieldtype": "Data", "width": 200},
+            {"label": "رقم المنشأة", "fieldname": "Facility Number", "fieldtype": "Data", "width": 150},
+            {"label": "الرقم الوطني", "fieldname": "National No", "fieldtype": "Data", "width": 150},
+            {"label": "الأجر", "fieldname": "Social Security Salary", "fieldtype": "Currency", "width": 150},
+            {"label": "الرقم الشخصي", "fieldname": "Personal No", "fieldtype": "Data", "width": 150},
+        ]
+        
     return[
-		"Employee: Link/Employee:200",
-		"Employee Name: Data:200",
-		"Nationality: Data:200",
-		"National No/Personal No: Data:200",
-		"Social Security No: Data:200",
-		"Date Of Birth: Data:200",
-		"Date Of Joining: Data:200",
-		"Social Security Salary: Data:200",
-		"ID Card No: Data:200",
-		"Working Days: Data:200",
-		"Payment Days: Data:200",
-		"Designation: Data:200",
-		"Hazard Code: Data:200",
-	]
+        {"label": "Employee", "fieldname": "Employee", "fieldtype": "Link", "options": "Employee", "width": 200},
+        {"label": "Employee Name", "fieldname": "Employee Name", "fieldtype": "Data", "width": 200},
+        {"label": "Nationality", "fieldname": "Nationality", "fieldtype": "Data", "width": 200},
+        {"label": "National No/Personal No", "fieldname": "National No", "fieldtype": "Data", "width": 200},
+        {"label": "Social Security No", "fieldname": "Social Security No", "fieldtype": "Data", "width": 200},
+        {"label": "Date Of Birth", "fieldname": "Date Of Birth", "fieldtype": "Data", "width": 200},
+        {"label": "Date Of Joining", "fieldname": "Date Of Joining", "fieldtype": "Data", "width": 200},
+        {"label": "Social Security Salary", "fieldname": "Social Security Salary", "fieldtype": "Data", "width": 200},
+        {"label": "ID Card No", "fieldname": "ID Card No", "fieldtype": "Data", "width": 200},
+        {"label": "Working Days", "fieldname": "Working Days", "fieldtype": "Data", "width": 200},
+        {"label": "Payment Days", "fieldname": "Payment Days", "fieldtype": "Data", "width": 200},
+        {"label": "Designation", "fieldname": "Designation", "fieldtype": "Data", "width": 200},
+        {"label": "Hazard Code", "fieldname": "Hazard Code", "fieldtype": "Data", "width": 200},
+    ]

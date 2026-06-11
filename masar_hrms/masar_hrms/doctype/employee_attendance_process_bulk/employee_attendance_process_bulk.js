@@ -7,6 +7,7 @@ frappe.ui.form.on("Employee Attendance Process Bulk", {
 		setupButtons(frm);
 	},
 	setup: function(frm) {
+		hrms.setup_employee_filter_group(frm);
 		GetStandardDatePeriod(frm);
 	},
 	onload: function(frm) {
@@ -18,25 +19,21 @@ frappe.ui.form.on("Employee Attendance Process Bulk", {
 });
 
 function setupButtons(frm) {
-	// Draft state: Insert Employees + rename primary action to "Create Process"
 	if (frm.doc.docstatus === 0) {
-		frm.add_custom_button(__("Employees"), function() {
-			frappe.call({
-				doc: frm.doc,
-				method: 'insert_employees',
-				callback: function(r) {
-					frm.refresh_field('employees');
-				}
-			});
-		}, __("Insert"));
-
-		// Override the default "Submit" label with "Create Process"
+		frm.add_custom_button(__("Employees"), () => {
+                frappe.call({
+                    doc: frm.doc,
+                    args: {
+                        advanced_filters: frm.advanced_filters || [],
+                    },
+                    method: "insert_employees",
+                    callback: () => frm.refresh_field("employees")
+                });
+            }, __("Get"));
 		frm.page.set_primary_action(__("Create Process"), function() {
 			frm.savesubmit();
 		});
 	}
-
-	// Submitted state: show Submit All Processes button
 	if (frm.doc.docstatus === 1) {
 		frm.add_custom_button(__("Submit All Processes"), function() {
 			frappe.confirm(

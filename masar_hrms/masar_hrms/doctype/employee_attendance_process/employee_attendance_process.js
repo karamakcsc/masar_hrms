@@ -23,8 +23,6 @@ frappe.ui.form.on("Employee Attendance Process", {
 		GetOvertimeTypeAsDefault(frm);
 	},
 });
-
-// When HR edits approved overtime, mark row as manually adjusted
 frappe.ui.form.on("EAP Overtime Detail", {
 	overtime: function(frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
@@ -39,8 +37,6 @@ frappe.ui.form.on("EAP Overtime Detail", {
 		frappe.model.set_value(cdt, cdn, 'is_manually_adjusted', 1);
 	}
 });
-
-// When HR edits approved shortage, validate it does not exceed calculated and recalculate amounts
 frappe.ui.form.on("EAP Leave Detail", {
 	approved_shortage: function(frm, cdt, cdn) {
 		let row = locals[cdt][cdn];
@@ -52,14 +48,10 @@ frappe.ui.form.on("EAP Leave Detail", {
 			]));
 			return;
 		}
-
-		// Recalculate row amount based on new approved_shortage
 		let hour_rate = frm.doc.shortage_hour_rate || 0;
 		let approved = flt(row.approved_shortage) || 0;
 		let new_amount = (approved / 3600) * hour_rate;
 		frappe.model.set_value(cdt, cdn, 'amount', new_amount);
-
-		// Recalculate parent total_shortage_amount
 		let total_amount = 0;
 		(frm.doc.leaves || []).forEach(function(r) {
 			total_amount += flt(r.amount) || 0;
@@ -69,7 +61,6 @@ frappe.ui.form.on("EAP Leave Detail", {
 });
 
 function setupChildTableRestrictions(frm) {
-	// Prevent HR from adding or deleting rows manually
 	if (frm.fields_dict.overtime_table && frm.fields_dict.overtime_table.grid) {
 		frm.fields_dict.overtime_table.grid.cannot_add_rows = true;
 		frm.fields_dict.overtime_table.grid.cannot_delete_rows = true;
