@@ -1,0 +1,184 @@
+{
+ "charts": [
+  {
+   "chart_name": "Attendance Count",
+   "label": "Attendance Count"
+  },
+  {
+   "chart_name": "Shift Assignment Breakup",
+   "label": "Shift Assignment Breakup"
+  }
+ ],
+ "content": "[{\"id\":\"31-I3YuJRn\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shift &amp; Time Management</span>\",\"col\":12}},{\"id\":\"_QiaAonjqD\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Present (This Month)\",\"col\":3}},{\"id\":\"ILGdpBVSf3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Absent (This Month)\",\"col\":3}},{\"id\":\"LEGCsa8_fT\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Late Entry (This Month)\",\"col\":3}},{\"id\":\"gltWlcGMjX\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Early Exit (This Month)\",\"col\":3}},{\"id\":\"uwDExIfkVT\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Attendance Count\",\"col\":12}},{\"id\":\"6aKQQWhQ61\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\"><b>Master Data</b></span>\",\"col\":12}},{\"id\":\"eGqWWnvN4C\",\"type\":\"card\",\"data\":{\"card_name\":\"Shifts\",\"col\":6}},{\"id\":\"U6bmzk8vmB\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Shift Assignment Breakup\",\"col\":6}},{\"id\":\"uNLSOfQoOs\",\"type\":\"card\",\"data\":{\"card_name\":\"Attendance\",\"col\":6}},{\"id\":\"RI0pbGOKs_\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":6}}]",
+ "creation": "2026-06-14 10:42:24.603829",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "folder-normal-large",
+ "idx": 0,
+ "indicator_color": "green",
+ "is_hidden": 0,
+ "label": "Shift & Time Management",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shifts",
+   "link_count": 5,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Shift Management Bulk",
+   "link_count": 0,
+   "link_to": "Employee Shift Management Bulk",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Shift Management",
+   "link_count": 0,
+   "link_to": "Employee Shift Management",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Shift Management",
+   "link_count": 0,
+   "link_to": "Shift Assignment",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shift Assignment Tool",
+   "link_count": 0,
+   "link_to": "Shift Assignment Tool",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shift Type",
+   "link_count": 0,
+   "link_to": "Shift Type",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Checkin",
+   "link_count": 0,
+   "link_to": "Employee Checkin",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance",
+   "link_count": 0,
+   "link_to": "Attendance",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Attendance Request",
+   "link_count": 0,
+   "link_to": "Attendance Request",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Shift Assignment Breakup",
+   "link_count": 0,
+   "link_to": "Monthly Attendance Sheet",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Shift Attendance",
+   "link_count": 0,
+   "link_to": "Shift Attendance",
+   "link_type": "Report",
+   "onboard": 0,
+   "report_ref_doctype": "Attendance",
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-06-14 11:18:49.046107",
+ "modified_by": "Administrator",
+ "module": "Masar Hrms",
+ "name": "Shift & Time Management",
+ "number_cards": [
+  {
+   "label": "Total Present (This Month)",
+   "number_card_name": "Total Present (This Month)"
+  },
+  {
+   "label": "Total Absent (This Month)",
+   "number_card_name": "Total Absent (This Month)"
+  },
+  {
+   "label": "Late Entry (This Month)",
+   "number_card_name": "Late Entry (This Month)"
+  },
+  {
+   "label": "Early Exit (This Month)",
+   "number_card_name": "Early Exit (This Month)"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 41.0,
+ "shortcuts": [],
+ "title": "Shift & Time Management"
+}
