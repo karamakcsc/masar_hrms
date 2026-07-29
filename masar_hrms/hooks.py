@@ -32,7 +32,7 @@ app_license = "MIT"
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
-# doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
+doctype_list_js = {"Attendance" : "injury/js/attendance_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
@@ -89,7 +89,8 @@ app_license = "MIT"
 
 override_doctype_class = {
     "Salary Slip" : "masar_hrms.override._salary_slip.SalarySlip",
-    "Payroll Entry" :"masar_hrms.override._payroll_entry.PayrollEntry"
+    "Payroll Entry" :"masar_hrms.override._payroll_entry.PayrollEntry",
+    "Leave Application" : "masar_hrms.override._leave_application.LeaveApplication"
 }
 
 # Document Events
@@ -112,7 +113,8 @@ doc_events = {
 doctype_js = {
    "Employee" : "custom/employee/employee.js",
    "Goal" : "custom/goal/goal.js",
-   "Appraisal" : "custom/appraisal/appraisal.js"
+   "Appraisal" : "custom/appraisal/appraisal.js",
+   "Payroll Entry" : "custom/payroll_entry/payroll_entry.js"
  }
 
 # Scheduled Tasks
@@ -265,7 +267,7 @@ fixtures = [
                 "Employee External Work History-custom_from_date",
                 "Employee External Work History-custom_to_date", 
                 # Leave Application
-                "Leave Application-custom_work_injury_ref"
+                "Leave Application-custom_work_injury_ref",
                 "Leave Application-custom_esla_ref",
                 # Leave Type
                 "Leave Type-is_short_leave",
@@ -276,6 +278,7 @@ fixtures = [
                 "Leave Type-custom_salary_deduction",
                 # Payroll Entry
                 "Payroll Entry-work_type",
+                "Payroll Entry-custom_cuttoff_date",
                 # Employee
                 "Employee-custom_privilege_details",
                 "Employee-overtime_ceiling",
@@ -368,8 +371,9 @@ fixtures = [
                     "Shift Request-status-permlevel",
                     # Appraisal
                     "Appraisal-appraisal_kra-permlevel",
-                    "Appraisal KRA-per_weightage-permlevel"
-
+                    "Appraisal KRA-per_weightage-permlevel",
+                    # Attendance
+                    "Attendance-status-options",
                 ]
             ]
         ]

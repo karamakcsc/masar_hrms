@@ -1,0 +1,265 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2025-07-23 10:28:38.089792",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_faty",
+  "is_active",
+  "from_date",
+  "column_break_hlak",
+  "salary_component_management",
+  "salary_component_details_section",
+  "is_ss_applicable",
+  "is_hazard",
+  "social_security_number",
+  "tax_type",
+  "ss_date",
+  "column_break_iwgj",
+  "basic_salary_component",
+  "basic_salary",
+  "b_from_date",
+  "tax_number",
+  "overtime",
+  "is_overtime_applicable",
+  "overtime_ceiling",
+  "other_component_section",
+  "other_sc_html",
+  "editor",
+  "salary_details_section",
+  "earning_salary",
+  "column_break_pnit",
+  "deduction_salary",
+  "section_break_efkk",
+  "create_assignment",
+  "salary_structure",
+  "column_break_tiyf",
+  "ssa_from_date",
+  "income_tax_slab"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_faty",
+   "fieldtype": "Section Break",
+   "label": "Employee Details"
+  },
+  {
+   "fieldname": "column_break_hlak",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "from_date",
+   "fieldtype": "Date",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "From Date",
+   "reqd": 1
+  },
+  {
+   "fieldname": "salary_component_details_section",
+   "fieldtype": "Section Break",
+   "label": "Salary Component Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_ss_applicable",
+   "fieldtype": "Check",
+   "label": "Is Social Security Applicable"
+  },
+  {
+   "default": "0",
+   "depends_on": "is_ss_applicable",
+   "fieldname": "is_hazard",
+   "fieldtype": "Check",
+   "label": "Is Hazard"
+  },
+  {
+   "depends_on": "is_ss_applicable",
+   "fieldname": "social_security_number",
+   "fieldtype": "Data",
+   "label": "Social Security Number",
+   "mandatory_depends_on": "is_ss_applicable"
+  },
+  {
+   "depends_on": "is_ss_applicable",
+   "fieldname": "tax_type",
+   "fieldtype": "Select",
+   "label": "Tax Type",
+   "mandatory_depends_on": "is_ss_applicable",
+   "options": "\n1\n2\n3"
+  },
+  {
+   "depends_on": "is_ss_applicable",
+   "fieldname": "ss_date",
+   "fieldtype": "Date",
+   "label": "Social Security Date",
+   "mandatory_depends_on": "is_ss_applicable"
+  },
+  {
+   "fieldname": "column_break_iwgj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Basic",
+   "fieldname": "basic_salary_component",
+   "fieldtype": "Link",
+   "label": "Basic Salary Component",
+   "link_filters": "[[\"Salary Component\",\"type\",\"=\",\"Earning\"]]",
+   "options": "Salary Component",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "basic_salary",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Basic Salary",
+   "reqd": 1
+  },
+  {
+   "fieldname": "overtime",
+   "fieldtype": "Heading",
+   "label": "Overtime"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_overtime_applicable",
+   "fieldtype": "Check",
+   "label": "Is Overtime Applicable"
+  },
+  {
+   "default": "0",
+   "depends_on": "is_overtime_applicable",
+   "fieldname": "overtime_ceiling",
+   "fieldtype": "Float",
+   "label": "Overtime Ceiling",
+   "mandatory_depends_on": "is_overtime_applicable"
+  },
+  {
+   "fieldname": "other_component_section",
+   "fieldtype": "Section Break",
+   "label": "Other Component"
+  },
+  {
+   "fieldname": "salary_details_section",
+   "fieldtype": "Section Break",
+   "label": "Salary Details"
+  },
+  {
+   "default": "0",
+   "fieldname": "earning_salary",
+   "fieldtype": "Float",
+   "label": "Earning Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_pnit",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "0",
+   "fieldname": "deduction_salary",
+   "fieldtype": "Float",
+   "label": "Deduction Salary",
+   "read_only": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "create_assignment",
+   "fieldtype": "Check",
+   "label": "Create Assignment"
+  },
+  {
+   "depends_on": "create_assignment",
+   "fieldname": "salary_structure",
+   "fieldtype": "Link",
+   "label": "Salary Structure",
+   "link_filters": "[[\"Salary Structure\",\"docstatus\",\"=\",\"1\"],[\"Salary Structure\",\"is_active\",\"=\",\"Yes\"]]",
+   "mandatory_depends_on": "create_assignment",
+   "options": "Salary Structure"
+  },
+  {
+   "fieldname": "column_break_tiyf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "depends_on": "create_assignment",
+   "fieldname": "ssa_from_date",
+   "fieldtype": "Date",
+   "label": "From Date",
+   "mandatory_depends_on": "create_assignment"
+  },
+  {
+   "depends_on": "create_assignment",
+   "fieldname": "income_tax_slab",
+   "fieldtype": "Link",
+   "label": "Income Tax Slab",
+   "mandatory_depends_on": "create_assignment",
+   "options": "Income Tax Slab"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_active",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Is Active"
+  },
+  {
+   "fieldname": "salary_component_management",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Salary Component Management",
+   "options": "Salary Component Management"
+  },
+  {
+   "fieldname": "other_sc_html",
+   "fieldtype": "HTML",
+   "label": "Other Salary Component",
+   "options": "{{ doc.editor }}",
+   "read_only": 1
+  },
+  {
+   "fieldname": "editor",
+   "fieldtype": "HTML Editor",
+   "hidden": 1,
+   "in_preview": 1,
+   "label": "editor"
+  },
+  {
+   "fieldname": "section_break_efkk",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "tax_number",
+   "fieldtype": "Data",
+   "label": "Tax Number"
+  },
+  {
+   "depends_on": "is_ss_applicable",
+   "fieldname": "b_from_date",
+   "fieldtype": "Date",
+   "label": "Basic Salary From Date",
+   "mandatory_depends_on": "is_ss_applicable"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-07-09 11:17:05.044025",
+ "modified_by": "Administrator",
+ "module": "Salary Component Management",
+ "name": "SCM History Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

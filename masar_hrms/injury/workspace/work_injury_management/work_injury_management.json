@@ -1,0 +1,172 @@
+{
+ "charts": [],
+ "content": "[{\"id\":\"wim-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Work Injury Management</span>\",\"col\":12}},{\"id\":\"wim-nc-1\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Open Cases\",\"col\":4}},{\"id\":\"wim-nc-2\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Approval\",\"col\":4}},{\"id\":\"wim-nc-3\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Employees Under Treatment\",\"col\":4}},{\"id\":\"wim-nc-4\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Treatment Cost (This Month)\",\"col\":4}},{\"id\":\"wim-nc-5\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Payroll Adjustments Pending\",\"col\":4}},{\"id\":\"wim-nc-6\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Closed Cases (This Year)\",\"col\":4}},{\"id\":\"wim-header-2\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Shortcuts</span>\",\"col\":12}},{\"id\":\"wim-sc-1\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Work Injury\",\"col\":3}},{\"id\":\"wim-sc-2\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Work Injury List\",\"col\":3}},{\"id\":\"wim-sc-3\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Work Injury Settings\",\"col\":3}},{\"id\":\"wim-sc-4\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Work Injury Register\",\"col\":3}},{\"id\":\"wim-card-masters\",\"type\":\"card\",\"data\":{\"card_name\":\"Masters\",\"col\":6}},{\"id\":\"wim-card-reports\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":6}}]",
+ "creation": "2026-07-09 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "color-energy-points",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Work Injury Management",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Masters",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Work Injury",
+   "link_count": 0,
+   "link_to": "Work Injury",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Work Injury Settings",
+   "link_count": 0,
+   "link_to": "Work Injury Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 5,
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Work Injury Register",
+   "link_count": 0,
+   "link_to": "Work Injury Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Active Injury Report",
+   "link_count": 0,
+   "link_to": "Active Injury Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payroll Impact Report",
+   "link_count": 0,
+   "link_to": "Payroll Impact Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Treatment Cost Report",
+   "link_count": 0,
+   "link_to": "Treatment Cost Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Injury History",
+   "link_count": 0,
+   "link_to": "Employee Injury History",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-07-09 16:56:03.057035",
+ "modified_by": "Administrator",
+ "module": "Injury",
+ "name": "Work Injury Management",
+ "number_cards": [
+  {
+   "label": "Open Cases",
+   "number_card_name": "Work Injury - Open Cases"
+  },
+  {
+   "label": "Pending Approval",
+   "number_card_name": "Work Injury - Pending Approval"
+  },
+  {
+   "label": "Employees Under Treatment",
+   "number_card_name": "Work Injury - Employees Under Treatment"
+  },
+  {
+   "label": "Treatment Cost (This Month)",
+   "number_card_name": "Work Injury - Treatment Cost MTD"
+  },
+  {
+   "label": "Payroll Adjustments Pending",
+   "number_card_name": "Work Injury - Payroll Adjustments Pending"
+  },
+  {
+   "label": "Closed Cases (This Year)",
+   "number_card_name": "Work Injury - Closed Cases This Year"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 41.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "New Work Injury",
+   "type": "URL",
+   "url": "/app/work-injury/new"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Work Injury List",
+   "link_to": "Work Injury",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "label": "Work Injury Settings",
+   "link_to": "Work Injury Settings",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Work Injury Register",
+   "link_to": "Work Injury Register",
+   "report_ref_doctype": "Work Injury",
+   "type": "Report"
+  }
+ ],
+ "title": "Work Injury Management"
+}

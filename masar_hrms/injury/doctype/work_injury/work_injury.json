@@ -1,0 +1,270 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "naming_series:",
+ "creation": "2025-09-07 10:03:58.208421",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_info_section",
+  "employee",
+  "employee_name",
+  "department",
+  "column_break_rrbg",
+  "posting_date",
+  "company",
+  "ss_no",
+  "designation",
+  "section_break_hzos",
+  "injury_no",
+  "injury_type",
+  "column_break_iams",
+  "injury_location",
+  "injury_start_date",
+  "is_medically_approved",
+  "section_break_xvtn",
+  "injuries",
+  "section_break_pned",
+  "total_days",
+  "employer_paid_days",
+  "column_break_hhga",
+  "total_cost_of_treatment",
+  "deduction_days",
+  "section_break_ccln",
+  "amended_from",
+  "column_break_ibji",
+  "naming_series",
+  "connections_tab"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_ccln",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Work Injury",
+   "print_hide": 1,
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.employee_name",
+   "fetch_if_empty": 1,
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee.department",
+   "fetch_if_empty": 1,
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Department",
+   "options": "Department",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_rrbg",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Today",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1,
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee.social_security_number",
+   "fieldname": "ss_no",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Social Security No.",
+   "read_only": 1
+  },
+  {
+   "fieldname": "injury_start_date",
+   "fieldtype": "Date",
+   "in_standard_filter": 1,
+   "label": "Injury Start Date"
+  },
+  {
+   "default": "0",
+   "description": "Must be checked before submission if Work Injury Settings requires medical approval.",
+   "fieldname": "is_medically_approved",
+   "fieldtype": "Check",
+   "label": "Medically Approved"
+  },
+  {
+   "fieldname": "section_break_xvtn",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_pned",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_hhga",
+   "fieldtype": "Column Break"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_cost_of_treatment",
+   "fieldtype": "Float",
+   "label": "Total Cost of Treatment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ibji",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "WRK-INJ-.YYYY.-",
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "Naming Series",
+   "options": "WRK-INJ-.YYYY.-",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "injuries",
+   "fieldtype": "Table",
+   "label": "Injuries",
+   "options": "Work Injury Detail"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "total_days",
+   "fieldtype": "Float",
+   "label": "Total Injuries Days",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "description": "Cumulative number of days fully paid by the company for this case (capped at Work Injury Settings' Employee Paid Days).",
+   "fieldname": "employer_paid_days",
+   "fieldtype": "Float",
+   "label": "Employer Paid Days",
+   "read_only": 1
+  },
+  {
+   "allow_on_submit": 1,
+   "description": "Cumulative number of days beyond the fully paid period, subject to the salary deduction.",
+   "fieldname": "deduction_days",
+   "fieldtype": "Float",
+   "label": "Deduction Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "injury_no",
+   "fieldtype": "Data",
+   "label": "Injury No.",
+   "reqd": 1
+  },
+  {
+   "fieldname": "connections_tab",
+   "fieldtype": "Tab Break",
+   "label": "Connections",
+   "show_dashboard": 1
+  },
+  {
+   "fieldname": "employee_info_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Info"
+  },
+  {
+   "fetch_from": "employee.designation",
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_hzos",
+   "fieldtype": "Section Break",
+   "label": "Injury Details"
+  },
+  {
+   "fieldname": "injury_type",
+   "fieldtype": "Select",
+   "label": "Injury Type",
+   "options": "\nWork Site Injury\nCommunity Injury\nOccupational Disease"
+  },
+  {
+   "fieldname": "column_break_iams",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "injury_location",
+   "fieldtype": "Link",
+   "label": "Injury Location/Project",
+   "options": "Project",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [
+  {
+   "group": "Leave Application",
+   "link_doctype": "Leave Application",
+   "link_fieldname": "custom_work_injury_ref"
+  }
+ ],
+ "modified": "2026-07-09 12:25:04.263801",
+ "modified_by": "Administrator",
+ "module": "Injury",
+ "name": "Work Injury",
+ "naming_rule": "By \"Naming Series\" field",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

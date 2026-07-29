@@ -1,0 +1,148 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2026-07-07 12:11:23.724647",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_paid_days",
+  "leave_type",
+  "injury_deduction_component",
+  "column_break_rfvl",
+  "ss_percent_ded",
+  "wage_calculation_base",
+  "basic_salary_component",
+  "section_break_gncx",
+  "require_medical_approval",
+  "cost_limit",
+  "column_break_csnt",
+  "action_for_cost_limit",
+  "treatment_cost_limit"
+ ],
+ "fields": [
+  {
+   "default": "3",
+   "description": "Number of work injury leave days that are fully paid by the company. <br>Salary deduction starts after this period.",
+   "fieldname": "employee_paid_days",
+   "fieldtype": "Int",
+   "in_list_view": 1,
+   "label": "Employee Paid Days",
+   "non_negative": 1,
+   "reqd": 1
+  },
+  {
+   "default": "25",
+   "description": "Percentage deducted from the employee's salary after the fully paid period ends. <br>For example, <b>25%</b> means the employee receives <b>75%</b> of their daily wage.",
+   "fieldname": "ss_percent_ded",
+   "fieldtype": "Percent",
+   "label": "Deduction Percentage",
+   "reqd": 1
+  },
+  {
+   "fieldname": "column_break_rfvl",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_gncx",
+   "fieldtype": "Section Break"
+  },
+  {
+   "default": "0",
+   "description": "Require medical approval before a work injury request can be submitted or approved.",
+   "fieldname": "require_medical_approval",
+   "fieldtype": "Check",
+   "label": "Require Medical Approval"
+  },
+  {
+   "fieldname": "column_break_csnt",
+   "fieldtype": "Column Break"
+  },
+  {
+   "depends_on": "cost_limit",
+   "description": "Maximum allowed treatment cost for a work injury claim.",
+   "fieldname": "treatment_cost_limit",
+   "fieldtype": "Float",
+   "label": "Treatment Cost Limit",
+   "mandatory_depends_on": "cost_limit"
+  },
+  {
+   "default": "Warn",
+   "depends_on": "cost_limit",
+   "description": "Action to take when the treatment cost exceeds the configured limit.<br><b>1- Stop:</b> Prevent the work injury request from being submitted.<br><b>2- Warn:</b> Display a warning message but allow the user to continue.<br><b>3- Ignore:</b> Do not perform any validation and allow the request to proceed without notification.",
+   "fieldname": "action_for_cost_limit",
+   "fieldtype": "Select",
+   "label": "Action for Cost Limit",
+   "mandatory_depends_on": "cost_limit",
+   "options": "Stop\nWarn\nIgnore"
+  },
+  {
+   "default": "0",
+   "description": "Enable a maximum treatment cost limit for work injury claims.",
+   "fieldname": "cost_limit",
+   "fieldtype": "Check",
+   "label": "Enable Cost Limit"
+  },
+  {
+   "description": "Select the leave type that will be automatically applied to attendance records for employees during the work injury period. This leave type is used when creating attendance and leave entries.",
+   "fieldname": "leave_type",
+   "fieldtype": "Link",
+   "label": "Leave Type",
+   "options": "Leave Type",
+   "reqd": 1
+  },
+  {
+   "description": "Select the salary component used to calculate work injury compensation:<br>\n\n<b>Basic Salary</b> \u2013 Compensation is calculated based on the employee's basic salary only.<br>\n<b>Earning Salary</b> \u2013 Compensation is calculated based on earnings that are prorated by payment days. Fixed earnings that are not affected by payment days are not included in the calculation.",
+   "fieldname": "wage_calculation_base",
+   "fieldtype": "Select",
+   "label": "Wage Calculation Base",
+   "options": "Basic Salary\nEarning Salary",
+   "reqd": 1
+  },
+  {
+   "default": "Basic",
+   "depends_on": "eval:doc.wage_calculation_base==\"Basic Salary\"",
+   "description": "Salary component used as the daily wage basis when Wage Calculation Base is Basic Salary.",
+   "fieldname": "basic_salary_component",
+   "fieldtype": "Link",
+   "label": "Basic Salary Component",
+   "link_filters": "[[\"Salary Component\",\"type\",\"=\",\"Earning\"]]",
+   "mandatory_depends_on": "eval:doc.wage_calculation_base==\"Basic Salary\"",
+   "options": "Salary Component"
+  },
+  {
+   "description": "Deduction salary component used to post the work injury salary deduction on the Salary Slip.",
+   "fieldname": "injury_deduction_component",
+   "fieldtype": "Link",
+   "label": "Injury Deduction Component",
+   "link_filters": "[[\"Salary Component\",\"type\",\"=\",\"Deduction\"]]",
+   "options": "Salary Component",
+   "reqd": 1
+  }
+ ],
+ "grid_page_length": 50,
+ "index_web_pages_for_search": 1,
+ "issingle": 1,
+ "links": [],
+ "modified": "2026-07-09 15:01:39.236433",
+ "modified_by": "Administrator",
+ "module": "Injury",
+ "name": "Work Injury Settings",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "print": 1,
+   "read": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "row_format": "Dynamic",
+ "rows_threshold_for_grid_search": 20,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

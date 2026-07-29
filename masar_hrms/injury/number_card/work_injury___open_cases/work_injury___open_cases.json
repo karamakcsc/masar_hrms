@@ -1,0 +1,21 @@
+{
+ "color": "#2490ef",
+ "creation": "2026-07-09 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "filters_json": "[]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Open Cases",
+ "method": "masar_hrms.injury.number_card.get_open_cases_count",
+ "modified": "2026-07-09 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Injury",
+ "name": "Work Injury - Open Cases",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Custom"
+}

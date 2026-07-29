@@ -52,6 +52,8 @@ from hrms.payroll.doctype.salary_slip.salary_slip_loan_utils import (
 from hrms.payroll.utils import sanitize_expression
 from hrms.utils.holiday_list import get_holiday_dates_between
 
+from masar_hrms.injury.doctype.work_injury_settings.work_injury_settings import get_settings as get_work_injury_settings
+
 # cache keys
 HOLIDAYS_BETWEEN_DATES = "holidays_between_dates"
 LEAVE_TYPE_MAP = "leave_type_map"
@@ -822,6 +824,131 @@ class SalarySlip(TransactionBase):
 			}
 			doc.append("earnings", wages_row)
 
+	def apply_work_injury_deduction(self):
+		settings = get_work_injury_settings()
+		if not settings.injury_deduction_component:
+			return
+
+		amount = flt(self.get_work_injury_deduction_amount(settings))
+		self.update_injury_deduction_row(settings.injury_deduction_component, amount)
+
+	def update_injury_deduction_row(self, salary_component, amount):
+		for row in self.deductions:
+			if row.salary_component != salary_component:
+				continue
+			if amount:
+				row.default_amount = amount
+				row.additional_amount = 0
+				row.amount = amount
+			else:
+				self.deductions.remove(row)
+			return
+
+		if not amount:
+			return
+
+		component_data = get_salary_component_data(salary_component)
+		if not component_data:
+			frappe.throw(
+				_(
+					"Salary Component {0} set as Injury Deduction Component in Work Injury Settings does not exist."
+				).format(salary_component)
+			)
+
+		self.append(
+			"deductions",
+			{
+				"salary_component": component_data.salary_component,
+				"abbr": component_data.abbr,
+				"amount": amount,
+				"default_amount": amount,
+				"additional_amount": 0.0,
+				"depends_on_payment_days": 0,
+				"do_not_include_in_total": component_data.do_not_include_in_total,
+			},
+		)
+
+	def get_work_injury_deduction_amount(self, settings):
+		if not self.employee:
+			return 0
+
+		attendance = frappe.qb.DocType("Attendance")
+		injured_rows = (
+			frappe.qb.from_(attendance)
+			.select(attendance.attendance_date, attendance.leave_application)
+			.where(
+				(attendance.status == "Injured")
+				& (attendance.employee == self.employee)
+				& (attendance.docstatus == 1)
+				& (attendance.attendance_date.between(self.start_date, self.actual_end_date))
+				& (attendance.leave_application.isnotnull())
+			)
+		).run(as_dict=True)
+
+		if not injured_rows:
+			return 0
+
+		leave_applications = list({d.leave_application for d in injured_rows if d.leave_application})
+		work_injury_by_leave_application = {
+			d.name: d.custom_work_injury_ref
+			for d in frappe.get_all(
+				"Leave Application",
+				filters={"name": ["in", leave_applications]},
+				fields=["name", "custom_work_injury_ref"],
+			)
+			if d.custom_work_injury_ref
+		}
+
+		injured_day_count_by_case = {}
+		for row in injured_rows:
+			work_injury = work_injury_by_leave_application.get(row.leave_application)
+			if not work_injury:
+				continue
+			injured_day_count_by_case[work_injury] = injured_day_count_by_case.get(work_injury, 0) + 1
+
+		if not injured_day_count_by_case:
+			return 0
+
+		daily_rate = self.get_work_injury_daily_rate(settings)
+		if not daily_rate:
+			return 0
+
+		total_deduction_days = 0
+		for work_injury, day_count in injured_day_count_by_case.items():
+			case_leave_applications = [
+				name for name, ref in work_injury_by_leave_application.items() if ref == work_injury
+			]
+			days_already_consumed = frappe.db.count(
+				"Attendance",
+				filters={
+					"status": "Injured",
+					"employee": self.employee,
+					"docstatus": 1,
+					"leave_application": ["in", case_leave_applications],
+					"attendance_date": ["<", self.start_date],
+				},
+			)
+			free_days_remaining = max(0, flt(settings.employee_paid_days) - days_already_consumed)
+			total_deduction_days += max(0, day_count - free_days_remaining)
+
+		if not total_deduction_days:
+			return 0
+
+		return total_deduction_days * daily_rate * flt(settings.ss_percent_ded) / 100
+
+	def get_work_injury_daily_rate(self, settings):
+		if not self.total_working_days:
+			return 0
+
+		if settings.wage_calculation_base == "Basic Salary":
+			for row in self.earnings:
+				if row.salary_component == settings.basic_salary_component:
+					return flt(row.amount) / flt(self.total_working_days)
+			return 0
+
+		total_earning = sum(flt(row.amount) for row in self.earnings if cint(row.depends_on_payment_days))
+		return flt(total_earning) / flt(self.total_working_days)
+
 	def set_salary_structure_assignment(self):
 		self._salary_structure_assignment = frappe.db.get_value(
 			"Salary Structure Assignment",
@@ -870,6 +997,8 @@ class SalarySlip(TransactionBase):
 
 		if self.salary_structure:
 			self.calculate_component_amounts("deductions")
+
+		self.apply_work_injury_deduction()
 
 		set_loan_repayment(self)
 

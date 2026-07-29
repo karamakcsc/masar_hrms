@@ -1208,7 +1208,12 @@ class PayrollEntry(Document):
 
 	def set_start_end_dates(self):
 		self.update(
-			get_start_end_dates(self.payroll_frequency, self.start_date or self.posting_date, self.company)
+			get_start_end_dates(
+				self.payroll_frequency,
+				self.start_date or self.posting_date,
+				self.company,
+				self.custom_cuttoff_date,
+			)
 		)
 
 	@frappe.whitelist()
@@ -1449,18 +1454,19 @@ from frappe.utils import getdate, add_months
 import frappe
 
 @frappe.whitelist()
-def get_start_end_dates(payroll_frequency, start_date=None, company=None):
+def get_start_end_dates(payroll_frequency, start_date=None, company=None, custom_cuttoff_date=1):
     """Returns dict of start and end dates for given payroll frequency based on start_date"""
     start_date = getdate(start_date)
     if payroll_frequency in ["Monthly", ""]:
-        previous_month = add_months(start_date, -1)
-        start_date = previous_month.replace(day=25)
-        end_date = start_date.replace(
-            year=start_date.year,
-            month=start_date.month
-        )
-        end_date = start_date
-        end_date = add_months(end_date, 1).replace(day=24)
+        if cint(custom_cuttoff_date):
+            previous_month = add_months(start_date, -1)
+            start_date = previous_month.replace(day=25)
+            end_date = add_months(start_date, 1).replace(day=24)
+        else:
+            import calendar
+            start_date = start_date.replace(day=1)
+            last_day = calendar.monthrange(start_date.year, start_date.month)[1]
+            end_date = start_date.replace(day=last_day)
     elif payroll_frequency == "Bimonthly":
         fiscal_year = get_fiscal_year(start_date, company=company)[0]
         month = "%02d" % start_date.month
