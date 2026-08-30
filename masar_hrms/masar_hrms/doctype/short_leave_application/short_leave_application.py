@@ -175,7 +175,7 @@ class ShortLeaveApplication(Document):
         sla = frappe.qb.DocType('Short Leave Application')
         la = frappe.qb.DocType('Leave Application')
         sql = (frappe.qb.from_(sla)
-            .join(la)
+            .left_join(la)
             .on(sla.name == la.custom_esla_ref)
             .select(
                 (Sum(sla.leave_duration)).as_('sla_amount'),
@@ -224,7 +224,7 @@ class ShortLeaveApplication(Document):
         if not self.employee:
             frappe.throw(_("Employee is required to check casual balance."), title=_("Employee Required"))
         leave_balance = get_leave_balance_on(self.employee, 'Casual Vacation', self.leave_date)
-        if leave_balance or leave_balance > 1:
+        if leave_balance and leave_balance > 0:
             frappe.throw(
                 """Casual Vacation balance is available for the employee on the selected date.
                 Please select Balance Deduction or None Deduction.""",

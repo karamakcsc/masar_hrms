@@ -161,6 +161,37 @@ class EmployeeAttendanceProcess(Document):
 				x.custom_late_exit_grace_period,
 				x.custom_enable_early_entry_marking,
 				x.custom_enable_late_exit_marking,
+			TIMESTAMPDIFF(
+				SECOND,
+				x.shift_start_datetime,
+				x.shift_end_datetime
+			) AS shift_duration_seconds,
+			IF(
+				x.in_time IS NOT NULL
+				AND x.out_time IS NOT NULL,
+				TIMESTAMPDIFF(
+					SECOND,
+					x.in_time,
+					x.out_time
+				),
+				0
+			) AS actual_duration_seconds,
+				IF(
+					x.in_time IS NOT NULL
+					AND x.out_time IS NOT NULL
+					AND TIMESTAMPDIFF(
+						SECOND,
+						x.in_time,
+						x.out_time
+					) >
+					TIMESTAMPDIFF(
+						SECOND,
+						x.shift_start_datetime,
+						x.shift_end_datetime
+					),
+					1,
+					0
+				) AS actual_time_exceeds_shift,
 				IF(
 					x.custom_enable_early_entry_marking = 1
 					AND x.in_time IS NOT NULL
@@ -219,55 +250,57 @@ class EmployeeAttendanceProcess(Document):
 					st.custom_enable_early_entry_marking,
 					st.custom_enable_late_exit_marking,
 					h.name AS holiday_name,
+			TIMESTAMP(
+				CONCAT(a.attendance_date, ' ', st.start_time)
+			) AS shift_start_datetime,
+			CASE
+				WHEN st.end_time < st.start_time THEN
 					TIMESTAMP(
-						CONCAT(a.attendance_date, ' ', st.start_time)
-					) AS shift_start_datetime,
-					CASE
-						WHEN st.end_time < st.start_time THEN
-							TIMESTAMP(
-								CONCAT(
-									DATE_ADD(a.attendance_date, INTERVAL 1 DAY),
-									' ',
-									st.end_time
-								)
-							)
-						ELSE
-							TIMESTAMP(
-								CONCAT(
-									a.attendance_date,
-									' ',
-									st.end_time
-								)
-							)
-					END AS shift_end_datetime
-				FROM tabAttendance a
-				INNER JOIN tabEmployee emp
-					ON emp.name = a.employee
-				INNER JOIN `tabShift Type` st
-					ON st.name = COALESCE(
-						(
-							SELECT sa.shift_type
-							FROM `tabShift Assignment` sa
-							WHERE sa.employee = a.employee
-								AND a.attendance_date BETWEEN sa.start_date
-								AND IFNULL(sa.end_date, '9999-12-31')
-								AND sa.status = 'Active'
-								AND sa.docstatus = 1
-							ORDER BY sa.start_date DESC
-							LIMIT 1
-						),
-						emp.default_shift
+						CONCAT(
+							DATE_ADD(a.attendance_date, INTERVAL 1 DAY),
+							' ',
+						st.end_time
 					)
-				LEFT JOIN `tabHoliday List` hl
-					ON hl.name = st.holiday_list
-				LEFT JOIN `tabHoliday` h
-					ON h.parent = hl.name
-					AND h.holiday_date = a.attendance_date
-				WHERE
-					a.employee = %(employee)s
-					AND a.attendance_date BETWEEN %(from_date)s AND %(to_date)s
+				)
+			ELSE
+				TIMESTAMP(
+					CONCAT(
+						a.attendance_date,
+						' ',
+								st.end_time
+							)
+						)
+				END AS shift_end_datetime
+			FROM tabAttendance a
+			INNER JOIN tabEmployee emp
+				ON emp.name = a.employee
+			INNER JOIN `tabShift Type` st
+			ON st.name = COALESCE(
+				(
+					SELECT sa.shift_type
+					FROM `tabShift Assignment` sa
+			WHERE sa.employee = a.employee
+				AND a.attendance_date BETWEEN sa.start_date
+				AND IFNULL(sa.end_date, '9999-12-31')
+			AND sa.status = 'Active'
+							AND sa.docstatus = 1
+						ORDER BY sa.start_date DESC
+						LIMIT 1
+					),
+					emp.default_shift
+				)
+			LEFT JOIN `tabHoliday List` hl
+				ON hl.name = st.holiday_list
+			LEFT JOIN `tabHoliday` h
+				ON h.parent = hl.name
+				AND h.holiday_date = a.attendance_date
+			WHERE
+				a.docstatus = 1
+				a.employee = %(employee)s
+				AND a.attendance_date BETWEEN %(from_date)s AND %(to_date)s
 			) x
-			ORDER BY x.attendance_date;		
+			HAVING actual_duration_seconds  > shift_duration_seconds 
+			ORDER BY x.attendance_date;
 		""", {
 			'employee': self.employee,
 			'from_date': str(self.from_date),
