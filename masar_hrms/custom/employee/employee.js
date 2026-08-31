@@ -1,4 +1,13 @@
 frappe.ui.form.on('Employee',  {
+    setup: function(frm) {
+        frm.set_query('custom_employee_budget_element', function() {
+            return {
+                filters: {
+                    budgeting_type: ['in', ['L', 'L1', 'L2']]
+                }
+            };
+        });
+    },
     refresh: function(frm) {
         var total = 0;
         $.each(frm.doc.family_members,  function(i,  d) {

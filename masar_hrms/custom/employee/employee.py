@@ -1,4 +1,5 @@
 import frappe
+from frappe import _
 from frappe.utils import getdate, today, now_datetime
 
 
@@ -6,6 +7,7 @@ def validate(self, method):
     employee_full_name(self)
     education_validation(self)
     check_salaries_and_relieving_date(self)
+    validate_budget_elements(self)
 
 
 def on_update(self, method):
@@ -117,6 +119,23 @@ def employee_full_name(self):
         if full_name_ar:
             self.full_name_ar = full_name_ar
             
+def validate_budget_elements(self):
+    if self.custom_employee_budget_element:
+        budgeting_type = frappe.db.get_value(
+            "Budget Element", self.custom_employee_budget_element, "budgeting_type", cache=True
+        )
+        if budgeting_type not in ("L", "L1", "L2" , "S"):
+            frappe.throw(
+                _(
+                    "Employee Budget Element {0} has Budgeting Type {1}. "
+                    "Only Budget Elements with Budgeting Type L, L1, L2 or S can be selected."
+                ).format(
+                    frappe.bold(self.custom_employee_budget_element),
+                    frappe.bold(budgeting_type or _("Not Set")),
+                )
+            )
+
+
 def education_validation(self):
     for e in self.education:
         if e.custom_is_qualification and e.custom_is_training:
