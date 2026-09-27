@@ -2,7 +2,6 @@
 # For license information, please see license.txt
 
 import json
-from collections import defaultdict
 
 from dateutil.relativedelta import relativedelta
 
@@ -59,7 +58,6 @@ class PayrollEntry(Document):
 	def before_submit(self):
 		self.validate_existing_salary_slips()
 		self.validate_payroll_payable_account()
-		self.validate_employee_budget_elements()
 		if self.get_employees_with_unmarked_attendance():
 			frappe.throw(_("Cannot submit. Attendance is not marked for some employees."))
 
@@ -165,14 +163,12 @@ class PayrollEntry(Document):
 			department=self.department,
 			designation=self.designation,
 			grade=self.grade,
-			work_type = self.work_type, ################ Mahmoud Edit / Add Work Type to Filters
+			work_type = self.work_type, ################ Mahmoud Edit / Add Work Type to Filters 
 			currency=self.currency,
 			start_date=self.start_date,
 			end_date=self.end_date,
 			payroll_payable_account=self.payroll_payable_account,
 			salary_slip_based_on_timesheet=self.salary_slip_based_on_timesheet,
-			budget_element=self.budget_element,
-			project=self.project,
 		)
 
 		if not self.salary_slip_based_on_timesheet:
@@ -358,8 +354,6 @@ class PayrollEntry(Document):
 		if salary_components:
 			component_dict = {}
 
-			employee_budget_details = self.get_employee_budget_details()
-
 			for item in salary_components:
 				if not self.should_add_component_to_accrual_jv(component_type, item):
 					continue
@@ -368,7 +362,6 @@ class PayrollEntry(Document):
 					item.employee, item.salary_structure
 				)
 				employee_advance = self.get_advance_deduction(component_type, item)
-				emp_budget = employee_budget_details.get(item.employee) or frappe._dict()
 
 				for cost_center, percentage in employee_cost_centers.items():
 					amount_against_cost_center = flt(item.amount) * percentage / 100
@@ -378,13 +371,7 @@ class PayrollEntry(Document):
 							item, amount_against_cost_center, cost_center, employee_advance
 						)
 					else:
-						key = (
-							item.salary_component,
-							cost_center,
-							item.employee,
-							emp_budget.budget_element,
-							emp_budget.project,
-						) ######### Mahmoud Edit / Budget Element + Project added for per-employee budgeting
+						key = (item.salary_component, cost_center , item.employee) ######### Mahmoud Edit 
 						component_dict[key] = component_dict.get(key, 0) + amount_against_cost_center
 
 					if employee_wise_accounting_enabled:
@@ -524,84 +511,17 @@ class PayrollEntry(Document):
 
 		return self.employee_cost_centers.get(employee, {})
 
-	def get_employee_budget_details(self):
-		"""Single bulk query resolving each employee's Employee Budget Element and
-		Company Social Security Budget Element, together with the Cost Center/Project
-		fetched from those Budget Elements. Cached on the instance and shared by the
-		salary expense accrual and the Company Social Security accrual so both avoid
-		N+1 lookups."""
-		if not hasattr(self, "_employee_budget_details"):
-			Employee = frappe.qb.DocType("Employee")
-			SalaryBE = frappe.qb.DocType("Budget Element").as_("salary_be")
-			SSBE = frappe.qb.DocType("Budget Element").as_("ss_be")
-			employees = [emp.employee for emp in self.employees]
-
-			rows = (
-				frappe.qb.from_(Employee)
-				.left_join(SalaryBE)
-				.on(Employee.custom_employee_budget_element == SalaryBE.name)
-				.left_join(SSBE)
-				.on(Employee.custom_company_social_security_budget_element == SSBE.name)
-				.select(
-					Employee.name.as_("employee"),
-					Employee.employee_name,
-					Employee.is_social_security_applicable,
-					Employee.custom_is_hazard,
-					Employee.custom_employee_budget_element.as_("budget_element"),
-					SalaryBE.cost_center.as_("cost_center"),
-					SalaryBE.project.as_("project"),
-					Employee.custom_company_social_security_budget_element.as_("ss_budget_element"),
-					SSBE.cost_center.as_("ss_cost_center"),
-					SSBE.project.as_("ss_project"),
-				)
-				.where(Employee.name.isin(employees))
-			).run(as_dict=True)
-
-			self._employee_budget_details = {row.employee: row for row in rows}
-
-		return self._employee_budget_details
-
-	def validate_employee_budget_elements(self):
-		"""Batched, upfront check (single query, no per-employee DB calls) that every
-		employee in this Payroll Entry has the Budget Element(s) required to accrue
-		Salary Expense / Company Social Security. Fails fast, before Salary Slips are
-		created, and lists every affected employee in one message."""
-		details = self.get_employee_budget_details()
-		missing_salary_be = []
-		missing_ss_be = []
-
-		for emp in details.values():
-			if not emp.budget_element:
-				missing_salary_be.append(emp)
-			if emp.is_social_security_applicable and not emp.ss_budget_element:
-				missing_ss_be.append(emp)
-
-		if missing_salary_be or missing_ss_be:
-			lines = [
-				_("Employee {0} - {1} does not have an Employee Budget Element assigned.").format(
-					emp.employee, emp.employee_name
-				)
-				for emp in missing_salary_be
-			] + [
-				_(
-					"Employee {0} - {1} does not have a Company Social Security Budget Element assigned."
-				).format(emp.employee, emp.employee_name)
-				for emp in missing_ss_be
-			]
-			frappe.throw("<br>".join(lines), title=_("Missing Budget Element"))
-
 	def get_account(self, component_dict=None):
 		account_dict = {}
-		default_payroll_payable_account = frappe.get_cached_value(
-			"Company", self.company, "default_payroll_payable_account"
-		)
 		for key, amount in component_dict.items():
-			component, cost_center, employee, budget_element, project = key ############# Mahmoud Edit / to Add employee as Party
+			component, cost_center , employee = key ############# Mahmoud Edit / to Add employee as Party 
 			account = self.get_salary_component_account(component)
-			if account == default_payroll_payable_account: ######## Mahmoud Edit
-				accounting_key = (account, cost_center, component, employee, budget_element, project) ######## Mahmoud Edit / Add Employee as party for UnExpenses Account
+			acc_doc = frappe.get_doc('Account' , account) ######## Mahmoud Edit
+			company_doc= frappe.get_doc('Company' , self.company)
+			if acc_doc.name == company_doc.default_payroll_payable_account: ######## Mahmoud Edit 
+				accounting_key = (account, cost_center ,component,  employee ) ######## Mahmoud Edit / Add Employee as party for UnExpenses Account 
 			else:
-				accounting_key = (account, cost_center, component, None, budget_element, project) ###### Mahmoud Edit / Add None Option for Expenses Account (Expense Account Without Party)
+				accounting_key = (account, cost_center ,component ,  None) ###### Mahmoud Edit / Add None Option for Expenses Account (Expense Account Without Party)
 
 			account_dict[accounting_key] = account_dict.get(accounting_key, 0) + amount
 
@@ -772,31 +692,42 @@ class PayrollEntry(Document):
 			float(comp_data.dangerous_rate) , 
 			float(comp_data.normal_rate)
 		)
-		ss, e = frappe.qb.DocType('Salary Slip'), frappe.qb.DocType('Employee')
+		ss  , e , d = frappe.qb.DocType('Salary Slip') ,  frappe.qb.DocType('Employee') ,  frappe.qb.DocType('Department')
 		rows = (
-			frappe.qb.from_(ss).join(e).on(ss.employee == e.name)
+			frappe.qb.from_(ss).join(e).on(ss.employee == e.name).left_join(d).on(d.name == e.department)
 			.select(
-				(e.name), (e.custom_is_hazard), (e.social_security_salary).as_('ss_salary'))
-			.where(ss.payroll_entry == self.name).where(e.is_social_security_applicable == 1).where(ss.payment_days > 15)
-		).run(as_dict=True)
-
-		employee_budget_details = self.get_employee_budget_details() ####### Employee's own Company Social Security Budget Element (was: Department's)
-		for r in rows:
-			emp_budget = employee_budget_details.get(r.name) or frappe._dict()
-			r.ss_be = emp_budget.ss_budget_element
-			r.custom_ss_cost_center = emp_budget.ss_cost_center
-			r.custom_ss_project = emp_budget.ss_project
-
+				(e.name),(e.custom_is_hazard), (e.social_security_salary).as_('ss_salary'),
+				(d.custom_ss_budget_element).as_('ss_be'),(d.custom_ss_cost_center),(d.custom_ss_project))	
+			.where(ss.payroll_entry ==self.name).where(e.is_social_security_applicable == 1 ).where(ss.payment_days > 15)
+		).run(as_dict = True)
 		if with_party == False:
-			ss_amounts = defaultdict(float) ####### Mahmoud Edit / plain dict aggregation instead of an O(n^2) list-of-dicts scan
+			rows_lst = list()
 			for r in rows:
-				rate = dangerous_rate / 100 if r.custom_is_hazard == 1 else normal_rate / 100
-				ss_amount = float(r.ss_salary if r.ss_salary else 0) * rate
-				ss_amounts[(r.ss_be, r.custom_ss_cost_center, r.custom_ss_project)] += ss_amount
-
-			for (row_be, cost_center, project), row_amount in ss_amounts.items():
+				if r.custom_is_hazard == 0 :
+					rate = normal_rate/100
+				elif r.custom_is_hazard == 1 : 
+					rate = dangerous_rate/100
+				ss_amount = float(r.ss_salary if r.ss_salary else 0 ) * rate 
+				key = r.ss_be
+				if len(rows_lst) == 0 :
+					rows_lst.append({key:ss_amount})
+				else:
+					key_found = False
+					for row_dict in rows_lst:
+						if key in row_dict:
+							row_dict[key] += ss_amount
+							key_found = True
+							break
+					if not key_found:
+						rows_lst.append({key: ss_amount})
+			for row in rows_lst:
+				for row_be, row_amount in row.items(): 
+					row_be , row_amount = row_be, row_amount
+				be = frappe.get_doc('Budget Element' , row_be)
+				project = be.project
+				cost_center = be.cost_center
 				acc_row = {
-					'account' : ss_liability,'credit_in_account_currency' : row_amount,
+					'account' : ss_liability,'credit_in_account_currency' : row_amount, 
 					'credit' : row_amount,'reference_type' : self.doctype,'reference_name' : self.name,
 					'user_remark' : 'Reference for Budget Element {be}'.format(be=row_be),
      				# 'budget_element' : row_be,
@@ -805,7 +736,7 @@ class PayrollEntry(Document):
 				}
 				journal_entry.append('accounts' , acc_row)
 				dr_acc = {
-					'account' : ss_expense,'debit_in_account_currency' : row_amount,
+					'account' : ss_expense,'debit_in_account_currency' : row_amount, 
 					'debit' : row_amount,'reference_type' : self.doctype,'reference_name' : self.name,
 					'budget_element' : row_be,'project': project , 'cost_center' : cost_center,
 				}
@@ -814,21 +745,21 @@ class PayrollEntry(Document):
 			for r in rows:
 				if r.custom_is_hazard == 0:
 					rate = normal_rate/100
-				elif r.custom_is_hazard == 1:
+				elif r.custom_is_hazard == 1: 
 					rate = dangerous_rate/100
-				ss_amount =float(r.ss_salary if r.ss_salary else 0 )* rate
+				ss_amount =float(r.ss_salary if r.ss_salary else 0 )* rate 
 				acc_row = {
 					'account' : ss_liability,'credit_in_account_currency' : ss_amount, 'credit' : ss_amount,
 					'reference_type' : self.doctype,'reference_name' : self.name,
 					'user_remark' : 'Reference for Budget Element {be} and Employee {emp}'.format(be =  r.ss_be , emp=r.name ),
 					# 'budget_element' : r.ss_be,
-     				'project': r.custom_ss_project ,
+     				'project': r.custom_ss_project , 
      				# 'cost_center' : r.custom_ss_cost_center,
 					'party_type' : 'Employee','party' : r.name
 				}
 				journal_entry.append('accounts' , acc_row)
 				dr_row = {
-					'account' : ss_expense,'debit_in_account_currency' : ss_amount,
+					'account' : ss_expense,'debit_in_account_currency' : ss_amount, 
 					'debit' : ss_amount,'reference_type' : self.doctype,
 					'reference_name' : self.name,'budget_element' : r.ss_be,
 					'project': r.custom_ss_project ,'cost_center' : r.custom_ss_cost_center,
@@ -849,13 +780,12 @@ class PayrollEntry(Document):
 	):
 		# Earnings
 		for acc_cc, amount in earnings.items():
-			account, cost_center, component, employee, budget_element, project = acc_cc
 			user_remark = None ########### Mahmoud Edit
-			if employee:########### Mahmoud Edit
-				user_remark= "Salary Component: {sc} For Employee: {emp}".format(sc=component , emp=employee) ####### Mahmoud Edit / Add User Remarks
+			if acc_cc[3]:########### Mahmoud Edit
+				user_remark= "Salary Component: {sc} For Employee: {emp}".format(sc=acc_cc[2] , emp=acc_cc[3]) ####### Mahmoud Edit / Add User Remarks 
 			payable_amount = self.get_accounting_entries_and_payable_amount(
-				account,
-				cost_center or self.cost_center,
+				acc_cc[0],
+				acc_cc[1] or self.cost_center,
 				amount,
 				currencies,
 				company_currency,
@@ -864,21 +794,18 @@ class PayrollEntry(Document):
 				precision,
 				entry_type="debit",
 				accounts=accounts,
-				party=employee,  ####### Mahmoud Edit / Insert Party for Components
+				party=acc_cc[3],  ####### Mahmoud Edit / Insert Party for Components 
 				user_remark= user_remark,  ########### Mahmoud Edit
-				budget_element=budget_element, ####### Budget Element / Project sourced from the Employee's Employee Budget Element
-				project=project,
 			)
 
 		# Deductions
 		for acc_cc, amount in deductions.items():
-			account, cost_center, component, employee, budget_element, project = acc_cc
 			user_remark = None ########### Mahmoud Edit
-			if employee:########### Mahmoud Edit
-				user_remark= "Salary Component: {sc} For Employee: {emp}".format(sc=component , emp=employee) ####### Mahmoud Edit / Add User Remarks
+			if acc_cc[3]:########### Mahmoud Edit
+				user_remark= "Salary Component: {sc} For Employee: {emp}".format(sc=acc_cc[2] , emp=acc_cc[3]) ####### Mahmoud Edit / Add User Remarks 
 			payable_amount = self.get_accounting_entries_and_payable_amount(
-				account,
-				cost_center or self.cost_center,
+				acc_cc[0],
+				acc_cc[1] or self.cost_center,
 				amount,
 				currencies,
 				company_currency,
@@ -887,10 +814,8 @@ class PayrollEntry(Document):
 				precision,
 				entry_type="credit",
 				accounts=accounts,
-				party=employee,  ####### Mahmoud Edit / Insert Party for Components
+				party=acc_cc[3],  ####### Mahmoud Edit / Insert Party for Components 
 				user_remark= user_remark,  ########### Mahmoud Edit
-				budget_element=budget_element, ####### Budget Element / Project sourced from the Employee's Employee Budget Element
-				project=project,
 			)
 
 		return payable_amount
@@ -968,8 +893,6 @@ class PayrollEntry(Document):
 		reference_name=None,
 		is_advance=None,
 		user_remark=None, ###### Mahmoud Edit to Add User Remark Options
-		project=None, ###### Per-employee Budget Element Project, overrides self.project for Expense rows only
-		budget_element=None, ###### Per-employee Budget Element, overrides the blanket Payroll Entry dimension for Expense rows only
 	):
 		exchange_rate, amt = self.get_amount_and_exchange_rate_for_journal_entry(
 			account, amount, company_currency, currencies
@@ -1029,17 +952,14 @@ class PayrollEntry(Document):
 				}
 			)
 		########### Mahmoud End Added
-		account_type = frappe.get_cached_value("Account", account, "account_type")
-		if account_type == 'Expense Account':# or acc_doc.name == company_doc.default_payroll_payable_account :
-			if project: ####### Employee's Budget Element Project takes precedence over the blanket Payroll Entry project for Expense rows
-				row['project'] = project
-			if budget_element: ####### Employee's Budget Element takes precedence over the blanket Payroll Entry dimension for Expense rows
-				row['budget_element'] = budget_element
+		acc_doc = frappe.get_doc('Account' , account)
+		company_doc = frappe.get_doc('Company' , self.company)
+		if acc_doc.account_type == 'Expense Account':# or acc_doc.name == company_doc.default_payroll_payable_account :
 			self.update_accounting_dimensions(
 				row,
 				accounting_dimensions,
 			)
-		else:
+		else: 
 			row['cost_center'] = None
 
 		if amt:
@@ -1050,8 +970,7 @@ class PayrollEntry(Document):
  
 	def update_accounting_dimensions(self, row, accounting_dimensions):
 		for dimension in accounting_dimensions:
-			if not row.get(dimension): ####### Don't clobber a per-employee dimension value (e.g. budget_element) already set on the row
-				row[dimension] = self.get(dimension)
+			row.update({dimension: self.get(dimension)})
 
 		return row
 
@@ -1435,14 +1354,11 @@ def get_filtered_employees(
 ) -> list:
 	SalaryStructureAssignment = frappe.qb.DocType("Salary Structure Assignment")
 	Employee = frappe.qb.DocType("Employee")
-	BudgetElement = frappe.qb.DocType("Budget Element")
 
 	query = (
 		frappe.qb.from_(Employee)
 		.join(SalaryStructureAssignment)
 		.on(Employee.name == SalaryStructureAssignment.employee)
-		.left_join(BudgetElement)
-		.on(Employee.custom_employee_budget_element == BudgetElement.name)
 		.where(
 			(SalaryStructureAssignment.docstatus == 1)
 			& (Employee.status != "Inactive")
@@ -1454,13 +1370,6 @@ def get_filtered_employees(
 			& (filters.end_date >= SalaryStructureAssignment.from_date)
 		)
 	)
-
-	# Budget Element / Project filters (requirement: filter by the employee's own
-	# Employee Budget Element, not by the Payroll Entry's dimension-stamp fields)
-	if filters.get("budget_element"):
-		query = query.where(Employee.custom_employee_budget_element == filters.budget_element)
-	if filters.get("project"):
-		query = query.where(BudgetElement.project == filters.project)
 
 	query = set_fields_to_select(query, fields)
 	query = set_searchfield(query, searchfield, search_string, qb_object=Employee)

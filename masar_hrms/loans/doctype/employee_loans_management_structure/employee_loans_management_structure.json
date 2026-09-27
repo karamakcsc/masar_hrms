@@ -1,15 +1,17 @@
 {
  "actions": [],
  "allow_rename": 1,
- "creation": "2025-05-24 16:35:51.208227",
+ "creation": "2025-06-17 12:57:53.277742",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
   "schedule_date",
   "repayment_amount",
   "accumulated_repayment_amount",
+  "emp_loans_ref",
   "additional_salary_ref",
-  "management_comments"
+  "old_add_sal_ref",
+  "el_ref"
  ],
  "fields": [
   {
@@ -20,17 +22,27 @@
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "repayment_amount",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Repayment Amount",
+   "precision": "3",
    "read_only": 1
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "accumulated_repayment_amount",
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Accumulated Repayment Amount",
+   "precision": "3",
+   "read_only": 1
+  },
+  {
+   "fieldname": "emp_loans_ref",
+   "fieldtype": "Data",
+   "label": "Employee Loans Reference",
    "read_only": 1
   },
   {
@@ -42,19 +54,27 @@
    "read_only": 1
   },
   {
-   "fieldname": "management_comments",
+   "allow_on_submit": 1,
+   "fieldname": "old_add_sal_ref",
    "fieldtype": "Data",
-   "label": "Management Comments",
+   "label": "Old Additional Salary Reference",
+   "read_only": 1
+  },
+  {
+   "fieldname": "el_ref",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "ELS Ref",
    "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "istable": 1,
  "links": [],
- "modified": "2025-06-18 12:37:43.434071",
+ "modified": "2025-06-17 14:47:54.414581",
  "modified_by": "Administrator",
- "module": "Masar Hrms",
- "name": "Employee Loans Schedule",
+ "module": "Loans",
+ "name": "Employee Loans Management Structure",
  "owner": "Administrator",
  "permissions": [],
  "sort_field": "modified",

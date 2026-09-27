@@ -326,8 +326,6 @@ fixtures = [
                 "Employee-custom_bank_commitment_",
                 "Employee-custom_section",
                 "Employee-custom_project",
-                "Employee-custom_employee_budget_element",
-                "Employee-custom_company_social_security_budget_element",
                 "Employee-custom_custody",
                 "Employee-custom_asset_custody",
                 "Employee-custom_major", 
@@ -369,9 +367,6 @@ fixtures = [
                     "Employee-internal_work_history-depends_on",
                     "Employee-naming_series-default",
                     "Employee-naming_series-options",
-                    "Employee-payroll_cost_center-fetch_from",
-                    "Employee-payroll_cost_center-fetch_if_empty",
-                    "Employee-payroll_cost_center-read_only",
                     # Shift Request
                     "Shift Request-status-permlevel",
                     # Appraisal
@@ -379,8 +374,6 @@ fixtures = [
                     "Appraisal KRA-per_weightage-permlevel",
                     # Attendance
                     "Attendance-status-options",
-                    # Payroll Entry
-                    "Payroll Entry-main-field_order"
                 ]
             ]
         ]

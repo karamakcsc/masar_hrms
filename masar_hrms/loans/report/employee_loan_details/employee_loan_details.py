@@ -2,21 +2,29 @@
 # For license information, please see license.txt
 
 import frappe
+from frappe import _
 
 
 def execute(filters=None):
-	return get_columns(), get_data(filters)
+	filters = frappe._dict(filters or {})
+	data = get_data(filters)
+	return get_columns(), data, None, get_chart(data)
+
+
+def get_conditions(filters):
+	conditions = " 1=1 "
+	if filters.get("employee"):
+		conditions += " AND tel.employee = %(employee)s"
+	if filters.get("department"):
+		conditions += " AND tel.department = %(department)s"
+	if filters.get("designation"):
+		conditions += " AND tel.designation = %(designation)s"
+	return conditions
 
 
 def get_data(filters):
-    conditions = " 1=1 "
-    if filters.get("employee"):
-        conditions += f" AND tel.employee = '{filters.get('employee')}'"
-    if filters.get("department"):
-        conditions += f" AND tel.department = '{filters.get('department')}'"
-    if filters.get("designation"):
-        conditions += f" AND tel.designation = '{filters.get('designation')}'"
-    
+    conditions = get_conditions(filters)
+
     sql = frappe.db.sql(f"""
         SELECT
 			tel.name AS `Loan ID`,
@@ -45,9 +53,31 @@ def get_data(filters):
 			tel.name
 		ORDER BY
 			tel.employee_name;
-	""")
-    
+	""", filters)
+
     return sql
+
+
+def get_chart(data):
+	# `data` rows are already grouped one-per-loan by get_data(), so summing
+	# "Total Loan Amount"/"Repaid Amount" here avoids re-joining the schedule
+	# and additional salary tables (which would fan out and double-count).
+	total_loan = sum(row[7] or 0 for row in data)
+	total_repaid = sum(row[8] or 0 for row in data)
+	total_remaining = total_loan - total_repaid
+
+	if not total_loan:
+		return None
+
+	return {
+		"data": {
+			"labels": [_("Repaid"), _("Remaining")],
+			"datasets": [{"name": _("Amount"), "values": [total_repaid, total_remaining]}],
+		},
+		"type": "donut",
+		"colors": ["#28a745", "#dc3545"],
+		"height": 280,
+	}
 
 def get_columns():
     	return [

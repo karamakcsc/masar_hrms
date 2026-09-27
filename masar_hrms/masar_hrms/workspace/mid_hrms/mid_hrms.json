@@ -1,6 +1,6 @@
 {
  "charts": [],
- "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">MID HRMS</span>\",\"col\":12}},{\"id\":\"RM3jcFX1Sh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"AR 3 Print\",\"col\":4}},{\"id\":\"wWHTGxYSAW\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans\",\"col\":4}},{\"id\":\"u--ckTNn6N\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans Management\",\"col\":4}},{\"id\":\"WYnsiGyux5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Short Leave Application\",\"col\":4}},{\"id\":\"2_Q3bQt5wl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"tZhl0DFr4C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management Bulk\",\"col\":4}},{\"id\":\"HT71s974GY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Attendance Process\",\"col\":4}},{\"id\":\"898w1sF-45\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Attendance Process Bulk\",\"col\":4}},{\"id\":\"dnrAzqjjPT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Salary Component Management\",\"col\":4}},{\"id\":\"mFW_b07B0y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Salary Component History\",\"col\":4}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"_m3yxANToV\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"0y34di9GWn\",\"type\":\"card\",\"data\":{\"card_name\":\"Report\",\"col\":4}}]",
+ "content": "[{\"id\":\"SzU96w0976\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">MID HRMS</span>\",\"col\":12}},{\"id\":\"RM3jcFX1Sh\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"AR 3 Print\",\"col\":4}},{\"id\":\"WYnsiGyux5\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Short Leave Application\",\"col\":4}},{\"id\":\"2_Q3bQt5wl\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management\",\"col\":4}},{\"id\":\"tZhl0DFr4C\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Shift Management Bulk\",\"col\":4}},{\"id\":\"HT71s974GY\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Attendance Process\",\"col\":4}},{\"id\":\"898w1sF-45\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Attendance Process Bulk\",\"col\":4}},{\"id\":\"dnrAzqjjPT\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Salary Component Management\",\"col\":4}},{\"id\":\"mFW_b07B0y\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Salary Component History\",\"col\":4}},{\"id\":\"6fStKz1BOF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"_m3yxANToV\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":4}},{\"id\":\"0y34di9GWn\",\"type\":\"card\",\"data\":{\"card_name\":\"Report\",\"col\":4}}]",
  "creation": "2024-02-05 10:16:49.042033",
  "custom_blocks": [],
  "docstatus": 0,
@@ -274,14 +274,6 @@
   {
    "color": "Grey",
    "doc_view": "List",
-   "label": "Employee Loans Management",
-   "link_to": "Employee Loans Management",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
    "label": "Employee Shift Management",
    "link_to": "Employee Shift Management",
    "stats_filter": "[]",
@@ -300,14 +292,6 @@
    "doc_view": "List",
    "label": "Employee Shift Management Bulk",
    "link_to": "Employee Shift Management Bulk",
-   "stats_filter": "[]",
-   "type": "DocType"
-  },
-  {
-   "color": "Grey",
-   "doc_view": "List",
-   "label": "Employee Loans",
-   "link_to": "Employee Loans",
    "stats_filter": "[]",
    "type": "DocType"
   },

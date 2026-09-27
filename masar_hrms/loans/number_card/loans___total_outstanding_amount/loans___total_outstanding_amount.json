@@ -1,0 +1,22 @@
+{
+ "color": "#e0364e",
+ "creation": "2026-09-01 00:00:00",
+ "currency": "JOD",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[]",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Total Outstanding Loan Amount",
+ "method": "masar_hrms.loans.number_card.get_total_outstanding_amount",
+ "modified": "2026-09-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Loans",
+ "name": "Loans - Total Outstanding Amount",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Custom"
+}

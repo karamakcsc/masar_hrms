@@ -1,0 +1,162 @@
+{
+ "charts": [
+  {
+   "chart_name": "Employee Loan Details",
+   "label": "Employee Loan Details"
+  }
+ ],
+ "content": "[{\"id\":\"loans-header\",\"type\":\"header\",\"data\":{\"text\":\"<span class=\\\"h4\\\">Loans</span>\",\"col\":12}},{\"id\":\"qQOIEbd7n7\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Active Loans\",\"col\":3}},{\"id\":\"tCbQ4rAbpV\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Total Outstanding Loan Amount\",\"col\":3}},{\"id\":\"AXskkVE2GD\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Loans Ending This Month\",\"col\":3}},{\"id\":\"KrlZml7dEx\",\"type\":\"number_card\",\"data\":{\"number_card_name\":\"Pending Loan Management Requests\",\"col\":3}},{\"id\":\"f_sV25j3uF\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"34zCBHRycD\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"New Employee Loan\",\"col\":3}},{\"id\":\"ouPjFKPACn\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans List\",\"col\":3}},{\"id\":\"HW9fn4eaqf\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loans Management List\",\"col\":3}},{\"id\":\"Fhbm2LZ8rk\",\"type\":\"shortcut\",\"data\":{\"shortcut_name\":\"Employee Loan Details\",\"col\":3}},{\"id\":\"WVz7u6wG4K\",\"type\":\"spacer\",\"data\":{\"col\":12}},{\"id\":\"cNW0wKvI6e\",\"type\":\"card\",\"data\":{\"card_name\":\"DocTypes\",\"col\":6}},{\"id\":\"2iQpX7d38E\",\"type\":\"chart\",\"data\":{\"chart_name\":\"Employee Loan Details\",\"col\":6}},{\"id\":\"Z0TExdyj2X\",\"type\":\"card\",\"data\":{\"card_name\":\"Reports\",\"col\":6}}]",
+ "creation": "2026-09-01 14:38:50.715137",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 1,
+ "icon": "loan",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Loans",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "DocTypes",
+   "link_count": 2,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Loans",
+   "link_count": 0,
+   "link_to": "Employee Loans",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Employee Loans Management",
+   "link_count": 0,
+   "link_to": "Employee Loans Management",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Reports",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Loan Details",
+   "link_count": 0,
+   "link_to": "Employee Loan Details",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Loan Repayment Schedule Report",
+   "link_count": 0,
+   "link_to": "Loan Repayment Schedule Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Loan Management History Report",
+   "link_count": 0,
+   "link_to": "Loan Management History Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Outstanding Loans Summary Report",
+   "link_count": 0,
+   "link_to": "Outstanding Loans Summary Report",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-09-01 15:00:16.097115",
+ "modified_by": "Administrator",
+ "module": "Loans",
+ "name": "Loans",
+ "number_cards": [
+  {
+   "label": "Active Loans",
+   "number_card_name": "Loans - Active Loans"
+  },
+  {
+   "label": "Total Outstanding Loan Amount",
+   "number_card_name": "Loans - Total Outstanding Amount"
+  },
+  {
+   "label": "Loans Ending This Month",
+   "number_card_name": "Loans - Ending This Month"
+  },
+  {
+   "label": "Pending Loan Management Requests",
+   "number_card_name": "Loans - Pending Management Requests"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "HR",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 42.0,
+ "shortcuts": [
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "New Employee Loan",
+   "type": "URL",
+   "url": "/app/employee-loans/new"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Employee Loans List",
+   "link_to": "Employee Loans",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Blue",
+   "doc_view": "List",
+   "label": "Employee Loans Management List",
+   "link_to": "Employee Loans Management",
+   "stats_filter": "[]",
+   "type": "DocType"
+  },
+  {
+   "color": "Grey",
+   "doc_view": "List",
+   "label": "Employee Loan Details",
+   "link_to": "Employee Loan Details",
+   "report_ref_doctype": "Employee Loans",
+   "type": "Report"
+  }
+ ],
+ "title": "Loans"
+}

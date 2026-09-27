@@ -6,7 +6,7 @@ from datetime import timedelta , datetime
 import calendar
 from frappe.utils import add_months, get_last_day, getdate
 from frappe.model.document import Document
-from masar_hrms.masar_hrms.doctype.employee_loans.employee_loans import EmployeeLoans
+from masar_hrms.loans.doctype.employee_loans.employee_loans import EmployeeLoans
 set_loan_months = EmployeeLoans.set_loan_months
 contract_end_date_validate = EmployeeLoans.contract_end_date_validate
 dbr_validate = EmployeeLoans.dbr_validate

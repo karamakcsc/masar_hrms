@@ -1,0 +1,22 @@
+{
+ "color": "#2490ef",
+ "creation": "2026-09-01 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Employee Loans Management",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[[\"Employee Loans Management\",\"docstatus\",\"=\",0,false]]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Pending Loan Management Requests",
+ "modified": "2026-09-01 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Loans",
+ "name": "Loans - Pending Management Requests",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}

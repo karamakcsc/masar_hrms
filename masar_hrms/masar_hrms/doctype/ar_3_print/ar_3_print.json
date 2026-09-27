@@ -10,19 +10,65 @@
   "department",
   "get_salary_slips",
   "column_break_dpgo",
-  "from_date",
-  "to_date",
+  "month",
+  "year",
   "section_break_cadb",
   "ss_table",
+  "section_break_pdf",
+  "print_format",
+  "generate_pdf",
+  "column_break_pdf",
+  "pdf_status",
+  "attach_pdf",
   "section_break_sytj",
   "amended_from",
   "column_break_btjv",
-  "naming_series"
+  "naming_series",
+  "from_date",
+  "to_date"
  ],
  "fields": [
   {
    "fieldname": "section_break_sytj",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "section_break_pdf",
+   "fieldtype": "Section Break",
+   "label": "PDF Generation"
+  },
+  {
+   "fieldname": "print_format",
+   "fieldtype": "Link",
+   "label": "Print Format",
+   "options": "Print Format"
+  },
+  {
+   "depends_on": "eval:doc.ss_table && doc.ss_table.length && doc.print_format",
+   "fieldname": "generate_pdf",
+   "fieldtype": "Button",
+   "label": "Generate PDF"
+  },
+  {
+   "fieldname": "column_break_pdf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Pending",
+   "fieldname": "pdf_status",
+   "fieldtype": "Select",
+   "label": "PDF Status",
+   "no_copy": 1,
+   "options": "Pending\nProcessing\nCompleted\nFailed",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "attach_pdf",
+   "fieldtype": "Attach",
+   "label": "Attached PDF",
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "amended_from",
@@ -47,16 +93,33 @@
    "fieldtype": "Column Break"
   },
   {
+   "fieldname": "month",
+   "fieldtype": "Select",
+   "label": "Month",
+   "options": "January\nFebruary\nMarch\nApril\nMay\nJune\nJuly\nAugust\nSeptember\nOctober\nNovember\nDecember",
+   "reqd": 1
+  },
+  {
+   "fieldname": "year",
+   "fieldtype": "Int",
+   "label": "Year",
+   "reqd": 1
+  },
+  {
    "fieldname": "from_date",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "From Date",
-   "reqd": 1
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "to_date",
    "fieldtype": "Date",
+   "hidden": 1,
    "label": "To Date",
-   "reqd": 1
+   "no_copy": 1,
+   "read_only": 1
   },
   {
    "fieldname": "section_break_cadb",
