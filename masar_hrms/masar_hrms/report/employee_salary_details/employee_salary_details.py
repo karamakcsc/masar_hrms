@@ -19,7 +19,7 @@ def get_data(filters):
 	if(filters.get('work_type')):conditions += f" AND tss.work_type='{filters.get('work_type')}' "
 	if(filters.get('branch')):conditions += f" AND tss.branch LIKE '%{filters.get('branch')}' "
 	if(filters.get('dep')):conditions += f" AND tss.department LIKE '%{filters.get('dep')}' "
-	if(filters.get('is_hazard')):conditions += f" AND te.custom_is_hazard = '{filters.get('is_hazard')}'"
+	if(filters.get('is_hazard')):conditions += f" AND tss.custom_is_hazard = '{filters.get('is_hazard')}'"
 	is_trial = filters.get('is_trial')
 	if is_trial:
 		conditions += f" AND tss.docstatus = 0 "
@@ -66,27 +66,39 @@ def get_data(filters):
 			tss.department AS `Department`,
 			tss.designation AS `Designation`,
 			te.date_of_joining AS `Date of Joining`,
-			te.custom_is_hazard AS `Is Hazard`,
+			tss.custom_is_hazard AS `Is Hazard`,
 			tss.gross_pay AS `Reserved Salary`,
 			tss.leave_without_pay AS `Leave Without Pay`,
 			tss.payment_days AS `Payment Days`,
 			MAX(CASE
-				WHEN test.salary_component = 'Basic' AND test.is_active = 1 
-    			THEN test.esc_amount
+				WHEN tsd.salary_component = 'Basic'
+    			THEN tsd.amount
 			END) AS `Basic Salary`,
 			{basic_sql}
 			{earning_comps}
 			tss.gross_pay AS `Total Earnings`,
-			te.social_security_salary AS `Social Security Salary`,
+			MAX(CASE WHEN tsd.salary_component = 'Social Security' THEN tsd.amount END)/ 0.075 AS `Social Security Salary`,
 			{ss_sql}
 			CASE 
-				WHEN tss.payment_days < 16 THEN 0
-				ELSE 
-					CASE 
-						WHEN te.custom_is_hazard = 1 THEN IFNULL(te.social_security_salary, 0) * 0.15250 
-						ELSE IFNULL(te.social_security_salary, 0) * 0.14250 
-					END
-			END AS `Social Security Company Share`,
+			WHEN tss.payment_days = -1  THEN 0
+			ELSE
+				CASE 
+					WHEN tss.custom_is_hazard = 1 THEN
+						(
+							MAX(CASE 
+								WHEN tsd.salary_component = 'Social Security' 
+								THEN tsd.amount 
+							END) / 0.075
+						) * 0.1525
+					ELSE
+						(
+							MAX(CASE 
+								WHEN tsd.salary_component = 'Social Security' 
+								THEN tsd.amount 
+							END) / 0.075
+						) * 0.1425
+				END
+		END AS `Social Security Company Share` ,
 			{deduction_comps}
 			tss.total_deduction AS `Total Deductions`,
 			tss.net_pay AS `Net Pay`,
