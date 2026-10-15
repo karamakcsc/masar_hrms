@@ -53,6 +53,11 @@ from hrms.payroll.utils import sanitize_expression
 from hrms.utils.holiday_list import get_holiday_dates_between
 
 from masar_hrms.injury.doctype.work_injury_settings.work_injury_settings import get_settings as get_work_injury_settings
+from masar_hrms.payroll_budget.utils import (
+	EMPLOYEE_PROJECT_FIELD,
+	get_employee_payroll_budgets,
+	is_payroll_budget_enabled,
+)
 
 # cache keys
 HOLIDAYS_BETWEEN_DATES = "holidays_between_dates"
@@ -147,6 +152,7 @@ class SalarySlip(TransactionBase):
 			self.get_working_days_details(lwp=self.leave_without_pay)
 
 		self.set_salary_structure_assignment()
+		self.set_payroll_budget() ####### Payroll Budget / snapshot Project + Salary & Company Social Security budgets
 		self.calculate_net_pay()
 		self.compute_year_to_date()
 		self.compute_month_to_date()
@@ -165,6 +171,31 @@ class SalarySlip(TransactionBase):
 					),
 					alert=True,
 				)
+
+	def set_payroll_budget(self):
+		"""Resolve the employee's Project Payroll Budget row (dimensions driven by
+		Payroll Budget Settings) and store it on the slip. The Payroll Entry accrual
+		Journal Entry posts the Salary and Company Social Security expense from these fields."""
+		if not is_payroll_budget_enabled():
+			return
+
+		# Slips of a Payroll Entry must resolve; a standalone slip only warns
+		budgets, errors = get_employee_payroll_budgets(
+			[self.employee], raise_exception=bool(self.payroll_entry)
+		)
+		budget = budgets.get(self.employee) or frappe._dict()
+		if errors:
+			frappe.msgprint("<br>".join(errors), title=_("Payroll Budget"), indicator="orange")
+
+		self.custom_project = budget.project or frappe.get_cached_value(
+			"Employee", self.employee, EMPLOYEE_PROJECT_FIELD
+		)
+		self.custom_salary_budget_element = budget.salary_budget_element
+		self.custom_salary_cost_center = budget.salary_cost_center
+		self.custom_salary_project = budget.salary_project
+		self.custom_ss_budget_element = budget.ss_budget_element
+		self.custom_ss_cost_center = budget.ss_cost_center
+		self.custom_ss_project = budget.ss_project
 
 	def set_net_total_in_words(self):
 		doc_currency = self.currency

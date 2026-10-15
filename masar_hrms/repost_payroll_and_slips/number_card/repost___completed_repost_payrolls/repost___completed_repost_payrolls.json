@@ -1,0 +1,22 @@
+{
+ "color": "#28a745",
+ "creation": "2026-10-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Repost Payroll",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[[\"Repost Payroll\", \"status\", \"=\", \"Completed\", false]]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Completed Repost Payrolls",
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost - Completed Repost Payrolls",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}

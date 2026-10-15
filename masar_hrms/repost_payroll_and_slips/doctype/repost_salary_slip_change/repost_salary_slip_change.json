@@ -1,0 +1,65 @@
+{
+ "actions": [],
+ "creation": "2026-09-30 16:46:14.809298",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section",
+  "field",
+  "column_break_yafr",
+  "old_value",
+  "new_value"
+ ],
+ "fields": [
+  {
+   "columns": 2,
+   "fieldname": "section",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Section",
+   "read_only": 1
+  },
+  {
+   "columns": 3,
+   "fieldname": "field",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Field",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "old_value",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Original Value",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "fieldname": "new_value",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "New Value",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_yafr",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-15 15:48:23.480809",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost Salary Slip Change",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": []
+}

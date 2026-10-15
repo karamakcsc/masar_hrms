@@ -5,3 +5,5 @@ Social Security
 Injury
 Salary Component Management
 Loans
+Payroll Budget
+Repost Payroll and Slips

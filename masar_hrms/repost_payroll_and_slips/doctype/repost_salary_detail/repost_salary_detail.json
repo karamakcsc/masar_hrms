@@ -1,0 +1,258 @@
+{
+ "actions": [],
+ "creation": "2026-09-30 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "salary_component",
+  "abbr",
+  "amount",
+  "original_amount",
+  "is_social_security",
+  "is_income_tax",
+  "column_break_1",
+  "year_to_date",
+  "additional_salary",
+  "is_recurring_additional_salary",
+  "section_break_flags",
+  "statistical_component",
+  "depends_on_payment_days",
+  "exempted_from_income_tax",
+  "is_tax_applicable",
+  "is_flexible_benefit",
+  "column_break_2",
+  "variable_based_on_taxable_salary",
+  "do_not_include_in_total",
+  "do_not_include_in_accounts",
+  "deduct_full_tax_on_selected_payroll_date",
+  "section_break_formula",
+  "condition",
+  "amount_based_on_formula",
+  "formula",
+  "section_break_amounts",
+  "default_amount",
+  "additional_amount",
+  "column_break_3",
+  "tax_on_flexible_benefit",
+  "tax_on_additional_salary"
+ ],
+ "fields": [
+  {
+   "fieldname": "salary_component",
+   "fieldtype": "Link",
+   "label": "Component",
+   "options": "Salary Component",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2
+  },
+  {
+   "fieldname": "abbr",
+   "fieldtype": "Data",
+   "label": "Abbr",
+   "in_list_view": 1,
+   "columns": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount",
+   "fieldtype": "Currency",
+   "label": "Amount",
+   "options": "currency",
+   "in_list_view": 1,
+   "columns": 2,
+   "non_negative": 1
+  },
+  {
+   "fieldname": "original_amount",
+   "fieldtype": "Currency",
+   "label": "Original Amount",
+   "options": "currency",
+   "in_list_view": 1,
+   "columns": 2,
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_social_security",
+   "fieldtype": "Check",
+   "label": "Social Security",
+   "in_list_view": 1,
+   "columns": 1,
+   "description": "Calculated from the Social Security section. Cannot be edited.",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_income_tax",
+   "fieldtype": "Check",
+   "label": "Income Tax",
+   "in_list_view": 1,
+   "columns": 1,
+   "read_only": 1,
+   "description": "Calculated by the Salary Slip income tax logic from the final earnings. Cannot be edited."
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "year_to_date",
+   "fieldtype": "Currency",
+   "label": "Year To Date",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "additional_salary",
+   "fieldtype": "Link",
+   "label": "Additional Salary",
+   "options": "Additional Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_recurring_additional_salary",
+   "fieldtype": "Check",
+   "label": "Is Recurring Additional Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_flags",
+   "fieldtype": "Section Break",
+   "label": "Component Flags",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "statistical_component",
+   "fieldtype": "Check",
+   "label": "Statistical Component",
+   "read_only": 1
+  },
+  {
+   "fieldname": "depends_on_payment_days",
+   "fieldtype": "Check",
+   "label": "Depends on Payment Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exempted_from_income_tax",
+   "fieldtype": "Check",
+   "label": "Exempted from Income Tax",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_tax_applicable",
+   "fieldtype": "Check",
+   "label": "Is Tax Applicable",
+   "read_only": 1
+  },
+  {
+   "fieldname": "is_flexible_benefit",
+   "fieldtype": "Check",
+   "label": "Is Flexible Benefit",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "variable_based_on_taxable_salary",
+   "fieldtype": "Check",
+   "label": "Variable Based On Taxable Salary",
+   "read_only": 1
+  },
+  {
+   "fieldname": "do_not_include_in_total",
+   "fieldtype": "Check",
+   "label": "Do not include in total",
+   "read_only": 1
+  },
+  {
+   "fieldname": "do_not_include_in_accounts",
+   "fieldtype": "Check",
+   "label": "Do Not Include in Accounts",
+   "read_only": 1
+  },
+  {
+   "fieldname": "deduct_full_tax_on_selected_payroll_date",
+   "fieldtype": "Check",
+   "label": "Deduct Full Tax on Selected Payroll Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_formula",
+   "fieldtype": "Section Break",
+   "label": "Formula",
+   "collapsible": 1
+  },
+  {
+   "fieldname": "condition",
+   "fieldtype": "Code",
+   "label": "Condition",
+   "options": "PythonExpression",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amount_based_on_formula",
+   "fieldtype": "Check",
+   "label": "Amount based on formula",
+   "read_only": 1
+  },
+  {
+   "fieldname": "formula",
+   "fieldtype": "Code",
+   "label": "Formula",
+   "options": "PythonExpression",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_break_amounts",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "default_amount",
+   "fieldtype": "Currency",
+   "label": "Default Amount",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "additional_amount",
+   "fieldtype": "Currency",
+   "label": "Additional Amount",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_3",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "tax_on_flexible_benefit",
+   "fieldtype": "Currency",
+   "label": "Tax on flexible benefit",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "tax_on_additional_salary",
+   "fieldtype": "Currency",
+   "label": "Tax on additional salary",
+   "options": "currency",
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-30 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost Salary Detail",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

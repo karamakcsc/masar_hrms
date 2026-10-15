@@ -1,0 +1,150 @@
+{
+ "actions": [],
+ "creation": "2026-09-30 10:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "department",
+  "designation",
+  "branch",
+  "column_break_wvcu",
+  "grade",
+  "section",
+  "work_type",
+  "salary_budget_section",
+  "employee_salary_budget",
+  "salary_cost_center",
+  "salary_project",
+  "column_break_ss",
+  "company_social_security_budget",
+  "ss_cost_center",
+  "ss_project"
+ ],
+ "fields": [
+  {
+   "columns": 1,
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "columns": 1,
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Designation",
+   "options": "Designation"
+  },
+  {
+   "columns": 1,
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "columns": 1,
+   "fieldname": "grade",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Grade",
+   "options": "Employee Grade"
+  },
+  {
+   "columns": 1,
+   "fieldname": "section",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Section",
+   "options": "\nSection 1\nSection 1 - PDB\nSection 1 - MSC\nSection 2\nSection (2) Part (1) LG-F3\nSection (2) Part (2) F4-TOR\nSection 3\nSection 3 - NDM\nSection 3 - CUB\nAdmin\nExternal Work\nSite Services\nLabor Camp"
+  },
+  {
+   "columns": 1,
+   "fieldname": "work_type",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Work Type",
+   "options": "\nDaily\nMonthly"
+  },
+  {
+   "fieldname": "salary_budget_section",
+   "fieldtype": "Section Break",
+   "label": "Budgets"
+  },
+  {
+   "columns": 2,
+   "fieldname": "employee_salary_budget",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Employee Salary Budget",
+   "options": "Budget Element",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "employee_salary_budget.cost_center",
+   "fieldname": "salary_cost_center",
+   "fieldtype": "Link",
+   "label": "Salary Cost Center",
+   "options": "Cost Center",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "employee_salary_budget.project",
+   "fieldname": "salary_project",
+   "fieldtype": "Link",
+   "label": "Salary Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ss",
+   "fieldtype": "Column Break"
+  },
+  {
+   "columns": 2,
+   "fieldname": "company_social_security_budget",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company Social Security Budget",
+   "options": "Budget Element",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "company_social_security_budget.cost_center",
+   "fieldname": "ss_cost_center",
+   "fieldtype": "Link",
+   "label": "Social Security Cost Center",
+   "options": "Cost Center",
+   "read_only": 1
+  },
+  {
+   "fetch_from": "company_social_security_budget.project",
+   "fieldname": "ss_project",
+   "fieldtype": "Link",
+   "label": "Social Security Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_wvcu",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-09-30 14:22:52.047086",
+ "modified_by": "Administrator",
+ "module": "Payroll Budget",
+ "name": "Payroll Budget Dimensions",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

@@ -1,0 +1,21 @@
+{
+ "color": "#2490ef",
+ "creation": "2026-10-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "filters_json": "{}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Employees Reposted (This Year)",
+ "method": "masar_hrms.repost_payroll_and_slips.number_card.get_employees_affected_this_year",
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost - Employees Affected This Year",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Custom"
+}

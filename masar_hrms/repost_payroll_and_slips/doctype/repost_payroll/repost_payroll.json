@@ -1,0 +1,316 @@
+{
+ "actions": [],
+ "autoname": "RPR-.YYYY.-.#####",
+ "creation": "2026-09-30 16:48:56.636094",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "overview_tab",
+  "posting_date",
+  "payroll_entry",
+  "payroll_posting_date",
+  "amended_from",
+  "column_break_header_1",
+  "company",
+  "status",
+  "accounting_action",
+  "section_break_rmlo",
+  "start_date",
+  "column_break_nitj",
+  "end_date",
+  "salary_slips_tab",
+  "section_summary",
+  "number_of_salary_slips",
+  "number_of_reposts",
+  "employees_affected",
+  "column_break_summary_2",
+  "old_total_net_pay",
+  "new_total_net_pay",
+  "net_pay_difference",
+  "section_reposts",
+  "get_reposts",
+  "reposts",
+  "accounting_info_tab",
+  "section_accounting",
+  "old_journal_entries",
+  "reversal_journal_entries",
+  "column_break_accounting_1",
+  "new_journal_entry",
+  "completed_on",
+  "completed_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "payroll_entry",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Payroll Entry",
+   "options": "Payroll Entry",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payroll_posting_date",
+   "fieldtype": "Date",
+   "label": "Payroll Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_header_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "<b>Reverse</b>: keep the existing Journal Entry and post a reversing entry.<br><b>Cancel</b>: delink the Salary Slips and cancel the existing Journal Entry (the Salary Slips stay submitted).<br>In both cases one new consolidated accrual Journal Entry is created.",
+   "fieldname": "accounting_action",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "label": "Accounting Action",
+   "options": "\nReverse Existing Journal Entry\nCancel Existing Journal Entry",
+   "reqd": 1
+  },
+  {
+   "description": "Posting date of the reversal and of the new Journal Entry.",
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "reqd": 1
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "options": "Draft\nCompleted\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Repost Payroll",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_summary",
+   "fieldtype": "Section Break",
+   "label": "Summary"
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "number_of_salary_slips",
+   "fieldtype": "Int",
+   "label": "Number of Salary Slips",
+   "read_only": 1
+  },
+  {
+   "fieldname": "number_of_reposts",
+   "fieldtype": "Int",
+   "label": "Number of Repost Salary Slips",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employees_affected",
+   "fieldtype": "Int",
+   "label": "Employees Affected",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_summary_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "old_total_net_pay",
+   "fieldtype": "Currency",
+   "label": "Original Net Pay (Affected)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_total_net_pay",
+   "fieldtype": "Currency",
+   "label": "New Net Pay (Affected)",
+   "read_only": 1
+  },
+  {
+   "fieldname": "net_pay_difference",
+   "fieldtype": "Currency",
+   "label": "Net Pay Difference",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_reposts",
+   "fieldtype": "Section Break",
+   "label": "Prepared Salary Slip Reposts"
+  },
+  {
+   "depends_on": "eval:doc.docstatus==0",
+   "fieldname": "get_reposts",
+   "fieldtype": "Button",
+   "label": "Get Salary Slip Reposts"
+  },
+  {
+   "fieldname": "reposts",
+   "fieldtype": "Table",
+   "label": "Repost Salary Slips",
+   "no_copy": 1,
+   "options": "Repost Payroll Item"
+  },
+  {
+   "depends_on": "eval:doc.docstatus==1",
+   "fieldname": "section_accounting",
+   "fieldtype": "Section Break",
+   "label": "Accounting Result"
+  },
+  {
+   "fieldname": "old_journal_entries",
+   "fieldtype": "Small Text",
+   "label": "Existing Journal Entries",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "reversal_journal_entries",
+   "fieldtype": "Small Text",
+   "label": "Reversal Journal Entries",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_accounting_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "new_journal_entry",
+   "fieldtype": "Link",
+   "label": "New Journal Entry",
+   "no_copy": 1,
+   "options": "Journal Entry",
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_on",
+   "fieldtype": "Datetime",
+   "label": "Completed On",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "completed_by",
+   "fieldtype": "Link",
+   "label": "Completed By",
+   "no_copy": 1,
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "overview_tab",
+   "fieldtype": "Tab Break",
+   "label": "Overview"
+  },
+  {
+   "fieldname": "section_break_rmlo",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_nitj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "salary_slips_tab",
+   "fieldtype": "Tab Break",
+   "label": "Salary Slips"
+  },
+  {
+   "fieldname": "accounting_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "Accounting Info"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-01 16:34:11.306498",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost Payroll",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager"
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "payroll_entry,company",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "track_changes": 1
+}

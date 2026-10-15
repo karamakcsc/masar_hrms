@@ -2,6 +2,7 @@
 # For license information, please see license.txt
 
 import json
+from collections import defaultdict
 
 from dateutil.relativedelta import relativedelta
 
@@ -31,6 +32,8 @@ from erpnext.accounts.utils import get_fiscal_year
 
 from hrms.payroll.doctype.salary_withholding.salary_withholding import link_bank_entry_in_salary_withholdings
 
+from masar_hrms.payroll_budget.utils import get_employee_payroll_budgets, is_payroll_budget_enabled
+
 
 class PayrollEntry(Document):
 	def onload(self):
@@ -58,6 +61,7 @@ class PayrollEntry(Document):
 	def before_submit(self):
 		self.validate_existing_salary_slips()
 		self.validate_payroll_payable_account()
+		self.validate_payroll_budgets() ####### Payroll Budget / fail before any Salary Slip is created
 		if self.get_employees_with_unmarked_attendance():
 			frappe.throw(_("Cannot submit. Attendance is not marked for some employees."))
 
@@ -95,6 +99,14 @@ class PayrollEntry(Document):
 				msg,
 				title=_("Duplicate Entry"),
 			)
+
+	def validate_payroll_budgets(self):
+		"""Every employee must resolve to exactly one Project Payroll Budget row, using
+		only the dimensions enabled for the employee's Project in Payroll Budget Settings.
+		All failures are reported together."""
+		if not is_payroll_budget_enabled():
+			return
+		get_employee_payroll_budgets([d.employee for d in self.employees], raise_exception=True)
 
 	def validate_payroll_payable_account(self):
 		if frappe.db.get_value("Account", self.payroll_payable_account, "account_type"):
@@ -339,6 +351,9 @@ class PayrollEntry(Document):
 					ssd.additional_salary,
 					ss.salary_structure,
 					ss.employee,
+					ss.custom_salary_budget_element, ####### Payroll Budget
+					ss.custom_salary_cost_center,
+					ss.custom_salary_project,
 				)
 				.where((ssd.parentfield == component_type) & (ss.name.isin([d.name for d in salary_slips])))
 			).run(as_dict=True)
@@ -358,9 +373,12 @@ class PayrollEntry(Document):
 				if not self.should_add_component_to_accrual_jv(component_type, item):
 					continue
 
-				employee_cost_centers = self.get_payroll_cost_centers_for_employee(
-					item.employee, item.salary_structure
-				)
+				if item.custom_salary_cost_center: ####### Payroll Budget / salary expense posts to the budget's Cost Center
+					employee_cost_centers = {item.custom_salary_cost_center: 100}
+				else:
+					employee_cost_centers = self.get_payroll_cost_centers_for_employee(
+						item.employee, item.salary_structure
+					)
 				employee_advance = self.get_advance_deduction(component_type, item)
 
 				for cost_center, percentage in employee_cost_centers.items():
@@ -371,7 +389,13 @@ class PayrollEntry(Document):
 							item, amount_against_cost_center, cost_center, employee_advance
 						)
 					else:
-						key = (item.salary_component, cost_center , item.employee) ######### Mahmoud Edit 
+						key = (
+							item.salary_component,
+							cost_center,
+							item.employee,
+							item.custom_salary_budget_element,
+							item.custom_salary_project,
+						) ######### Mahmoud Edit / Payroll Budget: Budget Element + Project per employee
 						component_dict[key] = component_dict.get(key, 0) + amount_against_cost_center
 
 					if employee_wise_accounting_enabled:
@@ -514,14 +538,14 @@ class PayrollEntry(Document):
 	def get_account(self, component_dict=None):
 		account_dict = {}
 		for key, amount in component_dict.items():
-			component, cost_center , employee = key ############# Mahmoud Edit / to Add employee as Party 
+			component, cost_center, employee, budget_element, project = key ############# Mahmoud Edit / to Add employee as Party
 			account = self.get_salary_component_account(component)
 			acc_doc = frappe.get_doc('Account' , account) ######## Mahmoud Edit
 			company_doc= frappe.get_doc('Company' , self.company)
-			if acc_doc.name == company_doc.default_payroll_payable_account: ######## Mahmoud Edit 
-				accounting_key = (account, cost_center ,component,  employee ) ######## Mahmoud Edit / Add Employee as party for UnExpenses Account 
+			if acc_doc.name == company_doc.default_payroll_payable_account: ######## Mahmoud Edit
+				accounting_key = (account, cost_center, component, employee, budget_element, project) ######## Mahmoud Edit / Add Employee as party for UnExpenses Account
 			else:
-				accounting_key = (account, cost_center ,component ,  None) ###### Mahmoud Edit / Add None Option for Expenses Account (Expense Account Without Party)
+				accounting_key = (account, cost_center, component, None, budget_element, project) ###### Mahmoud Edit / Add None Option for Expenses Account (Expense Account Without Party)
 
 			account_dict[accounting_key] = account_dict.get(accounting_key, 0) + amount
 
@@ -693,39 +717,36 @@ class PayrollEntry(Document):
 			float(comp_data.normal_rate)
 		)
 		ss  , e , d = frappe.qb.DocType('Salary Slip') ,  frappe.qb.DocType('Employee') ,  frappe.qb.DocType('Department')
-		rows = (
-			frappe.qb.from_(ss).join(e).on(ss.employee == e.name).left_join(d).on(d.name == e.department)
-			.select(
-				(e.name),(e.custom_is_hazard), (e.social_security_salary).as_('ss_salary'),
-				(d.custom_ss_budget_element).as_('ss_be'),(d.custom_ss_cost_center),(d.custom_ss_project))	
-			.where(ss.payroll_entry ==self.name).where(e.is_social_security_applicable == 1 ).where(ss.payment_days > 15)
-		).run(as_dict = True)
+		query = (
+			frappe.qb.from_(ss).join(e).on(ss.employee == e.name)
+			.select((e.name),(e.custom_is_hazard), (e.social_security_salary).as_('ss_salary'),
+				(e.is_social_security_applicable).as_('ss_applicable'),
+				####### Repost Payroll / Social Security snapshot stored on a reposted Salary Slip
+				(ss.custom_ss_snapshot),(ss.custom_ss_applicable),(ss.custom_ss_base_salary),(ss.custom_ss_hazard))
+			.where(ss.payroll_entry ==self.name).where(ss.docstatus == 1).where(ss.payment_days > 15)
+		)
+		if is_payroll_budget_enabled(): ####### Payroll Budget / Company Social Security Budget resolved on the Salary Slip
+			query = query.select(
+				(ss.custom_ss_budget_element).as_('ss_be'),(ss.custom_ss_cost_center),(ss.custom_ss_project))
+		else: ####### Legacy / Department Social Security Budget Element
+			query = query.left_join(d).on(d.name == e.department).select(
+				(d.custom_ss_budget_element).as_('ss_be'),(d.custom_ss_cost_center),(d.custom_ss_project))
+		rows = query.run(as_dict = True)
+		for r in rows: ####### Repost Payroll / a reposted slip uses its own snapshot instead of the Employee
+			if r.custom_ss_snapshot:
+				r.ss_applicable = r.custom_ss_applicable
+				r.ss_salary = r.custom_ss_base_salary
+				r.custom_is_hazard = r.custom_ss_hazard
+		rows = [r for r in rows if r.ss_applicable == 1]
 		if with_party == False:
-			rows_lst = list()
+			ss_amounts = defaultdict(float)
 			for r in rows:
-				if r.custom_is_hazard == 0 :
-					rate = normal_rate/100
-				elif r.custom_is_hazard == 1 : 
-					rate = dangerous_rate/100
-				ss_amount = float(r.ss_salary if r.ss_salary else 0 ) * rate 
-				key = r.ss_be
-				if len(rows_lst) == 0 :
-					rows_lst.append({key:ss_amount})
-				else:
-					key_found = False
-					for row_dict in rows_lst:
-						if key in row_dict:
-							row_dict[key] += ss_amount
-							key_found = True
-							break
-					if not key_found:
-						rows_lst.append({key: ss_amount})
-			for row in rows_lst:
-				for row_be, row_amount in row.items(): 
-					row_be , row_amount = row_be, row_amount
-				be = frappe.get_doc('Budget Element' , row_be)
-				project = be.project
-				cost_center = be.cost_center
+				rate = dangerous_rate / 100 if r.custom_is_hazard == 1 else normal_rate / 100
+				if r.ss_be and not is_payroll_budget_enabled(): ####### Legacy / Cost Center + Project from the Budget Element
+					r.custom_ss_cost_center, r.custom_ss_project = frappe.get_cached_value(
+						'Budget Element', r.ss_be, ['cost_center', 'project'])
+				ss_amounts[(r.ss_be, r.custom_ss_cost_center, r.custom_ss_project)] += float(r.ss_salary or 0) * rate
+			for (row_be, cost_center, project), row_amount in ss_amounts.items():
 				acc_row = {
 					'account' : ss_liability,'credit_in_account_currency' : row_amount, 
 					'credit' : row_amount,'reference_type' : self.doctype,'reference_name' : self.name,
@@ -796,6 +817,8 @@ class PayrollEntry(Document):
 				accounts=accounts,
 				party=acc_cc[3],  ####### Mahmoud Edit / Insert Party for Components 
 				user_remark= user_remark,  ########### Mahmoud Edit
+				budget_element=acc_cc[4], ####### Payroll Budget / Employee Salary Budget
+				project=acc_cc[5],
 			)
 
 		# Deductions
@@ -816,6 +839,8 @@ class PayrollEntry(Document):
 				accounts=accounts,
 				party=acc_cc[3],  ####### Mahmoud Edit / Insert Party for Components 
 				user_remark= user_remark,  ########### Mahmoud Edit
+				budget_element=acc_cc[4], ####### Payroll Budget / Employee Salary Budget
+				project=acc_cc[5],
 			)
 
 		return payable_amount
@@ -893,6 +918,8 @@ class PayrollEntry(Document):
 		reference_name=None,
 		is_advance=None,
 		user_remark=None, ###### Mahmoud Edit to Add User Remark Options
+		budget_element=None, ###### Payroll Budget / applied to Expense rows only
+		project=None, ###### Payroll Budget / overrides self.project on Expense rows only
 	):
 		exchange_rate, amt = self.get_amount_and_exchange_rate_for_journal_entry(
 			account, amount, company_currency, currencies
@@ -955,6 +982,10 @@ class PayrollEntry(Document):
 		acc_doc = frappe.get_doc('Account' , account)
 		company_doc = frappe.get_doc('Company' , self.company)
 		if acc_doc.account_type == 'Expense Account':# or acc_doc.name == company_doc.default_payroll_payable_account :
+			if project:
+				row['project'] = project
+			if budget_element:
+				row['budget_element'] = budget_element
 			self.update_accounting_dimensions(
 				row,
 				accounting_dimensions,
@@ -970,7 +1001,8 @@ class PayrollEntry(Document):
  
 	def update_accounting_dimensions(self, row, accounting_dimensions):
 		for dimension in accounting_dimensions:
-			row.update({dimension: self.get(dimension)})
+			if not row.get(dimension): ####### Payroll Budget / keep a per-employee value (e.g. budget_element)
+				row[dimension] = self.get(dimension)
 
 		return row
 

@@ -1,0 +1,21 @@
+{
+ "color": "#28a745",
+ "creation": "2026-10-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "filters_json": "{}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Remaining Payroll Budget",
+ "method": "masar_hrms.payroll_budget.number_card.get_remaining_payroll_budget",
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Payroll Budget",
+ "name": "Payroll Budget - Remaining Budget",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Custom"
+}

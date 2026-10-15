@@ -1,0 +1,117 @@
+{
+ "actions": [],
+ "creation": "2026-09-30 12:00:00.000000",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "repost_salary_slip",
+  "salary_slip",
+  "employee",
+  "employee_name",
+  "column_break_1",
+  "old_gross_pay",
+  "new_gross_pay",
+  "old_total_deduction",
+  "new_total_deduction",
+  "column_break_2",
+  "old_net_pay",
+  "new_net_pay"
+ ],
+ "fields": [
+  {
+   "fieldname": "repost_salary_slip",
+   "fieldtype": "Link",
+   "label": "Repost Salary Slip",
+   "options": "Repost Salary Slip",
+   "reqd": 1,
+   "in_list_view": 1,
+   "columns": 2,
+   "read_only": 1
+  },
+  {
+   "fieldname": "salary_slip",
+   "fieldtype": "Link",
+   "label": "Salary Slip",
+   "options": "Salary Slip",
+   "in_list_view": 1,
+   "columns": 2,
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "label": "Employee",
+   "options": "Employee",
+   "in_list_view": 1,
+   "columns": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "old_gross_pay",
+   "fieldtype": "Currency",
+   "label": "Original Gross Pay",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_gross_pay",
+   "fieldtype": "Currency",
+   "label": "New Gross Pay",
+   "read_only": 1
+  },
+  {
+   "fieldname": "old_total_deduction",
+   "fieldtype": "Currency",
+   "label": "Original Total Deduction",
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_total_deduction",
+   "fieldtype": "Currency",
+   "label": "New Total Deduction",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "old_net_pay",
+   "fieldtype": "Currency",
+   "label": "Original Net Pay",
+   "in_list_view": 1,
+   "columns": 2,
+   "read_only": 1
+  },
+  {
+   "fieldname": "new_net_pay",
+   "fieldtype": "Currency",
+   "label": "New Net Pay",
+   "in_list_view": 1,
+   "columns": 2,
+   "read_only": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2026-09-30 12:00:00.000000",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost Payroll Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "istable": 1,
+ "editable_grid": 1
+}

@@ -1,11 +1,20 @@
 import frappe
+from frappe import _
 from frappe.utils import getdate, today, now_datetime
+
+from masar_hrms.payroll_budget.utils import (
+    PAYROLL_DIMENSIONS,
+    SETTINGS_DOCTYPE,
+    get_project_dimensions,
+    is_payroll_budget_enabled,
+)
 
 
 def validate(self, method):
     employee_full_name(self)
     education_validation(self)
     check_salaries_and_relieving_date(self)
+    validate_payroll_budget_dimensions(self)
 
 
 def on_update(self, method):
@@ -117,6 +126,34 @@ def employee_full_name(self):
         if full_name_ar:
             self.full_name_ar = full_name_ar
             
+def validate_payroll_budget_dimensions(self):
+    if not is_payroll_budget_enabled():
+        return
+
+    if not self.custom_project:
+        frappe.throw(_("Project is mandatory for Payroll."), title=_("Missing Project"))
+
+    if self.status == "Left":
+        return
+
+    dimensions = get_project_dimensions(self.custom_project)
+    if dimensions is None:
+        frappe.throw(
+            _("Project {0} is not configured in {1}.").format(
+                frappe.bold(self.custom_project), SETTINGS_DOCTYPE
+            )
+        )
+
+    missing = [d for d in dimensions if not self.get(PAYROLL_DIMENSIONS[d]["employee_field"])]
+    if missing:
+        frappe.throw(
+            _("Project {0} requires the following dimensions: {1}").format(
+                frappe.bold(self.custom_project), frappe.bold(", ".join(missing))
+            ),
+            title=_("Missing Payroll Dimensions"),
+        )
+
+
 def education_validation(self):
     for e in self.education:
         if e.custom_is_qualification and e.custom_is_training:
@@ -135,4 +172,4 @@ def check_salaries_and_relieving_date(self):
             AND tss.end_date IS NOT NULL
     ''', as_list=1)
     if sql and sql[0][0] and self.relieving_date and getdate(self.relieving_date) < getdate(sql[0][0]):
-        frappe.throw(f"Relieving date cannot be before the end date of the last salary slip.<br> Last salary slip end date: <b>{sql[0][0]}</b>")
+        frappe.throw(f"Relieving date cannot be before the end date of the last salary slip.<br> Last salary slip end date: <b>{sql[0][0]}</b>")

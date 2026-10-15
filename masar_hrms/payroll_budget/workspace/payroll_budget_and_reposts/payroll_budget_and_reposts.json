@@ -1,0 +1,377 @@
+{
+ "charts": [
+  {
+   "chart_name": "Payroll Cumulative Expense vs Budget",
+   "label": "Payroll Cumulative Expense vs Budget"
+  },
+  {
+   "chart_name": "Payroll Budget vs Expensed by Project",
+   "label": "Payroll Budget vs Expensed by Project"
+  },
+  {
+   "chart_name": "Payroll Budget vs Expensed by Element",
+   "label": "Payroll Budget vs Expensed by Element"
+  },
+  {
+   "chart_name": "Monthly Payroll Gross Pay",
+   "label": "Monthly Payroll Gross Pay"
+  },
+  {
+   "chart_name": "Payroll Cost by Project",
+   "label": "Payroll Cost by Project"
+  },
+  {
+   "chart_name": "Payroll Cost by Department",
+   "label": "Payroll Cost by Department"
+  },
+  {
+   "chart_name": "Payroll Budget Mapping Status",
+   "label": "Payroll Budget Mapping Status"
+  },
+  {
+   "chart_name": "Salary Slip Reposts by Status",
+   "label": "Salary Slip Reposts by Status"
+  },
+  {
+   "chart_name": "Monthly Repost Net Pay Difference",
+   "label": "Monthly Repost Net Pay Difference"
+  },
+  {
+   "chart_name": "Repost Component Variance",
+   "label": "Repost Component Variance"
+  },
+  {
+   "chart_name": "Repost Payroll Original vs New Net Pay",
+   "label": "Repost Payroll Original vs New Net Pay"
+  }
+ ],
+ "content": "[{\"id\": \"pbr-1\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Payroll Budget</b></span>\", \"col\": 12}}, {\"id\": \"pbr-2\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Total Payroll Budget\", \"col\": 3}}, {\"id\": \"pbr-3\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Payroll Expensed (Cumulative)\", \"col\": 3}}, {\"id\": \"pbr-4\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Remaining Payroll Budget\", \"col\": 3}}, {\"id\": \"pbr-5\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Payroll Budget Utilization\", \"col\": 3}}, {\"id\": \"pbr-6\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Payroll Expensed (This Month)\", \"col\": 3}}, {\"id\": \"pbr-7\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Payroll Expensed (This Fiscal Year)\", \"col\": 3}}, {\"id\": \"pbr-8\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Exceeded Payroll Budgets\", \"col\": 3}}, {\"id\": \"pbr-9\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Employees Without Payroll Budget\", \"col\": 3}}, {\"id\": \"pbr-10\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Projects With Payroll Budget\", \"col\": 3}}, {\"id\": \"pbr-11\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Payroll Cumulative Expense vs Budget\", \"col\": 12}}, {\"id\": \"pbr-12\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Payroll Budget vs Expensed by Project\", \"col\": 6}}, {\"id\": \"pbr-13\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Payroll Budget Mapping Status\", \"col\": 6}}, {\"id\": \"pbr-14\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Payroll Budget vs Expensed by Element\", \"col\": 12}}, {\"id\": \"pbr-15\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Payroll Cost</b></span>\", \"col\": 12}}, {\"id\": \"pbr-16\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Monthly Payroll Gross Pay\", \"col\": 12}}, {\"id\": \"pbr-17\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Payroll Cost by Project\", \"col\": 6}}, {\"id\": \"pbr-18\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Payroll Cost by Department\", \"col\": 6}}, {\"id\": \"pbr-19\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Repost Payroll and Slips</b></span>\", \"col\": 12}}, {\"id\": \"pbr-20\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Salary Slip Reposts\", \"col\": 3}}, {\"id\": \"pbr-21\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Pending Salary Slip Reposts\", \"col\": 3}}, {\"id\": \"pbr-22\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Applied Salary Slip Reposts\", \"col\": 3}}, {\"id\": \"pbr-23\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Draft Repost Payrolls\", \"col\": 3}}, {\"id\": \"pbr-24\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Completed Repost Payrolls\", \"col\": 3}}, {\"id\": \"pbr-25\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Employees Reposted (This Year)\", \"col\": 3}}, {\"id\": \"pbr-26\", \"type\": \"number_card\", \"data\": {\"number_card_name\": \"Repost Net Pay Difference (This Year)\", \"col\": 3}}, {\"id\": \"pbr-27\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Salary Slip Reposts by Status\", \"col\": 6}}, {\"id\": \"pbr-28\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Monthly Repost Net Pay Difference\", \"col\": 6}}, {\"id\": \"pbr-29\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Repost Component Variance\", \"col\": 6}}, {\"id\": \"pbr-30\", \"type\": \"chart\", \"data\": {\"chart_name\": \"Repost Payroll Original vs New Net Pay\", \"col\": 6}}, {\"id\": \"pbr-31\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Shortcuts</b></span>\", \"col\": 12}}, {\"id\": \"pbr-32\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Project Payroll Budget\", \"col\": 3}}, {\"id\": \"pbr-33\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payroll Budget Settings\", \"col\": 3}}, {\"id\": \"pbr-34\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Repost Salary Slip\", \"col\": 3}}, {\"id\": \"pbr-35\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Repost Payroll\", \"col\": 3}}, {\"id\": \"pbr-36\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payroll Budget vs Actual\", \"col\": 3}}, {\"id\": \"pbr-37\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Payroll Budget Cumulative Expense\", \"col\": 3}}, {\"id\": \"pbr-38\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Employee Payroll Budget Mapping\", \"col\": 3}}, {\"id\": \"pbr-39\", \"type\": \"shortcut\", \"data\": {\"shortcut_name\": \"Repost Salary Slip Register\", \"col\": 3}}, {\"id\": \"pbr-40\", \"type\": \"header\", \"data\": {\"text\": \"<span class=\\\"h4\\\"><b>Reports & Masters</b></span>\", \"col\": 12}}, {\"id\": \"pbr-41\", \"type\": \"card\", \"data\": {\"card_name\": \"Payroll Budget Setup\", \"col\": 6}}, {\"id\": \"pbr-42\", \"type\": \"card\", \"data\": {\"card_name\": \"Repost Transactions\", \"col\": 6}}, {\"id\": \"pbr-43\", \"type\": \"card\", \"data\": {\"card_name\": \"Payroll Budget Reports\", \"col\": 6}}, {\"id\": \"pbr-44\", \"type\": \"card\", \"data\": {\"card_name\": \"Repost Reports\", \"col\": 6}}]",
+ "creation": "2026-10-11 00:00:00",
+ "custom_blocks": [],
+ "docstatus": 0,
+ "doctype": "Workspace",
+ "for_user": "",
+ "hide_custom": 0,
+ "icon": "accounting",
+ "idx": 0,
+ "indicator_color": "",
+ "is_hidden": 0,
+ "label": "Payroll Budget and Reposts",
+ "links": [
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll Budget Setup",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll Budget Settings",
+   "link_count": 0,
+   "link_to": "Payroll Budget Settings",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Project Payroll Budget",
+   "link_count": 0,
+   "link_to": "Project Payroll Budget",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Budget Element",
+   "link_count": 0,
+   "link_to": "Budget Element",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Repost Transactions",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Repost Salary Slip",
+   "link_count": 0,
+   "link_to": "Repost Salary Slip",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Repost Payroll",
+   "link_count": 0,
+   "link_to": "Repost Payroll",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Salary Slip",
+   "link_count": 0,
+   "link_to": "Salary Slip",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll Entry",
+   "link_count": 0,
+   "link_to": "Payroll Entry",
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Payroll Budget Reports",
+   "link_count": 4,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payroll Budget vs Actual",
+   "link_count": 0,
+   "link_to": "Payroll Budget vs Actual",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payroll Budget Cumulative Expense",
+   "link_count": 0,
+   "link_to": "Payroll Budget Cumulative Expense",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Payroll Cost Analysis",
+   "link_count": 0,
+   "link_to": "Payroll Cost Analysis",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Employee Payroll Budget Mapping",
+   "link_count": 0,
+   "link_to": "Employee Payroll Budget Mapping",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 0,
+   "label": "Repost Reports",
+   "link_count": 3,
+   "link_type": "DocType",
+   "onboard": 0,
+   "type": "Card Break"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Repost Salary Slip Register",
+   "link_count": 0,
+   "link_to": "Repost Salary Slip Register",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Repost Payroll Summary",
+   "link_count": 0,
+   "link_to": "Repost Payroll Summary",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  },
+  {
+   "hidden": 0,
+   "is_query_report": 1,
+   "label": "Repost Component Variance",
+   "link_count": 0,
+   "link_to": "Repost Component Variance",
+   "link_type": "Report",
+   "onboard": 0,
+   "type": "Link"
+  }
+ ],
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Payroll Budget",
+ "name": "Payroll Budget and Reposts",
+ "number_cards": [
+  {
+   "label": "Total Payroll Budget",
+   "number_card_name": "Payroll Budget - Total Budget"
+  },
+  {
+   "label": "Payroll Expensed (Cumulative)",
+   "number_card_name": "Payroll Budget - Expensed To Date"
+  },
+  {
+   "label": "Remaining Payroll Budget",
+   "number_card_name": "Payroll Budget - Remaining Budget"
+  },
+  {
+   "label": "Payroll Budget Utilization",
+   "number_card_name": "Payroll Budget - Utilization"
+  },
+  {
+   "label": "Payroll Expensed (This Month)",
+   "number_card_name": "Payroll Budget - Expensed This Month"
+  },
+  {
+   "label": "Payroll Expensed (This Fiscal Year)",
+   "number_card_name": "Payroll Budget - Expensed This Year"
+  },
+  {
+   "label": "Exceeded Payroll Budgets",
+   "number_card_name": "Payroll Budget - Exceeded Budgets"
+  },
+  {
+   "label": "Employees Without Payroll Budget",
+   "number_card_name": "Payroll Budget - Employees Without Budget"
+  },
+  {
+   "label": "Projects With Payroll Budget",
+   "number_card_name": "Payroll Budget - Projects"
+  },
+  {
+   "label": "Draft Salary Slip Reposts",
+   "number_card_name": "Repost - Draft Salary Slip Reposts"
+  },
+  {
+   "label": "Pending Salary Slip Reposts",
+   "number_card_name": "Repost - Pending Salary Slip Reposts"
+  },
+  {
+   "label": "Applied Salary Slip Reposts",
+   "number_card_name": "Repost - Applied Salary Slip Reposts"
+  },
+  {
+   "label": "Draft Repost Payrolls",
+   "number_card_name": "Repost - Draft Repost Payrolls"
+  },
+  {
+   "label": "Completed Repost Payrolls",
+   "number_card_name": "Repost - Completed Repost Payrolls"
+  },
+  {
+   "label": "Employees Reposted (This Year)",
+   "number_card_name": "Repost - Employees Affected This Year"
+  },
+  {
+   "label": "Repost Net Pay Difference (This Year)",
+   "number_card_name": "Repost - Net Pay Difference This Year"
+  }
+ ],
+ "owner": "Administrator",
+ "parent_page": "Payroll",
+ "public": 1,
+ "quick_lists": [],
+ "roles": [],
+ "sequence_id": 30.0,
+ "shortcuts": [
+  {
+   "label": "Project Payroll Budget",
+   "type": "DocType",
+   "link_to": "Project Payroll Budget",
+   "doc_view": "List",
+   "color": "Blue"
+  },
+  {
+   "label": "Payroll Budget Settings",
+   "type": "DocType",
+   "link_to": "Payroll Budget Settings",
+   "doc_view": "",
+   "color": "Grey"
+  },
+  {
+   "label": "Repost Salary Slip",
+   "type": "DocType",
+   "link_to": "Repost Salary Slip",
+   "doc_view": "List",
+   "color": "Orange",
+   "stats_filter": "[[\"Repost Salary Slip\", \"status\", \"=\", \"Pending\", false]]",
+   "format": "{} Pending"
+  },
+  {
+   "label": "Repost Payroll",
+   "type": "DocType",
+   "link_to": "Repost Payroll",
+   "doc_view": "List",
+   "color": "Red",
+   "stats_filter": "[[\"Repost Payroll\", \"docstatus\", \"=\", 0, false]]",
+   "format": "{} Draft"
+  },
+  {
+   "label": "Payroll Budget vs Actual",
+   "type": "Report",
+   "link_to": "Payroll Budget vs Actual",
+   "doc_view": "",
+   "color": "Green"
+  },
+  {
+   "label": "Payroll Budget Cumulative Expense",
+   "type": "Report",
+   "link_to": "Payroll Budget Cumulative Expense",
+   "doc_view": "",
+   "color": "Green"
+  },
+  {
+   "label": "Employee Payroll Budget Mapping",
+   "type": "Report",
+   "link_to": "Employee Payroll Budget Mapping",
+   "doc_view": "",
+   "color": "Purple"
+  },
+  {
+   "label": "Repost Salary Slip Register",
+   "type": "Report",
+   "link_to": "Repost Salary Slip Register",
+   "doc_view": "",
+   "color": "Purple"
+  }
+ ],
+ "title": "Payroll Budget and Reposts"
+}

@@ -1,0 +1,729 @@
+{
+ "actions": [],
+ "autoname": "RSS-.YYYY.-.#####",
+ "creation": "2026-09-30 16:58:07.851579",
+ "doctype": "DocType",
+ "engine": "InnoDB",
+ "field_order": [
+  "employee_info_section",
+  "salary_slip",
+  "employee",
+  "employee_name",
+  "company",
+  "column_break_header_1",
+  "posting_date",
+  "payroll_entry",
+  "status",
+  "column_break_header_2",
+  "start_date",
+  "end_date",
+  "amended_from",
+  "section_break_gmgz",
+  "salary_structure",
+  "salary_structure_assignment",
+  "column_break_zbcf",
+  "currency",
+  "exchange_rate",
+  "payroll_and_budget_info_tab",
+  "section_dimensions",
+  "project",
+  "department",
+  "branch",
+  "grade",
+  "column_break_dim_1",
+  "enabled_dimensions",
+  "designation",
+  "section",
+  "work_type",
+  "section_budget",
+  "salary_budget_element",
+  "salary_cost_center",
+  "salary_project",
+  "column_break_budget_1",
+  "ss_budget_element",
+  "ss_cost_center",
+  "ss_project",
+  "payment_days_tab",
+  "section_salary",
+  "column_break_salary_1",
+  "total_working_days",
+  "payment_days",
+  "column_break_salary_2",
+  "leave_without_pay",
+  "absent_days",
+  "total_loan_repayment",
+  "earnings_and_deductions_tab",
+  "section_earnings",
+  "earnings",
+  "deductions",
+  "section_social_security",
+  "is_social_security_applicable",
+  "social_security_salary",
+  "is_hazard",
+  "column_break_ss_1",
+  "employee_share_rate",
+  "company_share_rate",
+  "column_break_ss_2",
+  "employee_social_security",
+  "company_social_security",
+  "section_income_tax",
+  "original_income_tax",
+  "column_break_tax_1",
+  "income_tax",
+  "column_break_tax_2",
+  "annual_taxable_amount",
+  "net_pay_info_tab",
+  "section_totals",
+  "original_gross_pay",
+  "original_total_deduction",
+  "original_net_pay",
+  "column_break_totals_1",
+  "gross_pay",
+  "total_deduction",
+  "net_pay",
+  "column_break_totals_2",
+  "net_pay_difference",
+  "changes_tab",
+  "section_changes",
+  "changes",
+  "section_repost_data",
+  "repost_data",
+  "original_data",
+  "source_hash",
+  "applied_info_tab",
+  "section_applied",
+  "repost_payroll",
+  "column_break_applied_1",
+  "applied_on",
+  "applied_by"
+ ],
+ "fields": [
+  {
+   "fieldname": "salary_slip",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Salary Slip",
+   "options": "Salary Slip",
+   "reqd": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "employee",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Employee",
+   "options": "Employee",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Employee Name",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_header_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "payroll_entry",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Payroll Entry",
+   "options": "Payroll Entry",
+   "read_only": 1,
+   "search_index": 1
+  },
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "label": "Company",
+   "options": "Company",
+   "read_only": 1
+  },
+  {
+   "fieldname": "posting_date",
+   "fieldtype": "Date",
+   "label": "Posting Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_header_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "default": "Draft",
+   "fieldname": "status",
+   "fieldtype": "Select",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Status",
+   "no_copy": 1,
+   "options": "Draft\nPending\nApplied\nCancelled",
+   "read_only": 1
+  },
+  {
+   "fieldname": "start_date",
+   "fieldtype": "Date",
+   "label": "Start Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "end_date",
+   "fieldtype": "Date",
+   "label": "End Date",
+   "read_only": 1
+  },
+  {
+   "fieldname": "amended_from",
+   "fieldtype": "Link",
+   "label": "Amended From",
+   "no_copy": 1,
+   "options": "Repost Salary Slip",
+   "print_hide": 1,
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_salary",
+   "fieldtype": "Section Break",
+   "label": "Salary Slip Details"
+  },
+  {
+   "fieldname": "salary_structure",
+   "fieldtype": "Link",
+   "label": "Salary Structure",
+   "options": "Salary Structure",
+   "read_only": 1
+  },
+  {
+   "fieldname": "salary_structure_assignment",
+   "fieldtype": "Link",
+   "label": "Salary Structure Assignment",
+   "options": "Salary Structure Assignment",
+   "read_only": 1
+  },
+  {
+   "fieldname": "currency",
+   "fieldtype": "Link",
+   "label": "Currency",
+   "options": "Currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "exchange_rate",
+   "fieldtype": "Float",
+   "hidden": 1,
+   "label": "Exchange Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_salary_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "total_working_days",
+   "fieldtype": "Float",
+   "label": "Working Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "payment_days",
+   "fieldtype": "Float",
+   "label": "Payment Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_salary_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "leave_without_pay",
+   "fieldtype": "Float",
+   "label": "Leave Without Pay",
+   "read_only": 1
+  },
+  {
+   "fieldname": "absent_days",
+   "fieldtype": "Float",
+   "label": "Absent Days",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_loan_repayment",
+   "fieldtype": "Currency",
+   "label": "Total Loan Repayment",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "description": "Only the dimensions enabled for the Project in Payroll Budget Settings can be changed.",
+   "fieldname": "section_dimensions",
+   "fieldtype": "Section Break",
+   "label": "Payroll Budget Dimensions"
+  },
+  {
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "label": "Project",
+   "options": "Project"
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Department"
+  },
+  {
+   "fieldname": "designation",
+   "fieldtype": "Link",
+   "label": "Designation",
+   "options": "Designation"
+  },
+  {
+   "fieldname": "column_break_dim_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "branch",
+   "fieldtype": "Link",
+   "label": "Branch",
+   "options": "Branch"
+  },
+  {
+   "fieldname": "grade",
+   "fieldtype": "Link",
+   "label": "Grade",
+   "options": "Employee Grade"
+  },
+  {
+   "fieldname": "section",
+   "fieldtype": "Select",
+   "label": "Section"
+  },
+  {
+   "fieldname": "work_type",
+   "fieldtype": "Select",
+   "label": "Work Type"
+  },
+  {
+   "fieldname": "enabled_dimensions",
+   "fieldtype": "Small Text",
+   "label": "Project Dimensions",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_budget",
+   "fieldtype": "Section Break",
+   "label": "Payroll Budget"
+  },
+  {
+   "fieldname": "salary_budget_element",
+   "fieldtype": "Link",
+   "label": "Salary Budget Element",
+   "options": "Budget Element",
+   "read_only": 1
+  },
+  {
+   "fieldname": "salary_cost_center",
+   "fieldtype": "Link",
+   "label": "Salary Cost Center",
+   "options": "Cost Center",
+   "read_only": 1
+  },
+  {
+   "fieldname": "salary_project",
+   "fieldtype": "Link",
+   "label": "Salary Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_budget_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "ss_budget_element",
+   "fieldtype": "Link",
+   "label": "Company Social Security Budget Element",
+   "options": "Budget Element",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ss_cost_center",
+   "fieldtype": "Link",
+   "label": "Social Security Cost Center",
+   "options": "Cost Center",
+   "read_only": 1
+  },
+  {
+   "fieldname": "ss_project",
+   "fieldtype": "Link",
+   "label": "Social Security Project",
+   "options": "Project",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_social_security",
+   "fieldtype": "Section Break",
+   "label": "Social Security"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_social_security_applicable",
+   "fieldtype": "Check",
+   "label": "Social Security Applicable"
+  },
+  {
+   "fieldname": "social_security_salary",
+   "fieldtype": "Currency",
+   "label": "Social Security Salary",
+   "non_negative": 1,
+   "options": "currency"
+  },
+  {
+   "default": "0",
+   "fieldname": "is_hazard",
+   "fieldtype": "Check",
+   "label": "Is Hazard"
+  },
+  {
+   "fieldname": "column_break_ss_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_share_rate",
+   "fieldtype": "Percent",
+   "label": "Employee Share Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_share_rate",
+   "fieldtype": "Percent",
+   "label": "Company Share Rate",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_ss_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "employee_social_security",
+   "fieldtype": "Currency",
+   "label": "Employee Social Security",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "company_social_security",
+   "fieldtype": "Currency",
+   "label": "Company Social Security",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_income_tax",
+   "fieldtype": "Section Break",
+   "label": "Income Tax"
+  },
+  {
+   "fieldname": "original_income_tax",
+   "fieldtype": "Currency",
+   "label": "Original Income Tax",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tax_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Calculated by the Salary Slip income tax logic.",
+   "fieldname": "income_tax",
+   "fieldtype": "Currency",
+   "label": "Income Tax",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_tax_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "annual_taxable_amount",
+   "fieldtype": "Currency",
+   "label": "Annual Taxable Amount",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_earnings",
+   "fieldtype": "Section Break",
+   "label": "Earnings & Deductions"
+  },
+  {
+   "fieldname": "earnings",
+   "fieldtype": "Table",
+   "label": "Earnings",
+   "options": "Repost Salary Detail"
+  },
+  {
+   "fieldname": "deductions",
+   "fieldtype": "Table",
+   "label": "Deductions",
+   "options": "Repost Salary Detail"
+  },
+  {
+   "fieldname": "section_totals",
+   "fieldtype": "Section Break",
+   "label": "Totals"
+  },
+  {
+   "fieldname": "original_gross_pay",
+   "fieldtype": "Currency",
+   "label": "Original Gross Pay",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_total_deduction",
+   "fieldtype": "Currency",
+   "label": "Original Total Deduction",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_net_pay",
+   "fieldtype": "Currency",
+   "label": "Original Net Pay",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_totals_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "gross_pay",
+   "fieldtype": "Currency",
+   "label": "Gross Pay",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "total_deduction",
+   "fieldtype": "Currency",
+   "label": "Total Deduction",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "net_pay",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Net Pay",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_totals_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "net_pay_difference",
+   "fieldtype": "Currency",
+   "label": "Net Pay Difference",
+   "options": "currency",
+   "read_only": 1
+  },
+  {
+   "fieldname": "section_changes",
+   "fieldtype": "Section Break",
+   "label": "Changes"
+  },
+  {
+   "fieldname": "changes",
+   "fieldtype": "Table",
+   "label": "Changes",
+   "no_copy": 1,
+   "options": "Repost Salary Slip Change",
+   "read_only": 1
+  },
+  {
+   "collapsible": 1,
+   "fieldname": "section_repost_data",
+   "fieldtype": "Section Break",
+   "label": "Repost Data"
+  },
+  {
+   "fieldname": "repost_data",
+   "fieldtype": "JSON",
+   "label": "Repost Data (Proposed State)",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "original_data",
+   "fieldtype": "JSON",
+   "label": "Original Data",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "source_hash",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Salary Slip Fingerprint",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "depends_on": "eval:doc.repost_payroll",
+   "fieldname": "section_applied",
+   "fieldtype": "Section Break",
+   "label": "Applied"
+  },
+  {
+   "fieldname": "repost_payroll",
+   "fieldtype": "Link",
+   "in_standard_filter": 1,
+   "label": "Repost Payroll",
+   "no_copy": 1,
+   "options": "Repost Payroll",
+   "read_only": 1
+  },
+  {
+   "fieldname": "column_break_applied_1",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "applied_on",
+   "fieldtype": "Datetime",
+   "label": "Applied On",
+   "no_copy": 1,
+   "read_only": 1
+  },
+  {
+   "fieldname": "applied_by",
+   "fieldtype": "Link",
+   "label": "Applied By",
+   "no_copy": 1,
+   "options": "User",
+   "read_only": 1
+  },
+  {
+   "fieldname": "employee_info_section",
+   "fieldtype": "Section Break",
+   "label": "Employee Info"
+  },
+  {
+   "fieldname": "payment_days_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payment Days"
+  },
+  {
+   "fieldname": "earnings_and_deductions_tab",
+   "fieldtype": "Tab Break",
+   "label": "Earnings & Deductions"
+  },
+  {
+   "fieldname": "net_pay_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "Net Pay Info"
+  },
+  {
+   "fieldname": "changes_tab",
+   "fieldtype": "Tab Break",
+   "label": "Changes"
+  },
+  {
+   "fieldname": "applied_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "Applied Info"
+  },
+  {
+   "fieldname": "payroll_and_budget_info_tab",
+   "fieldtype": "Tab Break",
+   "label": "Payroll & Budget Info"
+  },
+  {
+   "fieldname": "section_break_gmgz",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_zbcf",
+   "fieldtype": "Column Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "is_submittable": 1,
+ "links": [],
+ "modified": "2026-10-15 15:47:19.314157",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost Salary Slip",
+ "naming_rule": "Expression",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "create": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "HR User",
+   "share": 1,
+   "submit": 1,
+   "write": 1
+  },
+  {
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Accounts Manager"
+  }
+ ],
+ "row_format": "Dynamic",
+ "search_fields": "employee,employee_name,salary_slip,payroll_entry",
+ "sort_field": "creation",
+ "sort_order": "DESC",
+ "states": [],
+ "title_field": "employee_name",
+ "track_changes": 1
+}

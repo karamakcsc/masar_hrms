@@ -114,7 +114,8 @@ doctype_js = {
    "Employee" : "custom/employee/employee.js",
    "Goal" : "custom/goal/goal.js",
    "Appraisal" : "custom/appraisal/appraisal.js",
-   "Payroll Entry" : "custom/payroll_entry/payroll_entry.js"
+   "Payroll Entry" : "custom/payroll_entry/payroll_entry.js",
+   "Salary Slip" : "custom/salary_slip/salary_slip.js"
  }
 
 # Scheduled Tasks
@@ -224,6 +225,22 @@ fixtures = [
                 # Salary Slip
                 "Salary Slip-hourly_leaves",
                 "Salary Slip-custom_work_type",
+                "Salary Slip-custom_payroll_budget_section",
+                "Salary Slip-custom_project",
+                "Salary Slip-custom_salary_budget_element",
+                "Salary Slip-custom_salary_cost_center",
+                "Salary Slip-custom_salary_project",
+                "Salary Slip-custom_column_break_payroll_budget",
+                "Salary Slip-custom_ss_budget_element",
+                "Salary Slip-custom_ss_cost_center",
+                "Salary Slip-custom_ss_project",
+                "Salary Slip-custom_repost_section",
+                "Salary Slip-custom_last_repost_payroll",
+                "Salary Slip-custom_ss_snapshot",
+                "Salary Slip-custom_column_break_repost",
+                "Salary Slip-custom_ss_applicable",
+                "Salary Slip-custom_ss_base_salary",
+                "Salary Slip-custom_ss_hazard",
                 # Salary Component
                 "Salary Component-custom_is_dbr_applicable", 
                 "Salary Component-is_overtime_applicable",

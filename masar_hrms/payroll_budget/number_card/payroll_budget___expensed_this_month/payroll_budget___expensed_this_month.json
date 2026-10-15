@@ -1,0 +1,21 @@
+{
+ "color": "#ffa00a",
+ "creation": "2026-10-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "filters_json": "{}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Payroll Expensed (This Month)",
+ "method": "masar_hrms.payroll_budget.number_card.get_payroll_expensed_this_month",
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Payroll Budget",
+ "name": "Payroll Budget - Expensed This Month",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Custom"
+}

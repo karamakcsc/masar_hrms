@@ -296,7 +296,7 @@ class EmployeeAttendanceProcess(Document):
 				AND h.holiday_date = a.attendance_date
 			WHERE
 				a.docstatus = 1
-				a.employee = %(employee)s
+				AND a.employee = %(employee)s
 				AND a.attendance_date BETWEEN %(from_date)s AND %(to_date)s
 			) x
 			HAVING actual_duration_seconds  > shift_duration_seconds 

@@ -1,0 +1,89 @@
+{
+ "actions": [],
+ "creation": "2026-09-30 10:00:00",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "project",
+  "column_break_gqmj",
+  "project_name",
+  "section_break_ltrb",
+  "enable_multi_dimension",
+  "column_break_dkiy",
+  "select_dimensions",
+  "section_break_qrhu",
+  "dimensions"
+ ],
+ "fields": [
+  {
+   "columns": 3,
+   "fieldname": "project",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Project",
+   "options": "Project",
+   "reqd": 1
+  },
+  {
+   "fetch_from": "project.project_name",
+   "fieldname": "project_name",
+   "fieldtype": "Data",
+   "label": "Project Name",
+   "read_only": 1
+  },
+  {
+   "columns": 2,
+   "default": "0",
+   "fieldname": "enable_multi_dimension",
+   "fieldtype": "Check",
+   "in_list_view": 1,
+   "label": "Enable Multi Dimension"
+  },
+  {
+   "columns": 5,
+   "depends_on": "enable_multi_dimension",
+   "description": "Comma separated: Department, Designation, Branch, Grade, Section, Work Type. Use \"Select Dimensions\" to pick them.",
+   "fieldname": "dimensions",
+   "fieldtype": "Small Text",
+   "in_list_view": 1,
+   "label": "Dimensions",
+   "read_only": 1
+  },
+  {
+   "depends_on": "enable_multi_dimension",
+   "fieldname": "select_dimensions",
+   "fieldtype": "Button",
+   "label": "Select Dimensions"
+  },
+  {
+   "fieldname": "column_break_gqmj",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_ltrb",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_dkiy",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_qrhu",
+   "fieldtype": "Section Break"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2026-10-15 15:49:10.597497",
+ "modified_by": "Administrator",
+ "module": "Payroll Budget",
+ "name": "Payroll Project Dimension Settings",
+ "owner": "Administrator",
+ "permissions": [],
+ "row_format": "Dynamic",
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}

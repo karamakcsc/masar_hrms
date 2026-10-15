@@ -1,0 +1,22 @@
+{
+ "color": "#2490ef",
+ "creation": "2026-10-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "document_type": "Project Payroll Budget",
+ "dynamic_filters_json": "[]",
+ "filters_json": "[]",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Projects With Payroll Budget",
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Payroll Budget",
+ "name": "Payroll Budget - Projects",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Document Type"
+}

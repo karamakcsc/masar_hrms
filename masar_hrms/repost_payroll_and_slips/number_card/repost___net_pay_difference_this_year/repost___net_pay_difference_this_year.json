@@ -1,0 +1,21 @@
+{
+ "color": "#743ee2",
+ "creation": "2026-10-11 00:00:00",
+ "docstatus": 0,
+ "doctype": "Number Card",
+ "filters_json": "{}",
+ "function": "Count",
+ "idx": 0,
+ "is_public": 1,
+ "is_standard": 1,
+ "label": "Repost Net Pay Difference (This Year)",
+ "method": "masar_hrms.repost_payroll_and_slips.number_card.get_net_pay_difference_this_year",
+ "modified": "2026-10-11 00:00:00",
+ "modified_by": "Administrator",
+ "module": "Repost Payroll and Slips",
+ "name": "Repost - Net Pay Difference This Year",
+ "owner": "Administrator",
+ "show_full_number": 0,
+ "show_percentage_stats": 0,
+ "type": "Custom"
+}

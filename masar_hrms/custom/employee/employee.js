@@ -1,4 +1,10 @@
 frappe.ui.form.on('Employee',  {
+    onload: function(frm) {
+        // Project is mandatory once Payroll Budget is enabled
+        frappe.db.get_single_value('Payroll Budget Settings', 'enable_payroll_budget').then((enabled) => {
+            frm.toggle_reqd('custom_project', !!enabled);
+        });
+    },
     refresh: function(frm) {
         var total = 0;
         $.each(frm.doc.family_members,  function(i,  d) {

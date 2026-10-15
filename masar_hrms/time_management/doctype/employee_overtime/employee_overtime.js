@@ -117,7 +117,7 @@ var calculate_total = function(frm) {
 function GetBasicSalary(frm){
     if (frm.doc.employee){
     frappe.call({
-        method:'masar_hrms.masar_hrms.doctype.employee_overtime.employee_overtime.get_basic_salary', 
+        method:'masar_hrms.time_management.doctype.employee_overtime.employee_overtime.get_basic_salary', 
         args: 
         {
             employee: frm.doc.employee, 

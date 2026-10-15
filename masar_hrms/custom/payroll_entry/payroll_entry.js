@@ -21,3 +21,12 @@ frappe.ui.form.on("Payroll Entry", {
 		});
 	},
 });
+
+frappe.ui.form.on("Payroll Entry", {
+	refresh(frm) {
+		if (frm.doc.docstatus !== 1 || !frappe.model.can_create("Repost Payroll")) return;
+		frm.add_custom_button(__("Repost Payroll"), () => {
+			frappe.new_doc("Repost Payroll", { payroll_entry: frm.doc.name });
+		}, __("Create"));
+	},
+});
