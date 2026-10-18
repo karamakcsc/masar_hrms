@@ -207,7 +207,7 @@ fixtures = [
                 "Shift Type-custom_early_entry__late_exit_settings_for_overtime", 
                 "Shift Type-custom_enable_early_entry_marking", 
                 "Shift Type-custom_early_entry_grace_period" , 
-                "Shift Type-custom_column_break_9xw3j" , 
+                "Shift Type-custom_column_break_9xw3j", 
                 "Shift Type-custom_enable_late_exit_marking" , 
                 "Shift Type-custom_late_exit_grace_period", 
                 # Shift Assignment
@@ -352,7 +352,6 @@ fixtures = [
                 "Employee-custom_contract_comment",
                 "Employee-basic_salary",
                 "Employee-column_break_54",
-                "Employee Checkin-availo",
                 "custom_is_privilege_applicable",
                 "Employee-custom_is_bank_commitments",
             ]

@@ -39,7 +39,7 @@ frappe.query_reports["Payroll Cost Analysis"] = {
 				"Payroll Entry",
 				"Month",
 			],
-			default: "Project",
+			default: "Department",
 			reqd: 1,
 		},
 		{

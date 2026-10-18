@@ -1,8 +1,7 @@
 {
  "actions": [],
- "allow_rename": 0,
  "autoname": "field:project",
- "creation": "2026-09-30 10:00:00.000000",
+ "creation": "2026-09-30 10:00:00",
  "doctype": "DocType",
  "engine": "InnoDB",
  "field_order": [
@@ -68,7 +67,7 @@
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-30 10:00:00.000000",
+ "modified": "2026-10-18 14:20:02.494622",
  "modified_by": "Administrator",
  "module": "Payroll Budget",
  "name": "Project Payroll Budget",
@@ -110,10 +109,11 @@
    "role": "Accounts Manager"
   }
  ],
+ "row_format": "Dynamic",
  "search_fields": "project_name",
  "sort_field": "modified",
  "sort_order": "DESC",
  "states": [],
  "title_field": "project_name",
- "show_title_field_in_link": 0
+ "track_changes": 1
 }
