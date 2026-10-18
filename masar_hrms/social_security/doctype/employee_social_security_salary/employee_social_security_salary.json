@@ -19,7 +19,6 @@
   "national_number",
   "personal_number",
   "birth_date",
-  "social_security_salary_entry",
   "section_break_10",
   "social_security_joining_date",
   "employee_share_rate",
@@ -163,13 +162,6 @@
    "fieldname": "social_security_salary",
    "fieldtype": "Float",
    "label": "Social Security Salary"
-  },
-  {
-   "fieldname": "social_security_salary_entry",
-   "fieldtype": "Link",
-   "label": "Social Security Salary Entry",
-   "options": "Social Security Salary Entry",
-   "read_only": 1
   }
  ],
  "index_web_pages_for_search": 1,

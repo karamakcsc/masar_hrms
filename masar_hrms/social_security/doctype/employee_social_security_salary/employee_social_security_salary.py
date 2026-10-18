@@ -90,7 +90,7 @@ class EmployeeSocialSecuritySalary(Document):
 		if not prev:
 			return True
 
-		important_fields = ["employee", "company", "social_security_salary_entry"]
+		important_fields = ["employee", "company"]
 		for f in important_fields:
 			if (prev.get(f) or None) != (self.get(f) or None):
 				return True
@@ -124,10 +124,10 @@ class EmployeeSocialSecuritySalary(Document):
 	def ss_amount_validation(self):
 		msg = f"""Employee <b>{self.employee}</b> : The Employee Share amount must be greater than zero.
 Please verify the Employee Share Rate for the Social Security Salary."""
-		if self.ss_emp_share_amount in [None, 0] and self.social_security_salary_entry is None:
+		if self.ss_emp_share_amount in [None, 0]:
 			frappe.throw(msg, title=frappe._("Employee Share Validation"))
 
-		elif self.ss_emp_share_amount in [None, 0] and self.social_security_salary_entry is not None:
+		elif self.ss_emp_share_amount in [None, 0]:
 			frappe.msgprint(
 				msg,
 				title=frappe._("Employee Share Validation"),

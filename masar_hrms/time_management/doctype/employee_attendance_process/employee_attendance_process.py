@@ -50,16 +50,39 @@ class EmployeeAttendanceProcess(Document):
 
 	@frappe.whitelist()
 	def get_standard_date_period(self):
-		if self.posting_date is None:
+		if not self.posting_date:
 			return False
 		if isinstance(self.posting_date, str):
-			posting_date = datetime.strptime(self.posting_date, '%Y-%m-%d').date()
+			posting_date = datetime.strptime(
+				self.posting_date, '%Y-%m-%d'
+			).date()
 		else:
 			posting_date = self.posting_date
+
 		start_month = posting_date.replace(day=1)
+
 		next_month = start_month.replace(day=28) + timedelta(days=4)
 		end_month = next_month - timedelta(days=next_month.day)
-		return {'from_date': start_month, 'to_date': end_month}
+
+		relieving_date = frappe.db.get_value(
+			'Employee',
+			self.employee,
+			'relieving_date'
+		)
+
+		if relieving_date:
+			if isinstance(relieving_date, str):
+				relieving_date = datetime.strptime(
+					relieving_date, '%Y-%m-%d'
+				).date()
+
+			if relieving_date < end_month:
+				end_month = relieving_date
+
+		return {
+			'from_date': start_month,
+			'to_date': end_month
+		}
 
 	@frappe.whitelist()
 	def get_overtime_type_as_defualt(self):
@@ -148,159 +171,206 @@ class EmployeeAttendanceProcess(Document):
 	def _get_attendance_for_overtime(self):
 		"""Fetch attendance with shift details, falling back to employee default_shift."""
 		return frappe.db.sql("""
-			SELECT
-				x.attendance,
-				x.employee,
-				x.employee_name,
-				x.attendance_date,
-				x.in_time,
-				x.out_time,
-				x.start_time,
-				x.end_time,
-				x.custom_early_entry_grace_period,
-				x.custom_late_exit_grace_period,
-				x.custom_enable_early_entry_marking,
-				x.custom_enable_late_exit_marking,
-			TIMESTAMPDIFF(
-				SECOND,
-				x.shift_start_datetime,
-				x.shift_end_datetime
-			) AS shift_duration_seconds,
-			IF(
-				x.in_time IS NOT NULL
-				AND x.out_time IS NOT NULL,
-				TIMESTAMPDIFF(
-					SECOND,
+			    SELECT
+					x.attendance,
+					x.employee,
+					x.employee_name,
+					x.attendance_date,
 					x.in_time,
-					x.out_time
-				),
-				0
-			) AS actual_duration_seconds,
-				IF(
-					x.in_time IS NOT NULL
-					AND x.out_time IS NOT NULL
-					AND TIMESTAMPDIFF(
-						SECOND,
-						x.in_time,
-						x.out_time
-					) >
+					x.out_time,
+					x.start_time,
+					x.end_time,
+					x.custom_early_entry_grace_period,
+					x.custom_late_exit_grace_period,
+					x.custom_enable_early_entry_marking,
+					x.custom_enable_late_exit_marking,
 					TIMESTAMPDIFF(
 						SECOND,
 						x.shift_start_datetime,
 						x.shift_end_datetime
-					),
-					1,
-					0
-				) AS actual_time_exceeds_shift,
-				IF(
-					x.custom_enable_early_entry_marking = 1
-					AND x.in_time IS NOT NULL
-					AND x.in_time <
-						(
-							x.shift_start_datetime
-							- INTERVAL x.custom_early_entry_grace_period MINUTE
+					) AS shift_duration_seconds,
+					IF(
+						x.in_time IS NOT NULL
+						AND x.out_time IS NOT NULL,
+						TIMESTAMPDIFF(
+							SECOND,
+							x.in_time,
+							x.out_time
 						),
-					TIMESTAMPDIFF(
-						SECOND,
-						x.in_time,
-						x.shift_start_datetime
-					),
-					0
-				) AS early_entry_overtime_seconds,
-				IF(
-					x.custom_enable_late_exit_marking = 1
-					AND x.out_time IS NOT NULL
-					AND x.out_time >
-						(
-							x.shift_end_datetime
-							+ INTERVAL x.custom_late_exit_grace_period MINUTE
-						),
-					TIMESTAMPDIFF(
-						SECOND,
-						x.shift_end_datetime,
-						x.out_time
-					),
-					0
-				) AS late_exit_overtime_seconds,
-				IF(x.holiday_name IS NOT NULL, 1, 0) AS is_off_day,
-				IF(
-					x.holiday_name IS NOT NULL
-					AND x.in_time IS NOT NULL
-					AND x.out_time IS NOT NULL,
-					TIMESTAMPDIFF(
-						SECOND,
-						x.in_time,
-						x.out_time
-					),
-					0
-				) AS off_day_time_seconds
-			FROM
-			(
-				SELECT
-					a.name AS attendance,
-					a.employee,
-					a.employee_name,
-					a.attendance_date,
-					a.in_time,
-					a.out_time,
-					st.start_time,
-					st.end_time,
-					st.custom_early_entry_grace_period,
-					st.custom_late_exit_grace_period,
-					st.custom_enable_early_entry_marking,
-					st.custom_enable_late_exit_marking,
-					h.name AS holiday_name,
-			TIMESTAMP(
-				CONCAT(a.attendance_date, ' ', st.start_time)
-			) AS shift_start_datetime,
-			CASE
-				WHEN st.end_time < st.start_time THEN
-					TIMESTAMP(
-						CONCAT(
-							DATE_ADD(a.attendance_date, INTERVAL 1 DAY),
-							' ',
-						st.end_time
-					)
-				)
-			ELSE
-				TIMESTAMP(
-					CONCAT(
-						a.attendance_date,
-						' ',
-								st.end_time
+						0
+					) AS actual_duration_seconds,
+					IF(
+						x.in_time IS NOT NULL
+						AND x.out_time IS NOT NULL
+						AND (
+							x.holiday_name IS NOT NULL
+							OR TIMESTAMPDIFF(
+								SECOND,
+								x.in_time,
+								x.out_time
+							) >
+							TIMESTAMPDIFF(
+								SECOND,
+								x.shift_start_datetime,
+								x.shift_end_datetime
 							)
+						),
+						1,
+						0
+					) AS actual_time_exceeds_shift,
+					IF(
+						x.holiday_name IS NOT NULL
+						AND x.in_time IS NOT NULL
+						AND x.out_time IS NOT NULL,
+						TIMESTAMPDIFF(
+							SECOND,
+							x.in_time,
+							x.out_time
+						),
+						IF(
+							x.custom_enable_early_entry_marking = 1
+							AND x.in_time IS NOT NULL
+							AND x.in_time <
+								(
+									x.shift_start_datetime
+									- INTERVAL x.custom_early_entry_grace_period MINUTE
+								),
+							TIMESTAMPDIFF(
+								SECOND,
+								x.in_time,
+								x.shift_start_datetime
+							),
+							0
 						)
-				END AS shift_end_datetime
-			FROM tabAttendance a
-			INNER JOIN tabEmployee emp
-				ON emp.name = a.employee
-			INNER JOIN `tabShift Type` st
-			ON st.name = COALESCE(
+					) AS early_entry_overtime_seconds,
+					IF(
+						x.holiday_name IS NOT NULL,
+						0,
+						IF(
+							x.custom_enable_late_exit_marking = 1
+							AND x.out_time IS NOT NULL
+							AND x.out_time >
+								(
+									x.shift_end_datetime
+									+ INTERVAL x.custom_late_exit_grace_period MINUTE
+								),
+							TIMESTAMPDIFF(
+								SECOND,
+								x.shift_end_datetime,
+								x.out_time
+							),
+							0
+						)
+					) AS late_exit_overtime_seconds,
+					IF(
+						x.holiday_name IS NOT NULL,
+						1,
+						0
+					) AS is_off_day,
+					IF(
+						x.holiday_name IS NOT NULL
+						AND x.in_time IS NOT NULL
+						AND x.out_time IS NOT NULL,
+
+						TIMESTAMPDIFF(
+							SECOND,
+							x.in_time,
+							x.out_time
+						),
+						0
+					) AS off_day_time_seconds
+				FROM
 				(
-					SELECT sa.shift_type
-					FROM `tabShift Assignment` sa
-			WHERE sa.employee = a.employee
-				AND a.attendance_date BETWEEN sa.start_date
-				AND IFNULL(sa.end_date, '9999-12-31')
-			AND sa.status = 'Active'
-							AND sa.docstatus = 1
-						ORDER BY sa.start_date DESC
-						LIMIT 1
-					),
-					emp.default_shift
-				)
-			LEFT JOIN `tabHoliday List` hl
-				ON hl.name = st.holiday_list
-			LEFT JOIN `tabHoliday` h
-				ON h.parent = hl.name
-				AND h.holiday_date = a.attendance_date
-			WHERE
-				a.docstatus = 1
-				AND a.employee = %(employee)s
-				AND a.attendance_date BETWEEN %(from_date)s AND %(to_date)s
-			) x
-			HAVING actual_duration_seconds  > shift_duration_seconds 
-			ORDER BY x.attendance_date;
+					SELECT
+						a.name AS attendance,
+						a.employee,
+						a.employee_name,
+						a.attendance_date,
+						a.in_time,
+						a.out_time,
+						st.start_time,
+						st.end_time,
+						st.custom_early_entry_grace_period,
+						st.custom_late_exit_grace_period,
+						st.custom_enable_early_entry_marking,
+						st.custom_enable_late_exit_marking,
+						h.name AS holiday_name,
+						TIMESTAMP(
+							CONCAT(
+								a.attendance_date,
+								' ',
+								st.start_time
+							)
+						) AS shift_start_datetime,
+						CASE
+							WHEN st.end_time < st.start_time THEN
+
+								TIMESTAMP(
+									CONCAT(
+										DATE_ADD(
+											a.attendance_date,
+											INTERVAL 1 DAY
+										),
+										' ',
+										st.end_time
+									)
+								)
+							ELSE
+								TIMESTAMP(
+									CONCAT(
+										a.attendance_date,
+										' ',
+										st.end_time
+									)
+								)
+
+						END AS shift_end_datetime
+
+					FROM tabAttendance a
+
+					INNER JOIN tabEmployee emp
+						ON emp.name = a.employee
+
+					INNER JOIN `tabShift Type` st
+						ON st.name = COALESCE(
+							(
+								SELECT sa.shift_type
+
+								FROM `tabShift Assignment` sa
+
+								WHERE
+									sa.employee = a.employee
+									AND a.attendance_date BETWEEN
+										sa.start_date
+										AND IFNULL(
+											sa.end_date,
+											'9999-12-31'
+										)
+									AND sa.status = 'Active'
+									AND sa.docstatus = 1
+								ORDER BY
+									sa.start_date DESC
+								LIMIT 1
+							),
+							emp.default_shift
+						)
+					LEFT JOIN `tabHoliday List` hl
+						ON hl.name = st.holiday_list
+					LEFT JOIN `tabHoliday` h
+						ON h.parent = hl.name
+						AND h.holiday_date = a.attendance_date
+					WHERE
+						a.docstatus = 1
+							AND a.employee = %(employee)s
+							AND a.attendance_date BETWEEN %(from_date)s AND %(to_date)s
+				) x
+				HAVING
+					is_off_day = 1
+					OR 
+					actual_duration_seconds > shift_duration_seconds
+				ORDER BY
+					x.attendance_date
+
 		""", {
 			'employee': self.employee,
 			'from_date': str(self.from_date),
